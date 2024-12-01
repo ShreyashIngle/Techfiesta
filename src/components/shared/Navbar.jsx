@@ -1,15 +1,23 @@
 import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Menu, X, LogIn } from 'lucide-react';
 import { motion } from 'framer-motion';
-import logo from "../../images/logo.jpg"
+import logo from "../../images/logo.jpg";
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const token = localStorage.getItem('token');
 
   const navItems = [
-    { label: 'Dashboard', path: '/dashboard' }
+    { label: 'Dashboard', path: '/dashboard' },
+    token 
+      ? { label: 'Logout', path: '#', onClick: () => {
+          localStorage.removeItem('token');
+          navigate('/login');
+        }}
+      : { label: 'Login', path: '/login', icon: LogIn }
   ];
 
   const isActive = (path) => location.pathname === path;
@@ -35,11 +43,13 @@ function Navbar() {
                 >
                   <Link
                     to={item.path}
-                    className={`px-3 py-2 rounded-md text-sm font-medium transition-colors hover-effect
+                    onClick={item.onClick}
+                    className={`px-3 py-2 rounded-md text-sm font-medium transition-colors hover-effect flex items-center gap-2
                       ${isActive(item.path) 
                         ? 'text-brand-green' 
                         : 'text-gray-300 hover:text-white'}`}
                   >
+                    {item.icon && <item.icon size={18} />}
                     {item.label}
                   </Link>
                 </motion.div>
@@ -70,12 +80,16 @@ function Navbar() {
               <Link
                 key={item.label}
                 to={item.path}
-                className={`block px-3 py-2 rounded-md text-base font-medium hover-effect
+                onClick={() => {
+                  setIsOpen(false);
+                  item.onClick?.();
+                }}
+                className={`block px-3 py-2 rounded-md text-base font-medium hover-effect flex items-center gap-2
                   ${isActive(item.path)
                     ? 'text-brand-green'
                     : 'text-gray-300 hover:text-white'}`}
-                onClick={() => setIsOpen(false)}
               >
+                {item.icon && <item.icon size={18} />}
                 {item.label}
               </Link>
             ))}
