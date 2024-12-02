@@ -33,9 +33,9 @@ function Signup() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-white rounded-[2rem] shadow-xl overflow-hidden max-w-4xl w-full flex"
+        className="bg-white rounded-[2rem] shadow-xl overflow-hidden max-w-3xl w-full flex"
       >
-        <div className="hidden md:block w-1/2 bg-emerald-500 p-12 text-white">
+        <div className="hidden md:block w-1/2 bg-green-900 p-8 text-white rounded-l-[2rem]">
           <div className="h-full flex flex-col justify-center items-center text-center">
             <h2 className="text-4xl font-bold mb-6">Already signed?</h2>
             <p className="text-lg mb-12">
@@ -50,7 +50,7 @@ function Signup() {
           </div>
         </div>
 
-        <div className="w-full md:w-1/2 p-12">
+        <div className="w-full md:w-1/2 p-8">
           <h2 className="text-4xl font-bold text-gray-900 mb-6">Create Account</h2>
           
           <div className="flex gap-4 mb-6">

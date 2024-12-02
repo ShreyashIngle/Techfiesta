@@ -99,7 +99,7 @@ function Login() {
           </form>
         </div>
 
-        <div className="hidden md:block w-1/2 bg-emerald-500 p-12 text-white">
+        <div className="hidden md:block w-1/2 bg-green-900 p-12 text-white">
           <div className="h-full flex flex-col justify-center items-center text-center">
             <h2 className="text-4xl font-bold mb-6">Hello, Friend!</h2>
             <p className="text-lg mb-12">
