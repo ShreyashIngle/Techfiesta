@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, Navigate } from 'react-router-dom';
 import RootLayout from '../layouts/RootLayout';
 import Home from '../pages/Home';
 import About from '../pages/About';
@@ -9,6 +9,14 @@ import Login from '../pages/Login';
 import Signup from '../pages/Signup';
 import ForgotPassword from '../pages/ForgotPassword';
 
+const ProtectedRoute = ({ children }) => {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    return <Navigate to="/login" replace />;
+  }
+  return children;
+};
+
 export const router = createBrowserRouter([
   {
     path: '/',
@@ -18,7 +26,10 @@ export const router = createBrowserRouter([
       { path: 'about', element: <About /> },
       { path: 'services', element: <Services /> },
       { path: 'contact', element: <Contact /> },
-      { path: 'dashboard', element: <Dashboard /> },
+      { 
+        path: 'dashboard', 
+        element: <ProtectedRoute><Dashboard /></ProtectedRoute>
+      },
       { path: 'login', element: <Login /> },
       { path: 'signup', element: <Signup /> },
       { path: 'forgot-password', element: <ForgotPassword /> }

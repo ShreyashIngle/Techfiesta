@@ -1,7 +1,12 @@
 import { motion } from 'framer-motion';
 import { ArrowDown } from 'lucide-react';
+import { useLanguage } from '../../contexts/LanguageContext';
+import { translations } from '../../utils/translations';
 
 function Hero() {
+  const { language } = useLanguage();
+  const t = translations[language].hero;
+
   return (
     <div className="relative h-screen flex items-center justify-center overflow-hidden">
       <video
@@ -26,7 +31,7 @@ function Hero() {
           transition={{ duration: 0.8 }}
           className="text-4xl sm:text-6xl font-bold mb-6"
         >
-          PREDICT. GROW. HARVEST.
+          {t.title}
         </motion.h1>
         
         <motion.h2
@@ -35,7 +40,7 @@ function Hero() {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="text-2xl sm:text-4xl font-semibold mb-8"
         >
-          WELCOME TO YIELDVISION!
+          {t.subtitle}
         </motion.h2>
         
         <motion.p
@@ -44,7 +49,7 @@ function Hero() {
           transition={{ duration: 0.8, delay: 0.4 }}
           className="max-w-2xl mx-auto text-lg sm:text-xl text-gray-200"
         >
-          At YieldVision, we combine cutting-edge satellite imagery with advanced machine learning to provide accurate yield predictions for farmers worldwide. Our platform uses real-time satellite data to forecast crop yields, optimize farming practices, and increase productivity. 
+          {t.description}
         </motion.p>
 
         <motion.div

@@ -2,22 +2,34 @@ import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, LogIn } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useLanguage } from '../../contexts/LanguageContext';
+import { translations } from '../../utils/translations';
 import logo from "../../images/logo.jpg";
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  const { language } = useLanguage();
+  const t = translations[language].nav;
   const token = localStorage.getItem('token');
 
   const navItems = [
-    { label: 'Dashboard', path: '/dashboard' },
+    { label: t.home, path: '/' },
+    { label: t.about, path: '/about' },
+    { label: t.services, path: '/services' },
+    { label: t.contact, path: '/contact' },
+    { label: t.dashboard, path: '/dashboard' },
     token 
-      ? { label: 'Logout', path: '#', onClick: () => {
-          localStorage.removeItem('token');
-          navigate('/login');
-        }}
-      : { label: 'Login', path: '/login', icon: LogIn }
+      ? { 
+          label: t.logout, 
+          path: '#', 
+          onClick: () => {
+            localStorage.removeItem('token');
+            navigate('/login');
+          }
+        }
+      : { label: t.login, path: '/login', icon: LogIn }
   ];
 
   const isActive = (path) => location.pathname === path;
