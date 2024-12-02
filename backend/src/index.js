@@ -6,10 +6,14 @@ import passport from 'passport';
 import authRoutes from './routes/auth.js';
 import './config/passport.js';
 import { sendResetPasswordEmail } from './utils/email.js';
+import morgan from 'morgan';
 
 dotenv.config();
 
+// Middleware
 const app = express();
+app.use(morgan('dev'));
+
 
 // Middleware
 app.use(cors());
