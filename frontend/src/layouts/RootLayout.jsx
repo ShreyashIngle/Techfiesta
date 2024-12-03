@@ -1,7 +1,8 @@
 import { Outlet } from 'react-router-dom';
-import Navbar from '../components/shared/Navbar';
-import Footer from '../components/shared/Footer';
+import LanguageToggle from '../components/shared/LanguageToggle';
 import Cursor from '../components/shared/Cursor';
+import Footer from '../components/shared/Footer';
+import Navbar from '../components/shared/Navbar';
 
 function RootLayout() {
   return (
@@ -12,6 +13,7 @@ function RootLayout() {
         <Outlet />
       </main>
       <Footer />
+      <LanguageToggle />
     </div>
   );
 }

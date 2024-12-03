@@ -16,6 +16,7 @@ app.use(morgan("tiny"));
 
 
 // Middleware
+app.use(morgan("tiny"));
 app.use(cors());
 app.use(express.json());
 app.use(passport.initialize());
