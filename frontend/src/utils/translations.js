@@ -1,3 +1,5 @@
+import CropRecommendation from "../components/crop/CropRecommendation";
+
 export const translations = {
   en: {
     nav: {
@@ -6,6 +8,7 @@ export const translations = {
       services: 'Services',
       contact: 'Contact',
       dashboard: 'Dashboard',
+      CropRecommendation: 'Crop Recommendation',
       login: 'Login',
       logout: 'Logout',
     },
@@ -140,6 +143,7 @@ export const translations = {
       services: 'सेवाएं',
       contact: 'संपर्क करें',
       dashboard: 'डैशबोर्ड',
+      CropRecommendation: 'फसल सिफारिश',
       login: 'लॉग इन',
       logout: 'लॉग आउट',
     },
