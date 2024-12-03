@@ -9,6 +9,7 @@ import Login from '../pages/Login';
 import Signup from '../pages/Signup';
 import ForgotPassword from '../pages/ForgotPassword';
 import CropRecommendation from '../components/crop/CropRecommendation';
+import Chatbot from '../pages/Chatbot';
 
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem('token');
@@ -34,6 +35,10 @@ export const router = createBrowserRouter([
       {
         path: 'crop-recommendation',
         element: <ProtectedRoute><CropRecommendation /></ProtectedRoute>
+      },
+      {
+        path: 'chatbot',
+        element: <ProtectedRoute><Chatbot /></ProtectedRoute>
       },
       { path: 'login', element: <Login /> },
       { path: 'signup', element: <Signup /> },

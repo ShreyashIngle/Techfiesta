@@ -3,8 +3,13 @@ import { motion } from "framer-motion";
 import { Star, Thermometer, Droplets, Cloud, Globe2 } from "lucide-react";
 import MapComponent from "./MapComponent";
 import toast from "react-hot-toast";
+import { useLanguage } from "../../contexts/LanguageContext";
+import { translations } from "../../utils/translations";
 
 function CropRecommendation() {
+  const { language } = useLanguage(); // Get current language
+  const t = translations[language].cropRecommendation; // Get translations for CropRecommendation
+
   const [coordinates, setCoordinates] = useState({ lng: 73.8987, lat: 18.4463 });
   const [formData, setFormData] = useState({
     nitrogen: 80,
@@ -27,20 +32,20 @@ function CropRecommendation() {
   const handleSubmit = (e) => {
     e.preventDefault();
     try {
-      toast.success("Maize is the best crop for your conditions!");
+      toast.success(t.successMessage); // Using translated success message
     } catch (error) {
-      toast.error("Failed to get crop recommendation");
+      toast.error(t.failureMessage); // Using translated failure message
     }
   };
 
   const inputFields = [
-    { name: "nitrogen", label: "Nitrogen", icon: Star, value: formData.nitrogen },
-    { name: "phosphorus", label: "Phosphorus", icon: Star, value: formData.phosphorus },
-    { name: "potassium", label: "Potassium", icon: Star, value: formData.potassium },
-    { name: "ph", label: "PH Level", icon: Globe2, value: formData.ph },
-    { name: "temperature", label: "Temperature", icon: Thermometer, value: formData.temperature },
-    { name: "humidity", label: "Humidity", icon: Droplets, value: formData.humidity },
-    { name: "rainfall", label: "Rainfall", icon: Cloud, value: formData.rainfall },
+    { name: "nitrogen", label: t.nitrogen, icon: Star, value: formData.nitrogen },
+    { name: "phosphorus", label: t.phosphorus, icon: Star, value: formData.phosphorus },
+    { name: "potassium", label: t.potassium, icon: Star, value: formData.potassium },
+    { name: "ph", label: t.ph, icon: Globe2, value: formData.ph },
+    { name: "temperature", label: t.temperature, icon: Thermometer, value: formData.temperature },
+    { name: "humidity", label: t.humidity, icon: Droplets, value: formData.humidity },
+    { name: "rainfall", label: t.rainfall, icon: Cloud, value: formData.rainfall },
   ];
 
   return (
@@ -51,7 +56,7 @@ function CropRecommendation() {
           animate={{ opacity: 1, y: 0 }}
           className="text-4xl font-bold text-center text-white mb-12"
         >
-          Crop Recommendation
+          {t.title}
         </motion.h1>
 
         <motion.div
@@ -60,7 +65,7 @@ function CropRecommendation() {
           className="bg-gray-800  rounded-xl shadow-lg p-8"
         >
           {/* image add  */}
-          <div className="mb-8 h-[] rounded-xl overflow-hidden">  
+          <div className="mb-8 h-[] rounded-xl overflow-hidden">
             <MapComponent coordinates={coordinates} setCoordinates={setCoordinates} />
           </div>
 
@@ -97,7 +102,7 @@ function CropRecommendation() {
                 animate={{ scale: 1 }}
                 className="w-full text-xl bg-green-800 text-white py-3 rounded-lg hover:bg-green-700 transition transform hover:scale-105"
               >
-                Submit Data
+                {t.submitButton}
               </motion.button>
             </div>
           </form>
