@@ -10,7 +10,10 @@ import morgan from 'morgan';
 
 dotenv.config();
 
+// Middleware
 const app = express();
+app.use(morgan("tiny"));
+
 
 // Middleware
 app.use(morgan("tiny"));
