@@ -18,8 +18,8 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  resetPasswordToken: String,
-  resetPasswordExpires: Date,
+  resetPasswordOTP: String,
+  resetPasswordOTPExpires: Date,
   githubId: String,
   linkedinId: String
 }, {

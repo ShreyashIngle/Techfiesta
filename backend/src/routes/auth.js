@@ -25,6 +25,7 @@ const loginValidation = [
 router.post('/register', registerValidation, validate, authController.register);
 router.post('/login', loginValidation, validate, authController.login);
 router.post('/forgot-password', authController.forgotPassword);
+router.post('/verify-otp', authController.verifyOTP);
 router.post('/reset-password', authController.resetPassword);
 
 // Social auth routes
@@ -32,7 +33,7 @@ router.get('/github',
   passport.authenticate('github', { scope: ['user:email'] })
 );
 
-router.get('/github/ callback',
+router.get('/github/callback',
   passport.authenticate('github', { failureRedirect: '/login' }),
   (req, res) => {
     const token = jwt.sign(

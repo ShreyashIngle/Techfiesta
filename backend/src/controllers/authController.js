@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import User from '../models/User.js';
-import { sendResetPasswordEmail } from '../utils/email.js';
+import { sendOTPEmail } from '../utils/email.js';
 
 export const register = async (req, res) => {
   try {
@@ -61,48 +61,63 @@ export const forgotPassword = async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    // Generate reset token
-    const resetToken = crypto.randomBytes(32).toString('hex');
-    user.resetPasswordToken = crypto
-      .createHash('sha256')
-      .update(resetToken)
-      .digest('hex');
-    user.resetPasswordExpires = Date.now() + 30 * 60 * 1000; // 30 minutes
+    // Generate OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const otpExpiry = Date.now() + 10 * 60 * 1000; // 10 minutes
+
+    // Save OTP to user
+    user.resetPasswordOTP = otp;
+    user.resetPasswordOTPExpires = otpExpiry;
     await user.save();
 
-    // Send reset email
-    const resetURL = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
-    await sendResetPasswordEmail(user.email, resetURL);
+    // Send OTP email
+    await sendOTPEmail(user.email, otp);
 
-    res.json({ message: 'Password reset email sent' });
+    res.json({ message: 'OTP sent successfully' });
   } catch (error) {
-    res.status(500).json({ message: 'Failed to send reset email' });
+    console.error('Forgot password error:', error);
+    res.status(500).json({ message: 'Failed to send OTP' });
+  }
+};
+
+export const verifyOTP = async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+    
+    const user = await User.findOne({
+      email,
+      resetPasswordOTP: otp,
+      resetPasswordOTPExpires: { $gt: Date.now() }
+    });
+
+    if (!user) {
+      return res.status(400).json({ message: 'Invalid or expired OTP' });
+    }
+
+    res.json({ message: 'OTP verified successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'OTP verification failed' });
   }
 };
 
 export const resetPassword = async (req, res) => {
   try {
-    const { token, password } = req.body;
-
-    // Find user with valid reset token
-    const hashedToken = crypto
-      .createHash('sha256')
-      .update(token)
-      .digest('hex');
+    const { email, otp, newPassword } = req.body;
 
     const user = await User.findOne({
-      resetPasswordToken: hashedToken,
-      resetPasswordExpires: { $gt: Date.now() }
+      email,
+      resetPasswordOTP: otp,
+      resetPasswordOTPExpires: { $gt: Date.now() }
     });
 
     if (!user) {
-      return res.status(400).json({ message: 'Invalid or expired reset token' });
+      return res.status(400).json({ message: 'Invalid or expired OTP' });
     }
 
     // Update password
-    user.password = password;
-    user.resetPasswordToken = undefined;
-    user.resetPasswordExpires = undefined;
+    user.password = newPassword;
+    user.resetPasswordOTP = undefined;
+    user.resetPasswordOTPExpires = undefined;
     await user.save();
 
     res.json({ message: 'Password reset successful' });

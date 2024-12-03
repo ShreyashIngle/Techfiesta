@@ -1,105 +1,3 @@
-// export const translations = {
-//   en: {
-//     nav: {
-//       home: 'Home',
-//       about: 'About',
-//       services: 'Services',
-//       contact: 'Contact',
-//       dashboard: 'Dashboard',
-//       login: 'Login',
-//       logout: 'Logout'
-//     },
-//     hero: {
-//       title: 'PREDICT. GROW. HARVEST.',
-//       subtitle: 'WELCOME TO YIELDVISION!',
-//       description: 'At YieldVision, we combine cutting-edge satellite imagery with advanced machine learning to provide accurate yield predictions for farmers worldwide. Our platform uses real-time satellite data to forecast crop yields, optimize farming practices, and increase productivity.'
-//     },
-//     about: {
-//       title: 'About YieldVision',
-//       mission: 'Our Mission',
-//       missionText: 'To revolutionize agriculture through advanced satellite technology and machine learning.',
-//       vision: 'Our Vision',
-//       visionText: 'Creating a future where farming is more predictable, sustainable, and profitable.',
-//       team: 'Our Team',
-//       teamText: 'A dedicated group of innovators combining expertise in agriculture, technology, and data science.'
-//     },
-//     services: {
-//       title: 'Our Services',
-//       prediction: {
-//         title: 'Yield Prediction',
-//         description: 'Advanced AI-powered crop yield forecasting'
-//       },
-//       monitoring: {
-//         title: 'Crop Monitoring',
-//         description: 'Real-time satellite-based crop health tracking'
-//       },
-//       analytics: {
-//         title: 'Data Analytics',
-//         description: 'Comprehensive agricultural data analysis'
-//       }
-//     },
-//     contact: {
-//       title: 'Contact Us',
-//       form: {
-//         name: 'Name',
-//         email: 'Email',
-//         message: 'Message',
-//         submit: 'Send Message'
-//       }
-//     }
-//   },
-//   hi: {
-//     nav: {
-//       home: 'होम',
-//       about: 'हमारे बारे में',
-//       services: 'सेवाएं',
-//       contact: 'संपर्क करें',
-//       dashboard: 'डैशबोर्ड',
-//       login: 'लॉग इन',
-//       logout: 'लॉग आउट'
-//     },
-//     hero: {
-//       title: 'भविष्यवाणी। विकास। फसल।',
-//       subtitle: 'यील्डविज़न में आपका स्वागत है!',
-//       description: 'यील्डविज़न में, हम दुनिया भर के किसानों के लिए सटीक उपज भविष्यवाणी प्रदान करने के लिए अत्याधुनिक उपग्रह इमेजरी को उन्नत मशीन लर्निंग के साथ जोड़ते हैं।'
-//     },
-//     about: {
-//       title: 'यील्डविज़न के बारे में',
-//       mission: 'हमारा मिशन',
-//       missionText: 'उन्नत उपग्रह प्रौद्योगिकी और मशीन लर्निंग के माध्यम से कृषि में क्रांति लाना।',
-//       vision: 'हमारी दृष्टि',
-//       visionText: 'एक ऐसा भविष्य बनाना जहां खेती अधिक पूर्वानुमेय, टिकाऊ और लाभदायक हो।',
-//       team: 'हमारी टीम',
-//       teamText: 'कृषि, प्रौद्योगिकी और डेटा विज्ञान में विशेषज्ञता को जोड़ने वाले नवप्रवर्तकों का एक समर्पित समूह।'
-//     },
-//     services: {
-//       title: 'हमारी सेवाएं',
-//       prediction: {
-//         title: 'उपज भविष्यवाणी',
-//         description: 'उन्नत एआई-संचालित फसल उपज पूर्वानुमान'
-//       },
-//       monitoring: {
-//         title: 'फसल निगरानी',
-//         description: 'रीयल-टाइम उपग्रह-आधारित फसल स्वास्थ्य ट्रैकिंग'
-//       },
-//       analytics: {
-//         title: 'डेटा विश्लेषण',
-//         description: 'व्यापक कृषि डेटा विश्लेषण'
-//       }
-//     },
-//     contact: {
-//       title: 'संपर्क करें',
-//       form: {
-//         name: 'नाम',
-//         email: 'ईमेल',
-//         message: 'संदेश',
-//         submit: 'संदेश भेजें'
-//       }
-//     }
-//   }
-// };
-
-
 export const translations = {
   en: {
     nav: {
@@ -122,47 +20,51 @@ export const translations = {
         "Using YieldVision has revolutionized the way we approach farming. The accurate yield predictions and real-time data have helped us optimize our crops and improve overall productivity. It's an invaluable tool that makes farming smarter and more sustainable.",
     },
     signup: {
-      title: "Create Account",
-      alreadySigned: "Already signed?",
-      enterDetails: "Enter your personal details to use all of site features",
-      signInButton: "SIGN IN",
-      orUseEmail: "or use your email for registration",
-      namePlaceholder: "Name",
-      emailPlaceholder: "Email",
-      passwordPlaceholder: "Password",
-      signUpButton: "SIGN UP",
+      title: 'Create Account',
+      alreadySigned: 'Already signed?',
+      enterDetails: 'Enter your personal details to use all of site features',
+      signInButton: 'SIGN IN',
+      orUseEmail: 'or use your email for registration',
+      namePlaceholder: 'Name',
+      emailPlaceholder: 'Email',
+      passwordPlaceholder: 'Password',
+      signUpButton: 'SIGN UP',
     },
     callToAction: {
-      heading: "WHAT ARE YOU WAITING FOR?",
-      cropYieldPrediction: "CROP YIELD PREDICTION",
-      cropHealthMonitoring: "CROP HEALTH MONITORING",
-      sustainabilityInsights: "SUSTAINABILITY INSIGHTS",
-      learnMore: "Learn More",
+      heading: 'WHAT ARE YOU WAITING FOR?',
+      cropYieldPrediction: 'CROP YIELD PREDICTION',
+      cropHealthMonitoring: 'CROP HEALTH MONITORING',
+      sustainabilityInsights: 'SUSTAINABILITY INSIGHTS',
+      learnMore: 'Learn More',
     },
     footer: {
-      description: "Making yield prediction and farming insights accessible to everyone.",
-      quickLinks: "Quick Links",
-      contact: "Contact",
-      followUs: "Follow Us",
-      allRightsReserved: "All rights reserved.",
+      description:
+        'Making yield prediction and farming insights accessible to everyone.',
+      quickLinks: 'Quick Links',
+      contact: 'Contact',
+      followUs: 'Follow Us',
+      allRightsReserved: 'All rights reserved.',
     },
     features: {
       'Satellite Yield Prediction': 'Satellite Yield Prediction',
       'Crop Health Monitoring': 'Crop Health Monitoring',
       'Precision Agriculture Solutions': 'Precision Agriculture Solutions',
-      'Experience the power of advanced satellite imagery and machine learning to accurately predict crop yields.': 'Experience the power of advanced satellite imagery and machine learning to accurately predict crop yields.',
-      'Monitor the health of your crops in real-time with high-resolution satellite data, ensuring optimal growth.': 'Monitor the health of your crops in real-time with high-resolution satellite data, ensuring optimal growth.',
-      'Leverage data-driven insights to make informed decisions, enhance farm productivity, and promote sustainability.': 'Leverage data-driven insights to make informed decisions, enhance farm productivity, and promote sustainability.',
+      'Experience the power of advanced satellite imagery and machine learning to accurately predict crop yields.':
+        'Experience the power of advanced satellite imagery and machine learning to accurately predict crop yields.',
+      'Monitor the health of your crops in real-time with high-resolution satellite data, ensuring optimal growth.':
+        'Monitor the health of your crops in real-time with high-resolution satellite data, ensuring optimal growth.',
+      'Leverage data-driven insights to make informed decisions, enhance farm productivity, and promote sustainability.':
+        'Leverage data-driven insights to make informed decisions, enhance farm productivity, and promote sustainability.',
     },
     login: {
-      title: "Sign In",
-      emailPlaceholder: "Email",
-      passwordPlaceholder: "Password",
-      forgotPassword: "Forgot your password?",
-      signInButton: "SIGN IN",
-      orUseEmail: "or use your email password",
-      helloFriend: "Hello, Friend!",
-      welcomeMessage: "New to website? Register with your personal details",
+      title: 'Sign In',
+      emailPlaceholder: 'Email',
+      passwordPlaceholder: 'Password',
+      forgotPassword: 'Forgot your password?',
+      signInButton: 'SIGN IN',
+      orUseEmail: 'or use your email password',
+      helloFriend: 'Hello, Friend!',
+      welcomeMessage: 'New to website? Register with your personal details',
       signUpText: 'SIGN UP',
     },
     home: {
@@ -236,7 +138,7 @@ export const translations = {
     },
     testimonials: {
       quote:
-        "YieldVision का उपयोग करना खेती के प्रति हमारे दृष्टिकोण में क्रांति ले आया है। सटीक उत्पादन भविष्यवाणियाँ और वास्तविक समय डेटा ने हमें अपनी फसलों को अनुकूलित करने और समग्र उत्पादकता में सुधार करने में मदद की है। यह एक अमूल्य उपकरण है जो खेती को अधिक स्मार्ट और टिकाऊ बनाता है।",
+        'YieldVision का उपयोग करना खेती के प्रति हमारे दृष्टिकोण में क्रांति ले आया है। सटीक उत्पादन भविष्यवाणियाँ और वास्तविक समय डेटा ने हमें अपनी फसलों को अनुकूलित करने और समग्र उत्पादकता में सुधार करने में मदद की है। यह एक अमूल्य उपकरण है जो खेती को अधिक स्मार्ट और टिकाऊ बनाता है।',
     },
     home: {
       'YIELD PREDICTIONS': 'उत्पादन भविष्यवाणी',
@@ -246,57 +148,66 @@ export const translations = {
       'SATELLITE DATA ANALYTICS': 'सैटेलाइट डेटा विश्लेषण',
     },
     signup: {
-      title: "खाता बनाएँ",
-      alreadySigned: "क्या आप पहले से साइन इन हैं?",
-      enterDetails: "साइट की सभी सुविधाओं का उपयोग करने के लिए अपनी व्यक्तिगत जानकारी दर्ज करें",
-      signInButton: "साइन इन करें",
-      orUseEmail: "या अपने ईमेल से पंजीकरण करें",
-      namePlaceholder: "नाम",
-      emailPlaceholder: "ईमेल",
-      passwordPlaceholder: "पासवर्ड",
-      signUpButton: "साइन अप करें",
+      title: 'खाता बनाएँ',
+      alreadySigned: 'क्या आप पहले से साइन इन हैं?',
+      enterDetails:
+        'साइट की सभी सुविधाओं का उपयोग करने के लिए अपनी व्यक्तिगत जानकारी दर्ज करें',
+      signInButton: 'साइन इन करें',
+      orUseEmail: 'या अपने ईमेल से पंजीकरण करें',
+      namePlaceholder: 'नाम',
+      emailPlaceholder: 'ईमेल',
+      passwordPlaceholder: 'पासवर्ड',
+      signUpButton: 'साइन अप करें',
     },
     footer: {
-      description: "उत्पादन भविष्यवाणी और कृषि अंतर्दृष्टि को सभी के लिए सुलभ बनाना।",
-      quickLinks: "त्वरित लिंक",
-      contact: "संपर्क करें",
-      followUs: "हमसे जुड़ें",
-      allRightsReserved: "सर्वाधिकार सुरक्षित।",
+      description:
+        'उत्पादन भविष्यवाणी और कृषि अंतर्दृष्टि को सभी के लिए सुलभ बनाना।',
+      quickLinks: 'त्वरित लिंक',
+      contact: 'संपर्क करें',
+      followUs: 'हमसे जुड़ें',
+      allRightsReserved: 'सर्वाधिकार सुरक्षित।',
     },
     callToAction: {
-      heading: "तुम्हें किस बात का इंतजार है?",
-      cropYieldPrediction: "फसल उत्पादन भविष्यवाणी",
-      cropHealthMonitoring: "फसल स्वास्थ्य निगरानी",
-      sustainabilityInsights: "सततता संबंधी अंतर्दृष्टियाँ",
-      learnMore: "और जानें",
+      heading: 'तुम्हें किस बात का इंतजार है?',
+      cropYieldPrediction: 'फसल उत्पादन भविष्यवाणी',
+      cropHealthMonitoring: 'फसल स्वास्थ्य निगरानी',
+      sustainabilityInsights: 'सततता संबंधी अंतर्दृष्टियाँ',
+      learnMore: 'और जानें',
     },
     features: {
       'Satellite Yield Prediction': 'सैटेलाइट उत्पादन भविष्यवाणी',
       'Crop Health Monitoring': 'फसल स्वास्थ्य निगरानी',
       'Precision Agriculture Solutions': 'सटीक कृषि समाधान',
-      'Experience the power of advanced satellite imagery and machine learning to accurately predict crop yields.': 'उन्नत सैटेलाइट इमेजरी और मशीन लर्निंग की शक्ति का अनुभव करें ताकि आप सही तरीके से फसल उत्पादन की भविष्यवाणी कर सकें।',
-      'Monitor the health of your crops in real-time with high-resolution satellite data, ensuring optimal growth.': 'उच्च-रिज़ॉल्यूशन सैटेलाइट डेटा के साथ अपनी फसलों के स्वास्थ्य की वास्तविक समय में निगरानी करें, जिससे यह सुनिश्चित होता है कि वे बेहतर वृद्धि कर रहे हैं।',
-      'Leverage data-driven insights to make informed decisions, enhance farm productivity, and promote sustainability.': 'डेटा-आधारित अंतर्दृष्टियों का उपयोग करके सूचित निर्णय लें, कृषि उत्पादकता बढ़ाएं और सततता को बढ़ावा दें।',
+      'Experience the power of advanced satellite imagery and machine learning to accurately predict crop yields.':
+        'उन्नत सैटेलाइट इमेजरी और मशीन लर्निंग की शक्ति का अनुभव करें ताकि आप सही तरीके से फसल उत्पादन की भविष्यवाणी कर सकें।',
+      'Monitor the health of your crops in real-time with high-resolution satellite data, ensuring optimal growth.':
+        'उच्च-रिज़ॉल्यूशन सैटेलाइट डेटा के साथ अपनी फसलों के स्वास्थ्य की वास्तविक समय में निगरानी करें, जिससे यह सुनिश्चित होता है कि वे बेहतर वृद्धि कर रहे हैं।',
+      'Leverage data-driven insights to make informed decisions, enhance farm productivity, and promote sustainability.':
+        'डेटा-आधारित अंतर्दृष्टियों का उपयोग करके सूचित निर्णय लें, कृषि उत्पादकता बढ़ाएं और सततता को बढ़ावा दें।',
     },
     login: {
-      title: "साइन इन करें",
-      emailPlaceholder: "ईमेल",
-      passwordPlaceholder: "पासवर्ड",
-      forgotPassword: "क्या आप अपना पासवर्ड भूल गए?",
-      signInButton: "साइन इन करें",
-      orUseEmail: "या अपने ईमेल पासवर्ड का उपयोग करें",
-      helloFriend: "नमस्ते, मित्र!",
-      welcomeMessage: "वेबसाइट पर नए हैं? अपनी व्यक्तिगत जानकारी के साथ पंजीकरण करें",
+      title: 'साइन इन करें',
+      emailPlaceholder: 'ईमेल',
+      passwordPlaceholder: 'पासवर्ड',
+      forgotPassword: 'क्या आप अपना पासवर्ड भूल गए?',
+      signInButton: 'साइन इन करें',
+      orUseEmail: 'या अपने ईमेल पासवर्ड का उपयोग करें',
+      helloFriend: 'नमस्ते, मित्र!',
+      welcomeMessage:
+        'वेबसाइट पर नए हैं? अपनी व्यक्तिगत जानकारी के साथ पंजीकरण करें',
       signUpText: 'साइन अप करें',
     },
     about: {
       title: 'यील्डविज़न के बारे में',
       mission: 'हमारा मिशन',
-      missionText: 'उन्नत उपग्रह प्रौद्योगिकी और मशीन लर्निंग के माध्यम से कृषि में क्रांति लाना।',
+      missionText:
+        'उन्नत उपग्रह प्रौद्योगिकी और मशीन लर्निंग के माध्यम से कृषि में क्रांति लाना।',
       vision: 'हमारी दृष्टि',
-      visionText: 'एक ऐसा भविष्य बनाना जहां खेती अधिक पूर्वानुमेय, टिकाऊ और लाभदायक हो।',
+      visionText:
+        'एक ऐसा भविष्य बनाना जहां खेती अधिक पूर्वानुमेय, टिकाऊ और लाभदायक हो।',
       team: 'हमारी टीम',
-      teamText: 'कृषि, प्रौद्योगिकी और डेटा विज्ञान में विशेषज्ञता को जोड़ने वाले नवप्रवर्तकों का एक समर्पित समूह।',
+      teamText:
+        'कृषि, प्रौद्योगिकी और डेटा विज्ञान में विशेषज्ञता को जोड़ने वाले नवप्रवर्तकों का एक समर्पित समूह।',
       newAbout: {
         title: 'हमारे बारे में',
         content:
