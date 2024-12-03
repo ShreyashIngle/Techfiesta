@@ -20,7 +20,7 @@ function Navbar() {
     { label: t.services, path: '/services' },
     { label: t.contact, path: '/contact' },
     { label: t.dashboard, path: '/dashboard' },
-    { label: 'Crop Recommendation', path: '/crop-recommendation', icon: Leaf },
+    { label: t.CropRecommendation, path: '/crop-recommendation', icon: Leaf },
     { label: 'Chatbot', path: '/chatbot', icon: MessageSquare },
     token 
       ? { 
