@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, LogIn, Leaf, MessageSquare } from 'lucide-react';
+import { Menu, X, LogIn, Leaf, MessageSquare, Newspaper } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { translations } from '../../utils/translations';
@@ -22,6 +22,7 @@ function Navbar() {
     { label: t.dashboard, path: '/dashboard' },
     { label: t.CropRecommendation, path: '/crop-recommendation', icon: Leaf },
     { label: 'Chatbot', path: '/chatbot', icon: MessageSquare },
+    { label: 'News', path: '/news', icon: Newspaper },
     token 
       ? { 
           label: t.logout, 
