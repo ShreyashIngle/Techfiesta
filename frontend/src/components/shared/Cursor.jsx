@@ -9,10 +9,8 @@ function Cursor() {
     const cursorBlur = cursorBlurRef.current;
 
     const moveCursor = (e) => {
-      requestAnimationFrame(() => {
-        cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
-        cursorBlur.style.transform = `translate(${e.clientX - 250}px, ${e.clientY - 250}px)`;
-      });
+      cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+      cursorBlur.style.transform = `translate(${e.clientX - 250}px, ${e.clientY - 250}px)`;
     };
 
     const handleHover = () => {
@@ -46,11 +44,11 @@ function Cursor() {
     <>
       <div
         ref={cursorRef}
-        className="fixed w-5 h-5 rounded-full pointer-events-none z-50 transition-transform duration-150 ease-out -translate-x-1/2 -translate-y-1/2 bg-brand-green"
+        className="fixed w-5 h-5 rounded-full pointer-events-none z-50 transition-none duration-100 ease-out -translate-x-1/2 -translate-y-1/2 bg-brand-green"
       />
       <div
         ref={cursorBlurRef}
-        className="fixed w-[500px] h-[500px] rounded-full pointer-events-none z-10 bg-brand-green/30 blur-[80px] transition-transform duration-300"
+        className="fixed w-[500px] h-[500px] rounded-full pointer-events-none z-10 bg-brand-green/30 blur-[180px] transition-none duration-300"
       />
     </>
   );
