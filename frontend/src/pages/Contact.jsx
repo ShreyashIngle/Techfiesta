@@ -116,7 +116,7 @@ function Contact() {
 
               <button
                 type="submit"
-                className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center gap-2"
+                className="w-full bg-green-800 text-white py-3 rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center gap-2"
               >
                 <Send size={20} />
                 {t.form.submit}

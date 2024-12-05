@@ -1,7 +1,12 @@
-import CropRecommendation from "../components/crop/CropRecommendation";
 
 export const translations = {
   en: {
+    news: {
+      title: 'Agricultural News',
+      searchPlaceholder: 'Search cities...',
+      selectCity: 'Select a city',
+    },
+
     nav: {
       home: 'Home',
       about: 'About',
@@ -272,5 +277,10 @@ export const translations = {
       successMessage: "मक्का आपकी परिस्थितियों के लिए सबसे अच्छी फसल है!",
       failureMessage: "फसल सिफारिश प्राप्त करने में विफल",
     },
+    news: {
+      title: 'कृषि समाचार',
+      searchPlaceholder: 'शहर खोजें...',
+      selectCity: 'शहर चुनें',
+    }
   },
 };

@@ -9,13 +9,13 @@ function ChatMessage({ message, isBot }) {
       className={`flex gap-4 ${isBot ? 'justify-start' : 'justify-end'}`}
     >
       {isBot && (
-        <div className="w-10 h-10 rounded-full bg-green-600 flex items-center justify-center">
+        <div className="w-10 h-10 rounded-full bg-green-800 flex items-center justify-center">
           <Bot className="w-6 h-6 text-white" />
         </div>
       )}
       <div
         className={`max-w-[80%] rounded-2xl p-4 ${
-          isBot ? 'bg-gray-800' : 'bg-green-600'
+          isBot ? 'bg-gray-800' : 'bg-green-800'
         }`}
       >
         <p className="text-white">{message}</p>
