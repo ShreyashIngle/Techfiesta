@@ -20,9 +20,9 @@ function Navbar() {
     { label: t.services, path: '/services' },
     { label: t.contact, path: '/contact' },
     { label: t.dashboard, path: '/dashboard' },
-    { label: t.CropRecommendation, path: '/crop-recommendation', icon: Leaf },
-    { label: 'Chatbot', path: '/chatbot', icon: MessageSquare },
-    { label: 'News', path: '/news', icon: Newspaper },
+    // { label: t.CropRecommendation, path: '/crop-recommendation', icon: Leaf },
+    // { label: 'Chatbot', path: '/chatbot', icon: MessageSquare },
+    // { label: 'News', path: '/news', icon: Newspaper },
     token 
       ? { 
           label: t.logout, 

@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { Send } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { Send } from 'lucide-react';
+import { useState } from 'react';
 
 function ChatInput({ onSendMessage }) {
   const [message, setMessage] = useState('');
@@ -27,7 +27,7 @@ function ChatInput({ onSendMessage }) {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           type="submit"
-          className="absolute right-2 top-1/2 -translate-y-1/2 bg-green-600 p-3 rounded-xl hover:bg-green-700 transition-colors"
+          className="absolute right-2 top-1/2 -translate-y-1/2 bg-green-800 p-3 rounded-xl hover:bg-green-700 transition-colors"
         >
           <Send className="w-5 h-5" />
         </motion.button>

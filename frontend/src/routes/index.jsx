@@ -5,6 +5,7 @@ import About from '../pages/About';
 import Services from '../pages/Services';
 import Contact from '../pages/Contact';
 import Dashboard from '../pages/Dashboard';
+import MapView from '../pages/dashboard/MapView';
 import Login from '../pages/Login';
 import Signup from '../pages/Signup';
 import ForgotPassword from '../pages/ForgotPassword';
@@ -30,20 +31,15 @@ export const router = createBrowserRouter([
       { path: 'services', element: <Services /> },
       { path: 'contact', element: <Contact /> },
       { 
-        path: 'dashboard', 
-        element: <ProtectedRoute><Dashboard /></ProtectedRoute>
-      },
-      {
-        path: 'crop-recommendation',
-        element: <ProtectedRoute><CropRecommendation /></ProtectedRoute>
-      },
-      {
-        path: 'chatbot',
-        element: <ProtectedRoute><Chatbot /></ProtectedRoute>
-      },
-      {
-        path: 'news',
-        element: <News />
+        path: 'dashboard',
+        element: <ProtectedRoute><Dashboard /></ProtectedRoute>,
+        children: [
+          { index: true, element: <Navigate to="map" replace /> },
+          { path: 'map', element: <MapView /> },
+          { path: 'crop-recommendation', element: <CropRecommendation /> },
+          { path: 'chatbot', element: <Chatbot /> },
+          { path: 'news', element: <News /> }
+        ]
       },
       { path: 'login', element: <Login /> },
       { path: 'signup', element: <Signup /> },

@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { X } from 'lucide-react';
 
 function NewsDialog({ isOpen, onClose, news }) {
@@ -15,7 +15,7 @@ function NewsDialog({ isOpen, onClose, news }) {
         >
           <div className="p-6">
             <div className="flex items-center justify-between mb-4">
-              <span className="bg-green-600 text-white px-3 py-1 rounded-full text-sm">
+              <span className="bg-green-800 text-white px-3 py-1 rounded-full text-sm">
                 {news.city}
               </span>
               <button

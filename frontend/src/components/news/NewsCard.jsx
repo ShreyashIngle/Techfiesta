@@ -14,7 +14,7 @@ function NewsCard({ news }) {
       >
         <div className="p-6">
           <div className="flex items-center justify-between mb-4">
-            <span className="bg-green-600 text-white px-3 py-1 rounded-full text-sm">
+            <span className="bg-green-800 text-white px-3 py-1 rounded-full text-sm">
               {news.city}
             </span>
           </div>
