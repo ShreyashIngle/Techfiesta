@@ -4,7 +4,7 @@ import { Menu, X, LogIn, Leaf, MessageSquare, Newspaper } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { translations } from '../../utils/translations';
-import logo from "../../images/logo.jpg";
+import logo from "../../images/logo.png";
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);

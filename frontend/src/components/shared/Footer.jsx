@@ -83,7 +83,7 @@
 
 import { motion } from 'framer-motion';
 import { Facebook, Twitter, Instagram, Mail, Phone, MapPin } from 'lucide-react';
-import logo from "../../images/logo.jpg";
+import logo from "../../images/logo.png";
 import { useLanguage } from '../../contexts/LanguageContext';
 import { translations } from '../../utils/translations';
 
