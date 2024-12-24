@@ -4,6 +4,7 @@ import { Menu, X, LogIn, Leaf, MessageSquare, Newspaper } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { translations } from '../../utils/translations';
+import ProfileIcon from './ProfileIcon';
 import logo from "../../images/logo.png";
 
 function Navbar() {
@@ -20,19 +21,6 @@ function Navbar() {
     { label: t.services, path: '/services' },
     { label: t.contact, path: '/contact' },
     { label: t.dashboard, path: '/dashboard' },
-    // { label: t.CropRecommendation, path: '/crop-recommendation', icon: Leaf },
-    // { label: 'Chatbot', path: '/chatbot', icon: MessageSquare },
-    // { label: 'News', path: '/news', icon: Newspaper },
-    token 
-      ? { 
-          label: t.logout, 
-          path: '#', 
-          onClick: () => {
-            localStorage.removeItem('token');
-            navigate('/login');
-          }
-        }
-      : { label: t.login, path: '/login', icon: LogIn }
   ];
 
   const isActive = (path) => location.pathname === path;
@@ -42,33 +30,36 @@ function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           <Link to="/" className="flex-shrink-0">
-            <img
-              className="h-12 w-auto"
-              src={logo}
-              alt="Logo"
-            />
+            <img className="h-12 w-auto" src={logo} alt="Logo" />
           </Link>
           
-          <div className="hidden md:block">
+          <div className="hidden md:flex md:items-center">
             <div className="ml-10 flex items-baseline space-x-8">
               {navItems.map((item) => (
-                <motion.div
-                  key={item.label}
-                  whileHover={{ scale: 1.05 }}
-                >
+                <motion.div key={item.label} whileHover={{ scale: 1.05 }}>
                   <Link
                     to={item.path}
-                    onClick={item.onClick}
-                    className={`px-3 py-2 rounded-md text-sm font-medium transition-colors hover-effect flex items-center gap-2
-                      ${isActive(item.path) 
-                        ? 'text-brand-green' 
-                        : 'text-gray-300 hover:text-white'}`}
+                    className={`px-3 py-2 rounded-md text-sm font-medium transition-colors hover-effect
+                      ${isActive(item.path) ? 'text-brand-green' : 'text-gray-300 hover:text-white'}`}
                   >
-                    {item.icon && <item.icon size={18} />}
                     {item.label}
                   </Link>
                 </motion.div>
               ))}
+            </div>
+            
+            <div className="ml-8">
+              {token ? (
+                <ProfileIcon />
+              ) : (
+                <Link
+                  to="/login"
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg bg-brand-green text-black font-medium hover:bg-opacity-90 transition-colors"
+                >
+                  <LogIn className="w-5 h-5" />
+                  {t.login}
+                </Link>
+              )}
             </div>
           </div>
 
@@ -94,19 +85,26 @@ function Navbar() {
               <Link
                 key={item.label}
                 to={item.path}
-                onClick={() => {
-                  setIsOpen(false);
-                  item.onClick?.();
-                }}
-                className={`block px-3 py-2 rounded-md text-base font-medium hover-effect flex items-center gap-2
-                  ${isActive(item.path)
-                    ? 'text-brand-green'
-                    : 'text-gray-300 hover:text-white'}`}
+                onClick={() => setIsOpen(false)}
+                className={`block px-3 py-2 rounded-md text-base font-medium hover-effect
+                  ${isActive(item.path) ? 'text-brand-green' : 'text-gray-300 hover:text-white'}`}
               >
-                {item.icon && <item.icon size={18} />}
                 {item.label}
               </Link>
             ))}
+            {token ? (
+              <div className="px-3 py-2">
+                <ProfileIcon />
+              </div>
+            ) : (
+              <Link
+                to="/login"
+                onClick={() => setIsOpen(false)}
+                className="block px-3 py-2 text-base font-medium text-gray-300 hover:text-white hover-effect"
+              >
+                {t.login}
+              </Link>
+            )}
           </div>
         </motion.div>
       )}
