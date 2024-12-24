@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import passport from 'passport';
 import authRoutes from './routes/auth.js';
+import userRoutes from './routes/user.js';
 import './config/passport.js';
 import morgan from 'morgan';
 
@@ -19,6 +20,7 @@ app.use(passport.initialize());
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/user', userRoutes);
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI)

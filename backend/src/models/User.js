@@ -18,6 +18,27 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  avatar: {
+    type: String,
+    default: ''
+  },
+  location: {
+    type: String,
+    default: ''
+  },
+  phone: {
+    type: String,
+    default: ''
+  },
+  landArea: {
+    type: String,
+    default: ''
+  },
+  notifications: {
+    emailNotifications: { type: Boolean, default: true },
+    weatherAlerts: { type: Boolean, default: true },
+    marketPrices: { type: Boolean, default: false }
+  },
   resetPasswordOTP: String,
   resetPasswordOTPExpires: Date,
   githubId: String,
