@@ -45,14 +45,14 @@ function Login() {
         <div className="w-full md:w-1/2 p-12">
           <h2 className="text-4xl font-bold text-gray-900 mb-6">{t.title}</h2>
           
-          <div className="flex gap-4 mb-6">
+          {/* <div className="flex gap-4 mb-6">
             <button className="flex-1 flex items-center justify-center gap-2 py-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
               <Github className="w-6 h-6 text-gray-900" />
             </button>
             <button className="flex-1 flex items-center justify-center gap-2 py-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
               <Linkedin className="w-6 h-6 text-[#0A66C2]" />
             </button>
-          </div>
+          </div> */}
 
           <div className="relative my-8">
             <div className="absolute inset-0 flex items-center">
