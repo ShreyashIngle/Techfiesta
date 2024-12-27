@@ -14,12 +14,18 @@ export const register = async (req, res) => {
     }
 
     // Create new user
-    const user = new User({ name, email, password });
-    await user.save();
+    const user = new User({
+      name,
+      email,
+      password,
+      profileCompleted: false
+    });
 
+    await user.save();
     res.status(201).json({ message: 'User registered successfully' });
   } catch (error) {
-    res.status(500).json({ message: 'Registration failed' });
+    console.error('Registration error:', error);
+    res.status(500).json({ message: 'Registration failed', error: error.message });
   }
 };
 
@@ -48,6 +54,7 @@ export const login = async (req, res) => {
 
     res.json({ token });
   } catch (error) {
+    console.error('Login error:', error);
     res.status(500).json({ message: 'Login failed' });
   }
 };

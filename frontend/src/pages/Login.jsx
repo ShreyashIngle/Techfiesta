@@ -6,11 +6,12 @@ import toast from 'react-hot-toast';
 import axios from 'axios';
 import { useLanguage } from '../contexts/LanguageContext';
 import { translations } from '../utils/translations';
+import ProfileUpdatePopup from '../components/shared/ProfileUpdatePopup';
 
 function Login() {
   const navigate = useNavigate();
-  const { language } = useLanguage();  // Get the current language from context
-  const t = translations[language].login;  // Get the login translations based on current language
+  const { language } = useLanguage();
+  const t = translations[language].login;
 
   const [formData, setFormData] = useState({
     email: '',
@@ -18,6 +19,7 @@ function Login() {
   });
 
   const [showPassword, setShowPassword] = useState(false);
+  const [showProfilePopup, setShowProfilePopup] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -28,8 +30,23 @@ function Login() {
     try {
       const response = await axios.post('http://localhost:5000/api/auth/login', formData);
       localStorage.setItem('token', response.data.token);
-      toast.success('Login successful!');
-      navigate('/dashboard');
+      
+      // Check if profile is complete
+      const profileResponse = await axios.get('http://localhost:5000/api/user/profile', {
+        headers: { Authorization: `Bearer ${response.data.token}` }
+      });
+
+      const isProfileComplete = profileResponse.data.location && 
+                              profileResponse.data.phone && 
+                              profileResponse.data.landArea &&
+                              profileResponse.data.soilType;
+
+      if (!isProfileComplete) {
+        setShowProfilePopup(true);
+      } else {
+        toast.success('Login successful!');
+        navigate('/dashboard');
+      }
     } catch (error) {
       toast.error(error.response?.data?.message || 'Login failed');
     }
@@ -44,15 +61,6 @@ function Login() {
       >
         <div className="w-full md:w-1/2 p-12">
           <h2 className="text-4xl font-bold text-gray-900 mb-6">{t.title}</h2>
-          
-          {/* <div className="flex gap-4 mb-6">
-            <button className="flex-1 flex items-center justify-center gap-2 py-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
-              <Github className="w-6 h-6 text-gray-900" />
-            </button>
-            <button className="flex-1 flex items-center justify-center gap-2 py-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
-              <Linkedin className="w-6 h-6 text-[#0A66C2]" />
-            </button>
-          </div> */}
 
           <div className="relative my-8">
             <div className="absolute inset-0 flex items-center">
@@ -121,11 +129,19 @@ function Login() {
               to="/signup"
               className="inline-block border-2 border-white text-white px-12 py-4 rounded-xl hover:bg-white hover:text-emerald-500 transition-colors text-center font-semibold"
             >
-              {t.signUpText} {/* Translated SIGN UP text */}
+              {t.signUpText}
             </Link>
           </div>
         </div>
       </motion.div>
+
+      <ProfileUpdatePopup 
+        isOpen={showProfilePopup} 
+        onClose={() => {
+          setShowProfilePopup(false);
+          navigate('/dashboard');
+        }} 
+      />
     </div>
   );
 }

@@ -34,6 +34,15 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: ''
   },
+  soilType: {
+    type: String,
+    enum: ['Clay', 'Sandy', 'Silty', 'Peaty', 'Chalky', 'Loamy', 'Other', ''],
+    default: ''
+  },
+  profileCompleted: {
+    type: Boolean,
+    default: false
+  },
   notifications: {
     emailNotifications: { type: Boolean, default: true },
     weatherAlerts: { type: Boolean, default: true },
@@ -41,8 +50,6 @@ const userSchema = new mongoose.Schema({
   },
   resetPasswordOTP: String,
   resetPasswordOTPExpires: Date,
-  githubId: String,
-  linkedinId: String
 }, {
   timestamps: true
 });
