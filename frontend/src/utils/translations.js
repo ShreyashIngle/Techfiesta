@@ -1,4 +1,5 @@
 
+
 export const translations = {
   en: {
     news: {
@@ -151,6 +152,8 @@ export const translations = {
       email: 'Email',
       landArea: 'Land Area',
       landAreaPlaceholder: 'Total area in acres',
+      soilType: 'Soil Type',
+      soilTypePlaceholder: 'Select soil type',
       edit: 'Edit Profile',
       save: 'Save Changes',
       cancel: 'Cancel',
@@ -324,6 +327,8 @@ export const translations = {
       email: 'ईमेल',
       landArea: 'भूमि क्षेत्र',
       landAreaPlaceholder: 'कुल क्षेत्र एकड़ में',
+      soilType: 'मिट्टी का प्रकार',
+      soilTypePlaceholder: 'मिट्टी का प्रकार चुनें',
       edit: 'प्रोफ़ाइल संपादित करें',
       save: 'परिवर्तन सहेजें',
       cancel: 'रद्द करें',

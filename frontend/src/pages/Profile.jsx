@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Camera, MapPin, Phone, Mail, Ruler } from 'lucide-react';
+import { Camera, MapPin, Phone, Mail, Ruler, Leaf } from 'lucide-react';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -18,9 +18,12 @@ function Profile() {
     location: '',
     phone: '',
     landArea: '',
+    soilType: ''
   });
 
   const [isEditing, setIsEditing] = useState(false);
+
+  const soilTypes = ['Clay', 'Sandy', 'Silty', 'Peaty', 'Chalky', 'Loamy', 'Other'];
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -31,7 +34,6 @@ function Profile() {
         });
 
         if (response.data) {
-          // Ensure avatar is correctly handled with a fallback for default avatar
           const avatarUrl = response.data.avatar ? `${API_BASE_URL}${response.data.avatar}` : `${API_BASE_URL}/default-avatar.png`;
 
           setProfile({
@@ -70,13 +72,11 @@ function Profile() {
 
         const newAvatarUrl = `${API_BASE_URL}${response.data.avatarUrl}`;
 
-        // Update profile state with new avatar
         setProfile(prev => ({
           ...prev,
-          avatar: `${newAvatarUrl}?t=${Date.now()}`, // Cache-busting
+          avatar: `${newAvatarUrl}?t=${Date.now()}`,
         }));
 
-        // Update localStorage with the new avatar URL
         localStorage.setItem('userProfile', JSON.stringify({
           ...profile,
           avatar: response.data.avatarUrl
@@ -221,6 +221,26 @@ function Profile() {
                         className="w-full pl-10 pr-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-green disabled:opacity-50"
                         placeholder={t.landAreaPlaceholder}
                       />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-400 mb-2">
+                      {t.soilType}
+                    </label>
+                    <div className="relative">
+                      <Leaf className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                      <select
+                        value={profile.soilType}
+                        onChange={(e) => setProfile(prev => ({ ...prev, soilType: e.target.value }))}
+                        disabled={!isEditing}
+                        className="w-full pl-10 pr-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-green disabled:opacity-50"
+                      >
+                        <option value="">{t.soilTypePlaceholder}</option>
+                        {soilTypes.map(type => (
+                          <option key={type} value={type}>{type}</option>
+                        ))}
+                      </select>
                     </div>
                   </div>
                 </div>
