@@ -20,7 +20,7 @@ export const translations = {
     },
     hero: {
       title: 'PREDICT. GROW. HARVEST.',
-      subtitle: 'WELCOME TO YIELDVISION!',
+      subtitle: 'WELCOME TO YIELD VISION!',
       description:
         'At YieldVision, we combine cutting-edge satellite imagery with advanced machine learning to provide accurate yield predictions for farmers worldwide. Our platform uses real-time satellite data to forecast crop yields, optimize farming practices, and increase productivity.',
     },
