@@ -4,7 +4,7 @@ import mapboxgl from 'mapbox-gl';
 import { Activity, Users, Target, Trophy, Clock, MapPin, Phone, Mail } from 'lucide-react';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
-mapboxgl.accessToken = '';
+mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
 function MapView() {
   const mapContainer = useRef(null);
