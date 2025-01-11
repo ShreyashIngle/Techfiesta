@@ -4,7 +4,7 @@ import mapboxgl from 'mapbox-gl';
 import { Activity, Users, Target, Trophy, Clock, MapPin, Phone, Mail } from 'lucide-react';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
-mapboxgl.accessToken = 'pk.eyJ1Ijoic2lkY3VwZ29sZiIsImEiOiJjbHNxYzJtMmowMGRpMmpxcnp5Z2E0M3ZqIn0.your-token';
+mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
 function MapView() {
   const mapContainer = useRef(null);
@@ -42,11 +42,12 @@ function MapView() {
   }, []);
 
   const statsCards = [
-    { icon: Target, label: 'Total Bays', value: facilityStats.totalBays },
-    { icon: Activity, label: 'Active Bays', value: facilityStats.activeBays },
-    { icon: Users, label: 'Total Players', value: facilityStats.totalPlayers },
-    { icon: Trophy, label: 'Average Score', value: facilityStats.averageScore }
+    { icon: Target, label: 'Total Fields Analyzed', value: facilityStats.totalFieldsAnalyzed },
+    { icon: Activity, label: 'Active Monitoring Areas', value: facilityStats.activeMonitoringAreas },
+    { icon: Users, label: 'Farmers Engaged', value: facilityStats.totalFarmers },
+    { icon: Trophy, label: 'Predicted Yield (Avg)', value: facilityStats.averageYield }
   ];
+  
 
   return (
     <div className="p-8">
