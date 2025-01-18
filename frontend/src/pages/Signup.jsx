@@ -1,11 +1,11 @@
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Link, useNavigate } from 'react-router-dom';
-import { Eye, EyeOff } from 'lucide-react';
-import toast from 'react-hot-toast';
-import axios from 'axios';
-import { useLanguage } from '../contexts/LanguageContext';
-import { translations } from '../utils/translations';
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { Link, useNavigate } from "react-router-dom";
+import { Eye, EyeOff } from "lucide-react";
+import toast from "react-hot-toast";
+import axios from "axios";
+import { useLanguage } from "../contexts/LanguageContext";
+import { translations } from "../utils/translations";
 
 function Signup() {
   const navigate = useNavigate();
@@ -13,9 +13,10 @@ function Signup() {
   const t = translations[language].signup;
 
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
+    name: "",
+    email: "",
+    password: "",
+    role: "",
   });
 
   const [showPassword, setShowPassword] = useState(false);
@@ -31,11 +32,11 @@ function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5000/api/auth/register', formData);
-      toast.success('Registration successful! Please login.');
-      navigate('/login');
+      await axios.post("http://localhost:5000/api/auth/register", formData);
+      toast.success("Registration successful! Please login.");
+      navigate("/login");
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Registration failed');
+      toast.error(error.response?.data?.message || "Registration failed");
     }
   };
 
@@ -67,7 +68,9 @@ function Signup() {
               <div className="w-full border-t border-gray-200"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-white text-gray-500">{t.orUseEmail}</span>
+              <span className="px-4 bg-white text-gray-500">
+                {t.orUseEmail}
+              </span>
             </div>
           </div>
 
@@ -98,7 +101,7 @@ function Signup() {
 
             <div className="relative">
               <input
-                type={showPassword ? 'text' : 'password'}
+                type={showPassword ? "text" : "password"}
                 name="password"
                 placeholder={t.passwordPlaceholder}
                 value={formData.password}
@@ -117,6 +120,22 @@ function Signup() {
                   <Eye className="w-6 h-6 text-gray-500" />
                 )}
               </button>
+            </div>
+
+            <div className="w-full">
+              <select
+                name="role"
+                value={formData.role}
+                onChange={handleChange}
+                className="w-full px-6 py-4 bg-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-green text-gray-900 placeholder-gray-800"
+                required
+              >
+                <option value="" disabled>
+                  Select Role
+                </option>
+                <option value="farmer">Farmer</option>
+                <option value="enterprise">Enterprise</option>
+              </select>
             </div>
 
             <button

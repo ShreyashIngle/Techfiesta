@@ -16,6 +16,7 @@ function Login() {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
+    role: 'farmer' // Default role
   });
 
   const [showPassword, setShowPassword] = useState(false);
@@ -30,23 +31,27 @@ function Login() {
     try {
       const response = await axios.post('http://localhost:5000/api/auth/login', formData);
       localStorage.setItem('token', response.data.token);
+      localStorage.setItem('userRole', response.data.role);
       
-      // Check if profile is complete
-      const profileResponse = await axios.get('http://localhost:5000/api/user/profile', {
-        headers: { Authorization: `Bearer ${response.data.token}` }
-      });
+      if (response.data.role === 'farmer') {
+        // Check if profile is complete for farmers only
+        const profileResponse = await axios.get('http://localhost:5000/api/user/profile', {
+          headers: { Authorization: `Bearer ${response.data.token}` }
+        });
 
-      const isProfileComplete = profileResponse.data.location && 
-                              profileResponse.data.phone && 
-                              profileResponse.data.landArea &&
-                              profileResponse.data.soilType;
+        const isProfileComplete = profileResponse.data.location && 
+                                profileResponse.data.phone && 
+                                profileResponse.data.landArea &&
+                                profileResponse.data.soilType;
 
-      if (!isProfileComplete) {
-        setShowProfilePopup(true);
-      } else {
-        toast.success('Login successful!');
-        navigate('/dashboard');
+        if (!isProfileComplete) {
+          setShowProfilePopup(true);
+          return;
+        }
       }
+      
+      toast.success('Login successful!');
+      navigate('/dashboard');
     } catch (error) {
       toast.error(error.response?.data?.message || 'Login failed');
     }
@@ -101,6 +106,34 @@ function Login() {
               >
                 {showPassword ? <EyeOff className="w-6 h-6" /> : <Eye className="w-6 h-6" />}
               </button>
+            </div>
+
+            <div className="flex flex-col space-y-4">
+              <label className="text-gray-700">Login as:</label>
+              <div className="flex space-x-4">
+                <label className="flex items-center space-x-2 text-gray-700">
+                  <input
+                    type="radio"
+                    name="role"
+                    value="farmer"
+                    checked={formData.role === 'farmer'}
+                    onChange={handleChange}
+                    className="form-radio text-brand-green"
+                  />
+                  <span>Farmer</span>
+                </label>
+                <label className="flex items-center space-x-2 text-gray-700">
+                  <input
+                    type="radio"
+                    name="role"
+                    value="enterprise"
+                    checked={formData.role === 'enterprise'}
+                    onChange={handleChange}
+                    className="form-radio text-brand-green"
+                  />
+                  <span>Enterprise</span>
+                </label>
+              </div>
             </div>
 
             <div className="flex items-center justify-end">

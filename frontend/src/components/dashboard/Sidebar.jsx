@@ -1,16 +1,27 @@
 import { motion } from 'framer-motion';
 import { Leaf, Map, MessageSquare, Newspaper } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
-
-const menuItems = [
-  { icon: Map, label: 'Map View', path: '/dashboard/map' },
-  { icon: Leaf, label: 'Crop Recommendation', path: '/dashboard/crop-recommendation' },
-  { icon: MessageSquare, label: 'Chatbot', path: '/dashboard/chatbot' },
-  { icon: Newspaper, label: 'News', path: '/dashboard/news' }
-];
+import { useState, useEffect } from 'react';
 
 function Sidebar() {
   const location = useLocation();
+  const [userRole, setUserRole] = useState('');
+
+  useEffect(() => {
+    const role = localStorage.getItem('userRole');
+    setUserRole(role);
+  }, []);
+
+  const menuItems = userRole === 'farmer' 
+    ? [
+        { icon: Map, label: 'Map View', path: '/dashboard/map' },
+        { icon: Leaf, label: 'Crop Recommendation', path: '/dashboard/crop-recommendation' },
+        { icon: MessageSquare, label: 'Chatbot', path: '/dashboard/chatbot' },
+        { icon: Newspaper, label: 'News', path: '/dashboard/news' }
+      ]
+    : [
+        { icon: Map, label: 'Map View', path: '/dashboard/map' }
+      ];
 
   return (
     <motion.div

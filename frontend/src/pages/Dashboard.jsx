@@ -6,7 +6,7 @@ function Dashboard() {
     <div className="min-h-screen pt-20 bg-gradient-to-b from-black to-gray-900">
       <div className="flex">
         <Sidebar />
-        <div className="flex-1 ml-64">
+        <div className="flex-1 pl-64 w-full p-8">
           <Outlet />
         </div>
       </div>

@@ -5,7 +5,7 @@ import { sendOTPEmail } from '../utils/email.js';
 
 export const register = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, role } = req.body;
 
     // Check if user already exists
     const existingUser = await User.findOne({ email });
@@ -18,6 +18,7 @@ export const register = async (req, res) => {
       name,
       email,
       password,
+      role,
       profileCompleted: false
     });
 
@@ -47,12 +48,12 @@ export const login = async (req, res) => {
 
     // Generate JWT
     const token = jwt.sign(
-      { userId: user._id },
+      { userId: user._id, role: user.role },
       process.env.JWT_SECRET,
       { expiresIn: '24h' }
     );
 
-    res.json({ token });
+    res.json({ token, role: user.role });
   } catch (error) {
     console.error('Login error:', error);
     res.status(500).json({ message: 'Login failed' });

@@ -15,11 +15,18 @@ import News from '../pages/News';
 import Profile from '../pages/Profile';
 import Settings from '../pages/Settings';
 
-const ProtectedRoute = ({ children }) => {
+const ProtectedRoute = ({ children, allowedRoles = ['farmer', 'enterprise'] }) => {
   const token = localStorage.getItem('token');
+  const userRole = localStorage.getItem('userRole');
+
   if (!token) {
     return <Navigate to="/login" replace />;
   }
+
+  if (!allowedRoles.includes(userRole)) {
+    return <Navigate to="/dashboard/map" replace />;
+  }
+
   return children;
 };
 
@@ -38,9 +45,18 @@ export const router = createBrowserRouter([
         children: [
           { index: true, element: <Navigate to="map" replace /> },
           { path: 'map', element: <MapView /> },
-          { path: 'crop-recommendation', element: <CropRecommendation /> },
-          { path: 'chatbot', element: <Chatbot /> },
-          { path: 'news', element: <News /> }
+          { 
+            path: 'crop-recommendation', 
+            element: <ProtectedRoute allowedRoles={['farmer']}><CropRecommendation /></ProtectedRoute> 
+          },
+          { 
+            path: 'chatbot', 
+            element: <ProtectedRoute allowedRoles={['farmer']}><Chatbot /></ProtectedRoute> 
+          },
+          { 
+            path: 'news', 
+            element: <ProtectedRoute allowedRoles={['farmer']}><News /></ProtectedRoute> 
+          }
         ]
       },
       { 
