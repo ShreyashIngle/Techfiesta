@@ -14,6 +14,9 @@ import Chatbot from '../pages/Chatbot';
 import News from '../pages/News';
 import Profile from '../pages/Profile';
 import Settings from '../pages/Settings';
+import GovernmentSchemes from '../pages/dashboard/GovernmentSchemes';
+import WeatherForecast from '../pages/dashboard/WeatherForecast';
+import Report from '../pages/dashboard/Report';
 
 const ProtectedRoute = ({ children, allowedRoles = ['farmer', 'enterprise'] }) => {
   const token = localStorage.getItem('token');
@@ -56,7 +59,16 @@ export const router = createBrowserRouter([
           { 
             path: 'news', 
             element: <ProtectedRoute allowedRoles={['farmer']}><News /></ProtectedRoute> 
-          }
+          },
+          {
+            path: 'schemes',
+            element: <ProtectedRoute allowedRoles={['farmer']}><GovernmentSchemes /></ProtectedRoute>
+          },
+          {
+            path: 'report',
+            element: <ProtectedRoute allowedRoles={['farmer']}><Report /></ProtectedRoute>
+          },
+          { path: 'weather', element: <ProtectedRoute allowedRoles={['farmer']}><WeatherForecast /></ProtectedRoute> }
         ]
       },
       { 

@@ -1,27 +1,36 @@
+import { useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Menu, X, LogIn, Leaf, MessageSquare, Newspaper, Map, GanttChart, FileText, Cloud } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { Leaf, Map, MessageSquare, Newspaper } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useLanguage } from '../../contexts/LanguageContext';
+import { translations } from '../../utils/translations';
+// import ProfileIcon from './ProfileIcon';
+// import logo from "../../images/logo.png";
 
 function Sidebar() {
+  const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
-  const [userRole, setUserRole] = useState('');
-
-  useEffect(() => {
-    const role = localStorage.getItem('userRole');
-    setUserRole(role);
-  }, []);
+  const navigate = useNavigate();
+  const { language } = useLanguage();
+  const t = translations[language].nav;
+  const token = localStorage.getItem('token');
+  const userRole = localStorage.getItem('userRole');
 
   const menuItems = userRole === 'farmer' 
     ? [
         { icon: Map, label: 'Map View', path: '/dashboard/map' },
         { icon: Leaf, label: 'Crop Recommendation', path: '/dashboard/crop-recommendation' },
         { icon: MessageSquare, label: 'Chatbot', path: '/dashboard/chatbot' },
-        { icon: Newspaper, label: 'News', path: '/dashboard/news' }
+        { icon: Newspaper, label: 'News', path: '/dashboard/news' },
+        { icon: GanttChart, label: 'Government Schemes', path: '/dashboard/schemes' },
+        { icon: FileText, label: 'Report', path: '/dashboard/report' },
+        { icon: Cloud, label: 'Weather', path: '/dashboard/weather' }
       ]
     : [
         { icon: Map, label: 'Map View', path: '/dashboard/map' }
       ];
+
+  const isActive = (path) => location.pathname === path;
 
   return (
     <motion.div
