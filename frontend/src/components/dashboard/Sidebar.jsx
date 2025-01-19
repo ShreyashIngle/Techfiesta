@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, LogIn, Leaf, MessageSquare, Newspaper, Map, GanttChart, FileText, Cloud } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -13,22 +13,29 @@ function Sidebar() {
   const navigate = useNavigate();
   const { language } = useLanguage();
   const t = translations[language].nav;
-  const token = localStorage.getItem('token');
-  const userRole = localStorage.getItem('userRole');
+  const [userRole, setUserRole] = useState(null);
 
-  const menuItems = userRole === 'farmer' 
-    ? [
-        { icon: Map, label: 'Map View', path: '/dashboard/map' },
-        { icon: Leaf, label: 'Crop Recommendation', path: '/dashboard/crop-recommendation' },
-        { icon: MessageSquare, label: 'Chatbot', path: '/dashboard/chatbot' },
-        { icon: Newspaper, label: 'News', path: '/dashboard/news' },
-        { icon: GanttChart, label: 'Government Schemes', path: '/dashboard/schemes' },
-        { icon: FileText, label: 'Report', path: '/dashboard/report' },
-        { icon: Cloud, label: 'Weather', path: '/dashboard/weather' }
-      ]
-    : [
-        { icon: Map, label: 'Map View', path: '/dashboard/map' }
-      ];
+  useEffect(() => {
+    const role = localStorage.getItem('userRole');
+    setUserRole(role);
+  }, []);
+
+  const farmerMenuItems = [
+    { icon: Map, label: 'Map View', path: '/dashboard/map' },
+    { icon: Leaf, label: 'Crop Recommendation', path: '/dashboard/crop-recommendation' },
+    { icon: MessageSquare, label: 'Chatbot', path: '/dashboard/chatbot' },
+    { icon: Newspaper, label: 'News', path: '/dashboard/news' },
+    { icon: GanttChart, label: 'Government Schemes', path: '/dashboard/schemes' },
+    { icon: FileText, label: 'Report', path: '/dashboard/report' },
+    { icon: Cloud, label: 'Weather', path: '/dashboard/weather' }
+  ];
+
+  const enterpriseMenuItems = [
+    { icon: Map, label: 'Map View', path: '/dashboard/map' },
+    { icon: Cloud, label: 'Weather', path: '/dashboard/weather' }
+  ];
+
+  const menuItems = userRole === 'farmer' ? farmerMenuItems : enterpriseMenuItems;
 
   const isActive = (path) => location.pathname === path;
 
@@ -40,13 +47,13 @@ function Sidebar() {
     >
       <div className="space-y-2">
         {menuItems.map((item) => {
-          const isActive = location.pathname === item.path;
+          const isCurrentActive = isActive(item.path);
           return (
             <Link
               key={item.path}
               to={item.path}
               className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
-                isActive
+                isCurrentActive
                   ? 'bg-green-800 text-white'
                   : 'text-gray-300 hover:bg-gray-800 hover:text-white'
               }`}

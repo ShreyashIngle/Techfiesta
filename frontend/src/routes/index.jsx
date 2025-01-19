@@ -15,8 +15,8 @@ import News from '../pages/News';
 import Profile from '../pages/Profile';
 import Settings from '../pages/Settings';
 import GovernmentSchemes from '../pages/dashboard/GovernmentSchemes';
-import WeatherForecast from '../pages/dashboard/WeatherForecast';
 import Report from '../pages/dashboard/Report';
+import WeatherForecast from '../pages/dashboard/WeatherForecast';
 
 const ProtectedRoute = ({ children, allowedRoles = ['farmer', 'enterprise'] }) => {
   const token = localStorage.getItem('token');
@@ -47,7 +47,10 @@ export const router = createBrowserRouter([
         element: <ProtectedRoute><Dashboard /></ProtectedRoute>,
         children: [
           { index: true, element: <Navigate to="map" replace /> },
-          { path: 'map', element: <MapView /> },
+          { 
+            path: 'map', 
+            element: <ProtectedRoute allowedRoles={['farmer', 'enterprise']}><MapView /></ProtectedRoute> 
+          },
           { 
             path: 'crop-recommendation', 
             element: <ProtectedRoute allowedRoles={['farmer']}><CropRecommendation /></ProtectedRoute> 
@@ -60,15 +63,18 @@ export const router = createBrowserRouter([
             path: 'news', 
             element: <ProtectedRoute allowedRoles={['farmer']}><News /></ProtectedRoute> 
           },
-          {
-            path: 'schemes',
-            element: <ProtectedRoute allowedRoles={['farmer']}><GovernmentSchemes /></ProtectedRoute>
+          { 
+            path: 'schemes', 
+            element: <ProtectedRoute allowedRoles={['farmer']}><GovernmentSchemes /></ProtectedRoute> 
           },
-          {
-            path: 'report',
-            element: <ProtectedRoute allowedRoles={['farmer']}><Report /></ProtectedRoute>
+          { 
+            path: 'report', 
+            element: <ProtectedRoute allowedRoles={['farmer']}><Report /></ProtectedRoute> 
           },
-          { path: 'weather', element: <ProtectedRoute allowedRoles={['farmer']}><WeatherForecast /></ProtectedRoute> }
+          { 
+            path: 'weather', 
+            element: <ProtectedRoute allowedRoles={['farmer','enterprise']}><WeatherForecast /></ProtectedRoute> 
+          }
         ]
       },
       { 
