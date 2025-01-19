@@ -11,6 +11,7 @@ export const getProfile = async (req, res) => {
     }
     res.json(user);
   } catch (error) {
+    console.error('Error fetching profile:', error);
     res.status(500).json({ message: 'Error fetching profile' });
   }
 };
@@ -19,25 +20,36 @@ export const updateProfile = async (req, res) => {
   try {
     const { name, location, phone, landArea, soilType } = req.body;
     
-    // Check if all required fields are filled
-    const isProfileComplete = location && phone && landArea && soilType;
+    // Validate the input data
+    if (!name || !location || !phone || !landArea || !soilType) {
+      return res.status(400).json({ message: 'All fields are required' });
+    }
+
+    // Find the user first
+    const user = await User.findById(req.userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Update user fields
+    user.name = name;
+    user.location = location;
+    user.phone = phone;
+    user.landArea = landArea;
+    user.soilType = soilType;
+    user.profileCompleted = true;
+
+    // Save the updated user
+    const updatedUser = await user.save();
     
-    const user = await User.findByIdAndUpdate(
-      req.userId,
-      { 
-        name, 
-        location, 
-        phone, 
-        landArea, 
-        soilType,
-        profileCompleted: isProfileComplete 
-      },
-      { new: true }
-    ).select('-password');
+    // Remove password from response
+    const userResponse = updatedUser.toObject();
+    delete userResponse.password;
     
-    res.json(user);
+    res.json(userResponse);
   } catch (error) {
-    res.status(500).json({ message: 'Error updating profile' });
+    console.error('Error updating profile:', error);
+    res.status(500).json({ message: 'Error updating profile. Please try again.' });
   }
 };
 
@@ -49,18 +61,20 @@ export const uploadAvatar = async (req, res) => {
 
     const user = await User.findById(req.userId);
     if (!user) {
+      // Delete the uploaded file if user not found
+      fs.unlinkSync(req.file.path);
       return res.status(404).json({ message: 'User not found' });
     }
 
     // Delete old avatar if exists
     if (user.avatar) {
-      const oldAvatarPath = path.join(__dirname, '../../uploads', user.avatar);
+      const oldAvatarPath = path.join(process.cwd(), 'uploads', path.basename(user.avatar));
       if (fs.existsSync(oldAvatarPath)) {
         fs.unlinkSync(oldAvatarPath);
       }
     }
 
-    // Save new avatar path
+    // Update user with new avatar path
     const avatarPath = `/uploads/${req.file.filename}`;
     user.avatar = avatarPath;
     await user.save();
@@ -68,6 +82,10 @@ export const uploadAvatar = async (req, res) => {
     res.json({ avatarUrl: avatarPath });
   } catch (error) {
     console.error('Avatar upload error:', error);
+    // Delete the uploaded file if there's an error
+    if (req.file) {
+      fs.unlinkSync(req.file.path);
+    }
     res.status(500).json({ message: 'Error uploading avatar' });
   }
 };
@@ -83,6 +101,7 @@ export const updateNotifications = async (req, res) => {
     
     res.json(user);
   } catch (error) {
+    console.error('Error updating notifications:', error);
     res.status(500).json({ message: 'Error updating notifications' });
   }
 };
