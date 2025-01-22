@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Upload, AlertCircle } from 'lucide-react';
+import { Upload, AlertCircle, Download } from 'lucide-react';
 import axios from 'axios';
 import {
   LineChart,
@@ -64,6 +64,44 @@ function NDVIPrediction() {
     }
   };
 
+  const downloadCSV = () => {
+    if (!predictions || predictions.length === 0) {
+      toast.error('No prediction data available to download');
+      return;
+    }
+
+    // Convert predictions data to CSV format
+    const headers = ['date', 'VH', 'VV', 'ndvi', 'cloudCoveragePercent', 'predicted_ndvi', 'prediction_type'];
+    const csvContent = [
+      headers.join(','),
+      ...predictions.map(row => 
+        headers.map(header => {
+          const value = row[header];
+          // Handle numbers with proper decimal places
+          if (typeof value === 'number') {
+            return value.toFixed(4);
+          }
+          // Wrap strings containing commas in quotes
+          if (typeof value === 'string' && value.includes(',')) {
+            return `"${value}"`;
+          }
+          return value;
+        }).join(',')
+      )
+    ].join('\n');
+
+    // Create and trigger download
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'ndvi_predictions.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
@@ -86,13 +124,27 @@ function NDVIPrediction() {
 
   return (
     <div className="p-8">
-      <motion.h1
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="text-4xl font-bold mb-8"
-      >
-        NDVI Prediction
-      </motion.h1>
+      <div className="flex justify-between items-center mb-8">
+        <motion.h1
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-4xl font-bold"
+        >
+          NDVI Prediction
+        </motion.h1>
+        {predictions && (
+          <motion.button
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            whileHover={{ scale: 1.05 }}
+            onClick={downloadCSV}
+            className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+          >
+            <Download className="w-5 h-5" />
+            Download CSV
+          </motion.button>
+        )}
+      </div>
 
       <motion.div
         initial={{ opacity: 0, y: -20 }}
