@@ -97,7 +97,7 @@ export const translations = {
       newAbout: {
         title: 'ABOUT US',
         content:
-          'We are a team of five students from PICT College, passionate about leveraging satellite imagery and machine learning to predict crop yields. Our goal is to provide farmers with accurate, data-driven insights to optimize farming practices and promote sustainable agriculture. Through innovation and technology, we aim to contribute to smarter, more efficient farming solutions worldwide.',
+          'We are a team of five students team TechHarvesters , passionate about leveraging satellite imagery and machine learning to predict crop yields. Our goal is to provide farmers with accurate, data-driven insights to optimize farming practices and promote sustainable agriculture. Through innovation and technology, we aim to contribute to smarter, more efficient farming solutions worldwide.',
         images: {
           alt1: 'Golf facility',
           alt2: 'Golf course',
@@ -267,7 +267,7 @@ export const translations = {
       newAbout: {
         title: 'हमारे बारे में',
         content:
-          'हम PICT कॉलेज के पांच छात्रों की एक टीम हैं, जो उपग्रह इमेजरी और मशीन लर्निंग का उपयोग करके फसल उपज की भविष्यवाणी करने के लिए प्रतिबद्ध हैं। हमारा उद्देश्य किसानों को सटीक, डेटा-संचालित अंतर्दृष्टि प्रदान करना है ताकि कृषि प्रथाओं को अनुकूलित किया जा सके और स्थायी कृषि को बढ़ावा दिया जा सके। नवाचार और प्रौद्योगिकी के माध्यम से, हम वैश्विक स्तर पर अधिक स्मार्ट और कुशल खेती समाधानों में योगदान देने का प्रयास करते हैं।',
+          'हम TechHarvesters Team के पांच छात्रों की एक टीम हैं, जो उपग्रह इमेजरी और मशीन लर्निंग का उपयोग करके फसल उपज की भविष्यवाणी करने के लिए प्रतिबद्ध हैं। हमारा उद्देश्य किसानों को सटीक, डेटा-संचालित अंतर्दृष्टि प्रदान करना है ताकि कृषि प्रथाओं को अनुकूलित किया जा सके और स्थायी कृषि को बढ़ावा दिया जा सके। नवाचार और प्रौद्योगिकी के माध्यम से, हम वैश्विक स्तर पर अधिक स्मार्ट और कुशल खेती समाधानों में योगदान देने का प्रयास करते हैं।',
         images: {
           alt1: 'गोल्फ सुविधा',
           alt2: 'गोल्फ कोर्स',

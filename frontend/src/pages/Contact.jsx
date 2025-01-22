@@ -46,7 +46,7 @@ function Contact() {
               <MapPin className="w-8 h-8 text-green-500" />
               <div>
                 <h3 className="text-xl font-semibold">Address</h3>
-                <p className="text-gray-300">PICT, Pune, Maharashtra</p>
+                <p className="text-gray-300">TechHarvesters, Pune, Maharashtra</p>
               </div>
             </div>
 

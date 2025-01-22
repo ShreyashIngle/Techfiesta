@@ -31,7 +31,7 @@ function Report() {
             text: "Secondary crop options include Barley and Maize, which would also thrive in your current conditions."
           }
         ],
-        backgroundColor: "bg-sky-50",
+        backgroundColor: "bg-sky-200",
         textColor: "text-sky-900",
         borderColor: "border-sky-200"
       },
@@ -48,7 +48,7 @@ function Report() {
             }
           }
         ],
-        backgroundColor: "bg-rose-50",
+        backgroundColor: "bg-sky-200",
         textColor: "text-rose-900",
         borderColor: "border-rose-200"
       },
@@ -65,7 +65,7 @@ function Report() {
             ]
           }
         ],
-        backgroundColor: "bg-emerald-50",
+        backgroundColor: "bg-sky-200",
         textColor: "text-emerald-900",
         borderColor: "border-emerald-200"
       }
@@ -179,7 +179,7 @@ function Report() {
           whileHover={{ scale: 1.05 }}
           onClick={generatePDF}
           disabled={isGenerating}
-          className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-sky-500 to-sky-600 text-white rounded-xl hover:from-sky-600 hover:to-sky-700 transition-all duration-300 shadow-lg disabled:opacity-50"
+          className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-800 to-green-900 text-white rounded-xl hover:from-green-600 hover:to-green-700 transition-all duration-300 shadow-lg disabled:opacity-50"
         >
           {isGenerating ? (
             <>Generating...</>
