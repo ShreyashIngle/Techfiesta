@@ -1,24 +1,23 @@
-#import libraries
-import uvicorn
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from npk.Data import Cdata
 import numpy as np
 import pickle
 import pandas as pd
-from fastapi.middleware.cors import CORSMiddleware
+from .ndvi_prediction import app as ndvi_app
 
 # Initialize FastAPI app
 app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allows all origins
+    allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["*"],  # Allows all methods (GET, POST, etc.)
-    allow_headers=["*"],  # Allows all headers
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
-# Load pre-trained model
+# Load pre-trained model for crop recommendation
 pickle_in = open("src/npk/model.pkl", "rb")
 classifier = pickle.load(pickle_in)
 
@@ -30,7 +29,6 @@ crops = [
     'coconut', 'cotton', 'jute', 'coffee'
 ]
 
-
 @app.get('/')
 def index():
     return {'message': 'FastAPI server'}
@@ -38,27 +36,24 @@ def index():
 @app.post('/predict')
 def predict_crop(data: Cdata):
     try:
-        # Extract features from the input data
         features = [[
-            data.N,  # Nitrogen
-            data.P,  # Phosphorus
-            data.K,  # Potassium
-            data.PH,  # pH level
-            data.Temp,  # Temperature
-            data.Humidity,  # Humidity
-            data.Rain  # Rainfall
+            data.N,
+            data.P,
+            data.K,
+            data.PH,
+            data.Temp,
+            data.Humidity,
+            data.Rain
         ]]
         
-        # Make prediction
         prediction = classifier.predict(features)
-        
-        # Return the predicted crop directly if it's already a string
         return {'Predicted Crop': prediction[0]}
     except Exception as e:
         return {'error': str(e)}
 
+# Mount the NDVI prediction app
+app.mount("/ndvi", ndvi_app)
 
 if __name__ == '__main__':
+    import uvicorn
     uvicorn.run(app, host='127.0.0.1', port=8000)
-    
-#uvicorn main:app --reload

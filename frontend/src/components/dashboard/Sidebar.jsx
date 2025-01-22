@@ -1,11 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, LogIn, Leaf, MessageSquare, Newspaper, Map, GanttChart, FileText, Cloud } from 'lucide-react';
+import { Menu, X, LogIn, Leaf, MessageSquare, Newspaper, Map, GanttChart, FileText, Cloud, BarChart } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { translations } from '../../utils/translations';
-// import ProfileIcon from './ProfileIcon';
-// import logo from "../../images/logo.png";
 
 function Sidebar({ isOpen, setIsOpen }) {
   const location = useLocation();
@@ -30,7 +28,9 @@ function Sidebar({ isOpen, setIsOpen }) {
   ];
 
   const enterpriseMenuItems = [
-    { icon: Map, label: 'Map View', path: '/dashboard/map' }
+    { icon: Map, label: 'Map View', path: '/dashboard/map' },
+    { icon: Cloud, label: 'Weather', path: '/dashboard/weather' },
+    { icon: BarChart, label: 'NDVI Prediction', path: '/dashboard/ndvi-prediction' }
   ];
 
   const menuItems = userRole === 'farmer' ? farmerMenuItems : enterpriseMenuItems;
@@ -81,7 +81,6 @@ function Sidebar({ isOpen, setIsOpen }) {
         )}
       </AnimatePresence>
 
-      {/* Overlay for mobile */}
       {isOpen && window.innerWidth < 768 && (
         <motion.div
           initial={{ opacity: 0 }}

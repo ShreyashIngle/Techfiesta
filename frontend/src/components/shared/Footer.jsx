@@ -48,7 +48,7 @@
 //               </li>
 //               <li className="flex items-center text-gray-300">
 //                 <Mail className="mr-2" size={20} />
-//                 info@yieldivision.com
+//                 info@yieldvision.com
 //               </li>
 //             </ul>
 //           </div>
@@ -136,7 +136,7 @@ function Footer() {
               </li>
               <li className="flex items-center text-gray-300">
                 <Mail className="mr-2" size={20} />
-                info@yieldivision.com
+                info@yieldvision.com
               </li>
             </ul>
           </div>
@@ -159,7 +159,7 @@ function Footer() {
         </div>
 
         <div className="mt-12 pt-8 border-t border-white/10 text-center text-gray-400">
-          <p>&copy; {new Date().getFullYear()} yieldivision. {t.allRightsReserved}</p>
+          <p>&copy; {new Date().getFullYear()} yieldvision. {t.allRightsReserved}</p>
         </div>
       </div>
     </footer>

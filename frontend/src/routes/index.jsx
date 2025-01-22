@@ -17,6 +17,7 @@ import Settings from '../pages/Settings';
 import GovernmentSchemes from '../pages/dashboard/GovernmentSchemes';
 import Report from '../pages/dashboard/Report';
 import WeatherForecast from '../pages/dashboard/WeatherForecast';
+import NDVIPrediction from '../pages/dashboard/NDVIPrediction';
 
 const ProtectedRoute = ({ children, allowedRoles = ['farmer', 'enterprise'] }) => {
   const token = localStorage.getItem('token');
@@ -74,6 +75,10 @@ export const router = createBrowserRouter([
           { 
             path: 'weather', 
             element: <ProtectedRoute allowedRoles={['farmer','enterprise']}><WeatherForecast /></ProtectedRoute> 
+          },
+          { 
+            path: 'ndvi-prediction', 
+            element: <ProtectedRoute allowedRoles={['enterprise']}><NDVIPrediction /></ProtectedRoute> 
           }
         ]
       },
