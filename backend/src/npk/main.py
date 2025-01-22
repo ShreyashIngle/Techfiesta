@@ -1,10 +1,11 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+import uvicorn
 from npk.Data import Cdata
 import numpy as np
 import pickle
 import pandas as pd
-from .ndvi_prediction import app as ndvi_app
+from npk.ndvi_prediction import app as ndvi_app
 
 # Initialize FastAPI app
 app = FastAPI()
@@ -17,7 +18,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Load pre-trained model for crop recommendation
+# Mount the NDVI prediction app
+app.mount("/ndvi", ndvi_app)
+
+# Load pre-trained model for crop prediction
 pickle_in = open("src/npk/model.pkl", "rb")
 classifier = pickle.load(pickle_in)
 
@@ -51,9 +55,5 @@ def predict_crop(data: Cdata):
     except Exception as e:
         return {'error': str(e)}
 
-# Mount the NDVI prediction app
-app.mount("/ndvi", ndvi_app)
-
 if __name__ == '__main__':
-    import uvicorn
     uvicorn.run(app, host='127.0.0.1', port=8000)

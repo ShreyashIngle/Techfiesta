@@ -49,7 +49,7 @@ function NDVIPrediction() {
 
     try {
       setLoading(true);
-      const response = await axios.post('http://localhost:8000/predict', formData, {
+      const response = await axios.post('http://localhost:8000/ndvi/ndvipredict', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -94,51 +94,49 @@ function NDVIPrediction() {
         NDVI Prediction
       </motion.h1>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <motion.div
-          initial={{ opacity: 0, x: -50 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="bg-gray-800 rounded-xl p-6"
-        >
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="space-y-4">
-              {Object.entries(files).map(([key, value]) => (
-                <div key={key} className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-300">
-                    {key.split('_')[0].toUpperCase()} File
-                  </label>
-                  <div className="flex items-center space-x-3">
-                    <label className="flex-1 cursor-pointer">
-                      <div className="bg-gray-700 rounded-lg px-4 py-3 flex items-center justify-center border-2 border-dashed border-gray-600 hover:border-green-500 transition-colors">
-                        <Upload className="w-5 h-5 mr-2" />
-                        <span>{value ? value.name : 'Choose CSV file'}</span>
-                      </div>
-                      <input
-                        type="file"
-                        accept=".csv"
-                        onChange={(e) => handleFileChange(e, key)}
-                        className="hidden"
-                      />
-                    </label>
-                  </div>
-                </div>
-              ))}
-
-              <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-300">
-                  Cloud Threshold (%)
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="mb-8"
+      >
+        <form onSubmit={handleSubmit} className="bg-gray-800 rounded-xl p-6">
+          <div className="grid grid-cols-4 gap-4">
+            {Object.entries(files).map(([key, value]) => (
+              <div key={key}>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  {key.split('_')[0].toUpperCase()} File
                 </label>
-                <input
-                  type="number"
-                  value={cloudThreshold}
-                  onChange={(e) => setCloudThreshold(e.target.value)}
-                  min="0"
-                  max="100"
-                  className="w-full px-4 py-3 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                />
+                <label className="cursor-pointer block">
+                  <div className="bg-gray-700 rounded-lg px-4 py-3 flex items-center justify-center border-2 border-dashed border-gray-600 hover:border-green-500 transition-colors">
+                    <Upload className="w-5 h-5 mr-2" />
+                    <span className="truncate">{value ? value.name : 'Choose CSV file'}</span>
+                  </div>
+                  <input
+                    type="file"
+                    accept=".csv"
+                    onChange={(e) => handleFileChange(e, key)}
+                    className="hidden"
+                  />
+                </label>
               </div>
-            </div>
+            ))}
 
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Cloud Threshold (%)
+              </label>
+              <input
+                type="number"
+                value={cloudThreshold}
+                onChange={(e) => setCloudThreshold(e.target.value)}
+                min="0"
+                max="100"
+                className="w-full px-4 py-3 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+              />
+            </div>
+          </div>
+
+          <div className="mt-4">
             <button
               type="submit"
               disabled={loading}
@@ -146,61 +144,61 @@ function NDVIPrediction() {
             >
               {loading ? 'Processing...' : 'Generate Prediction'}
             </button>
-          </form>
-        </motion.div>
+          </div>
+        </form>
+      </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, x: 50 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="bg-gray-800 rounded-xl p-6"
-        >
-          {predictions ? (
-            <div className="h-[600px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={predictions}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                  <XAxis
-                    dataKey="date"
-                    stroke="#9CA3AF"
-                    angle={-45}
-                    textAnchor="end"
-                    height={80}
-                  />
-                  <YAxis stroke="#9CA3AF" />
-                  <Tooltip content={<CustomTooltip />} />
-                  <Legend />
-                  <Line
-                    type="monotone"
-                    dataKey="VH"
-                    stroke="#EF4444"
-                    strokeWidth={2}
-                    dot={{ fill: '#EF4444' }}
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="VV"
-                    stroke="#3B82F6"
-                    strokeWidth={2}
-                    dot={{ fill: '#3B82F6' }}
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="ndvi"
-                    stroke="#10B981"
-                    strokeWidth={2}
-                    dot={{ fill: '#10B981' }}
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
-          ) : (
-            <div className="h-full flex flex-col items-center justify-center text-gray-400">
-              <AlertCircle className="w-16 h-16 mb-4" />
-              <p className="text-lg">Upload files and generate prediction to see the graph</p>
-            </div>
-          )}
-        </motion.div>
-      </div>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="bg-gray-800 rounded-xl p-6"
+      >
+        {predictions ? (
+          <div className="h-[600px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={predictions}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                <XAxis
+                  dataKey="date"
+                  stroke="#9CA3AF"
+                  angle={-45}
+                  textAnchor="end"
+                  height={80}
+                />
+                <YAxis stroke="#9CA3AF" />
+                <Tooltip content={<CustomTooltip />} />
+                <Legend />
+                <Line
+                  type="monotone"
+                  dataKey="VH"
+                  stroke="#EF4444"
+                  strokeWidth={2}
+                  dot={{ fill: '#EF4444' }}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="VV"
+                  stroke="#3B82F6"
+                  strokeWidth={2}
+                  dot={{ fill: '#3B82F6' }}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="ndvi"
+                  stroke="#10B981"
+                  strokeWidth={2}
+                  dot={{ fill: '#10B981' }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        ) : (
+          <div className="h-[400px] flex flex-col items-center justify-center text-gray-400">
+            <AlertCircle className="w-16 h-16 mb-4" />
+            <p className="text-lg">Upload files and generate prediction to see the graph</p>
+          </div>
+        )}
+      </motion.div>
     </div>
   );
 }

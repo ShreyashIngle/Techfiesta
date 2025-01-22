@@ -1,6 +1,5 @@
 from fastapi import FastAPI, UploadFile, File, HTTPException, Query
 from fastapi.responses import JSONResponse
-from fastapi.middleware.cors import CORSMiddleware
 import pandas as pd
 import pickle
 import logging
@@ -9,15 +8,6 @@ from typing import Dict, List
 
 # Initialize FastAPI app
 app = FastAPI(title="NDVI Prediction API")
-
-# Setup CORS
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
@@ -35,7 +25,7 @@ except FileNotFoundError as e:
 async def index():
     return {"message": "Welcome to the NDVI Prediction API"}
 
-@app.post("/predict")
+@app.post("/ndvipredict")
 async def predict(
     vh_file: UploadFile = File(...),
     vv_file: UploadFile = File(...),
@@ -89,7 +79,12 @@ async def predict(
 
         return JSONResponse(content={
             "message": "Prediction successful",
-            "predictions": predictions.to_dict(orient="records")
+            "predictions": predictions.to_dict(orient="records"),
+            "summary": {
+                "total_predictions": len(predictions),
+                "cloudy_predictions": sum(predictions['cloudCoveragePercent'] > cloud_threshold),
+                "clear_predictions": sum(predictions['cloudCoveragePercent'] <= cloud_threshold)
+            }
         })
 
     except Exception as e:
