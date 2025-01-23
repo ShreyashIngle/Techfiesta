@@ -18,7 +18,7 @@ function NDVIImagePrediction() {
 
   const handleFileChange = (e, fileType) => {
     const file = e.target.files[0];
-    if (file && file.name.endsWith('.tif')) {
+    if (file && file.name.endsWith('.tiff')) {
       setFiles(prev => ({ ...prev, [fileType]: file }));
     } else {
       toast.error('Please upload a valid TIFF file');
