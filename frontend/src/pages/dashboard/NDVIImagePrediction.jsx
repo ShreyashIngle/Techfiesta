@@ -127,6 +127,7 @@ function NDVIImagePrediction() {
             </div>
           )}
 
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {['vh_file', 'vv_file', 'ndvi_file'].map((fileType) => (
               <div key={fileType}>
