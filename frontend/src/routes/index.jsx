@@ -18,6 +18,7 @@ import GovernmentSchemes from '../pages/dashboard/GovernmentSchemes';
 import Report from '../pages/dashboard/Report';
 import WeatherForecast from '../pages/dashboard/WeatherForecast';
 import NDVIPrediction from '../pages/dashboard/NDVIPrediction';
+import NDVIImagePrediction from '../pages/dashboard/NDVIImagePrediction';
 
 const ProtectedRoute = ({ children, allowedRoles = ['farmer', 'enterprise'] }) => {
   const token = localStorage.getItem('token');
@@ -79,6 +80,10 @@ export const router = createBrowserRouter([
           { 
             path: 'ndvi-prediction', 
             element: <ProtectedRoute allowedRoles={['enterprise']}><NDVIPrediction /></ProtectedRoute> 
+          },
+          { 
+            path: 'ndvi-image-prediction', 
+            element: <ProtectedRoute allowedRoles={['enterprise']}><NDVIImagePrediction /></ProtectedRoute> 
           }
         ]
       },

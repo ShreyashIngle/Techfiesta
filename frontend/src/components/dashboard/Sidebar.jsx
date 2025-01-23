@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, LogIn, Leaf, MessageSquare, Newspaper, Map, GanttChart, FileText, Cloud, BarChart } from 'lucide-react';
+import { Menu, X, LogIn, Leaf, MessageSquare, Newspaper, Map, GanttChart, FileText, Cloud, BarChart, Image } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { translations } from '../../utils/translations';
@@ -30,7 +30,8 @@ function Sidebar({ isOpen, setIsOpen }) {
   const enterpriseMenuItems = [
     { icon: Map, label: 'Map View', path: '/dashboard/map' },
     { icon: Cloud, label: 'Weather', path: '/dashboard/weather' },
-    { icon: BarChart, label: 'NDVI Prediction', path: '/dashboard/ndvi-prediction' }
+    { icon: BarChart, label: 'NDVI Prediction', path: '/dashboard/ndvi-prediction' },
+    { icon: Image, label: 'Image NDVI Prediction', path: '/dashboard/ndvi-image-prediction' }
   ];
 
   const menuItems = userRole === 'farmer' ? farmerMenuItems : enterpriseMenuItems;

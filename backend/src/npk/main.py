@@ -6,6 +6,7 @@ import numpy as np
 import pickle
 import pandas as pd
 from npk.ndvi_prediction import app as ndvi_app
+from npk.image_ndvi import app as image_ndvi_app
 
 # Initialize FastAPI app
 app = FastAPI()
@@ -20,6 +21,9 @@ app.add_middleware(
 
 # Mount the NDVI prediction app
 app.mount("/ndvi", ndvi_app)
+
+# Mount the Image NDVI prediction app
+app.mount("/image-ndvi", image_ndvi_app)
 
 # Load pre-trained model for crop prediction
 pickle_in = open("src/npk/model.pkl", "rb")
