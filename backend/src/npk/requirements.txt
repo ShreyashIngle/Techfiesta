@@ -1,0 +1,11 @@
+streamlit
+openai==0.28
+audio_recorder_streamlit
+streamlit-float
+python-dotenv
+assemblyai
+pyttsx3
+google-cloud-texttospeech
+requests
+pydub
+numpy
