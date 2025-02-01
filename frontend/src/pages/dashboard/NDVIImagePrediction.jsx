@@ -109,8 +109,8 @@ function NDVIImagePrediction() {
               <p className="text-gray-300">Message: {prediction.message}</p>
               {prediction.predictions.map((pred, index) => (
                 <div key={index} className="space-y-1">
-                  <p className="text-gray-300">VH: {prediction.input_values.VH_mean}</p>
-                  <p className="text-gray-300">VV: {prediction.input_values.VV_mean}</p>
+                  <p className="text-gray-300">VH: {prediction.input_values.VH_mean_raw}</p>
+                  <p className="text-gray-300">VV: {prediction.input_values.VV_mean_raw}</p>
                   <p className="text-gray-300">Predicted NDVI: {pred.predicted_ndvi}</p>
                 </div>
               ))}
