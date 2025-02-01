@@ -5,14 +5,11 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 
 function NDVIImagePrediction() {
-  const [useOptionalValues, setUseOptionalValues] = useState(false);
   const [files, setFiles] = useState({
     vh_file: null,
     vv_file: null,
-    ndvi_file: null,
   });
-  const [cloudCover, setCloudCover] = useState('');
-  const [tolerance, setTolerance] = useState('');
+
   const [prediction, setPrediction] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -27,28 +24,15 @@ function NDVIImagePrediction() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!files.vh_file || !files.vv_file) {
       toast.error('Please upload VH and VV files');
-      return;
-    }
-
-    if (useOptionalValues && !files.ndvi_file) {
-      toast.error('Please upload NDVI file when using optional values');
       return;
     }
 
     const formData = new FormData();
     formData.append('vh_file', files.vh_file);
     formData.append('vv_file', files.vv_file);
-    if (files.ndvi_file) {
-      formData.append('ndvi_file', files.ndvi_file);
-    }
-    formData.append('use_optional_values', useOptionalValues);
-    if (useOptionalValues) {
-      formData.append('cloud_cover', cloudCover);
-      formData.append('tolerance', tolerance);
-    }
 
     try {
       setLoading(true);
@@ -57,6 +41,7 @@ function NDVIImagePrediction() {
           'Content-Type': 'multipart/form-data',
         },
       });
+      console.log('Backend response:', response.data);
       setPrediction(response.data);
       toast.success('Prediction successful!');
     } catch (error) {
@@ -83,53 +68,10 @@ function NDVIImagePrediction() {
         className="bg-gray-800 rounded-2xl p-8"
       >
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="mb-6">
-            <label className="flex items-center space-x-4">
-              <input
-                type="checkbox"
-                checked={useOptionalValues}
-                onChange={(e) => setUseOptionalValues(e.target.checked)}
-                className="form-checkbox h-5 w-5 text-green-500"
-              />
-              <span>Use optional values</span>
-            </label>
-          </div>
-
-          {useOptionalValues && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Cloud Cover (decimal)
-                </label>
-                <input
-                  type="number"
-                  step="0.01"
-                  value={cloudCover}
-                  onChange={(e) => setCloudCover(e.target.value)}
-                  className="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                  placeholder="Enter cloud cover value"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Tolerance (decimal)
-                </label>
-                <input
-                  type="number"
-                  step="0.01"
-                  value={tolerance}
-                  onChange={(e) => setTolerance(e.target.value)}
-                  className="w-full px-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                  placeholder="Enter tolerance value"
-                />
-              </div>
-            </div>
-          )}
 
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {['vh_file', 'vv_file', 'ndvi_file'].map((fileType) => (
+            {['vh_file', 'vv_file'].map((fileType) => (
               <div key={fileType}>
                 <label className="block text-sm font-medium text-gray-300 mb-2">
                   {fileType.split('_')[0].toUpperCase()} File
@@ -166,21 +108,14 @@ function NDVIImagePrediction() {
             <h3 className="text-xl font-bold mb-4">Prediction Results</h3>
             <div className="space-y-2">
               <p className="text-gray-300">Message: {prediction.message}</p>
-              {prediction.predictions ? (
-                prediction.predictions.map((pred, index) => (
-                  <div key={index} className="space-y-1">
-                    <p className="text-gray-300">VH: {pred.VH}</p>
-                    <p className="text-gray-300">VV: {pred.VV}</p>
-                    <p className="text-gray-300">Predicted NDVI: {pred.predicted_ndvi}</p>
-                  </div>
-                ))
-              ) : (
-                <div className="space-y-1">
-                  <p className="text-gray-300">VH: {prediction.actual_values?.VH}</p>
-                  <p className="text-gray-300">VV: {prediction.actual_values?.VV}</p>
-                  <p className="text-gray-300">NDVI: {prediction.actual_values?.ndvi}</p>
+              {prediction.predictions.map((pred, index) => (
+                <div key={index} className="space-y-1">
+                  <p className="text-gray-300">VH: {prediction.input_values.VH_mean}</p>
+                  <p className="text-gray-300">VV: {prediction.input_values.VV_mean}</p>
+                  <p className="text-gray-300">Predicted NDVI: {pred.predicted_ndvi}</p>
                 </div>
-              )}
+              ))}
+
             </div>
           </div>
         )}

@@ -1,3 +1,5 @@
 .env
+output_audio.mp3
 /node_modules
 **/__pycache__/
+src/npk/chatbot/google_credentials.json
