@@ -6,6 +6,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import authRoutes from './routes/auth.js';
 import userRoutes from './routes/user.js';
+import vegetationIndicesRoutes from './routes/vegetationIndices.js';
 import morgan from 'morgan';
 import multer from 'multer';
 
@@ -64,6 +65,7 @@ app.use('/api/user', (req, res, next) => {
   req.upload = upload;
   next();
 }, userRoutes);
+app.use('/api/vegetation-indices', vegetationIndicesRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
