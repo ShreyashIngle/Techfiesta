@@ -32,14 +32,14 @@ function VegetationIndices() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
+  
     try {
       const coordinates = formData.coordinates.map(coord => [
         parseFloat(coord.lng),
         parseFloat(coord.lat)
       ]);
       coordinates.push(coordinates[0]);
-
+  
       const requestData = {
         type: "mt_stats",
         params: {
@@ -54,24 +54,30 @@ function VegetationIndices() {
           sensors: ["sentinel2"]
         }
       };
-
-      const token = localStorage.getItem("token");
-      if (!token) {
-        toast.error('Authentication required. Please log in.');
-        setLoading(false);
+  
+      // Create task without authentication
+      const taskResponse = await axios.post('http://localhost:5000/api/vegetation-indices/create-task', requestData);
+      console.log('Task Response:', taskResponse.data);  // Log the response
+      const taskId = taskResponse.data.task_id;
+  
+      if (!taskId) {
+        toast.error('Failed to create task');
         return;
       }
-
-      const taskResponse = await axios.post('http://localhost:5000/api/vegetation-indices/create-task', requestData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        }
-      });
-      const taskId = taskResponse.data.task_id;
-
+  
+      // Wait for a few seconds before fetching the results
+      await new Promise(resolve => setTimeout(resolve, 5000));
+  
+      // Get results without authentication
       const resultsResponse = await axios.get(`http://localhost:5000/api/vegetation-indices/get-results/${taskId}`);
-      setResults(resultsResponse.data.result);
-      toast.success('Analysis completed successfully');
+      console.log('Results Response:', resultsResponse.data);  // Log the results response
+  
+      if (!resultsResponse.data.result || resultsResponse.data.result.length === 0) {
+        toast.error('No results found');
+      } else {
+        setResults(resultsResponse.data.result);
+        toast.success('Analysis completed successfully');
+      }
     } catch (error) {
       console.error('Error:', error);
       toast.error(error.response?.data?.message || 'Failed to analyze vegetation indices');
@@ -79,6 +85,7 @@ function VegetationIndices() {
       setLoading(false);
     }
   };
+  
 
   const handleCoordinateChange = (index, field, value) => {
     const newCoordinates = [...formData.coordinates];
@@ -211,8 +218,8 @@ function VegetationIndices() {
                     </tr>
                   </thead>
                   <tbody>
-                    {results.map((result, index) => (
-                      Object.entries(result.indexes).map(([indexName, values]) => (
+                    {results && results.map((result, index) => (
+                      result.indexes && Object.entries(result.indexes).map(([indexName, values]) => (
                         <tr key={`${index}-${indexName}`} className="border-t border-gray-600">
                           <td className="p-2">{result.date}</td>
                           <td className="p-2">{result.cloud}%</td>

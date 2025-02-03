@@ -88,7 +88,7 @@ export const router = createBrowserRouter([
           },
           { 
             path: 'vegetation-indices', 
-            element: <ProtectedRoute allowedRoles={['enterprise']}><VegetationIndices /></ProtectedRoute> 
+            element: <VegetationIndices /> // Removed ProtectedRoute wrapper
           }
         ]
       },
