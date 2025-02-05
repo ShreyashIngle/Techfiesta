@@ -24,9 +24,8 @@ const server = createServer(app);
 // Socket.IO setup
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173",
-    methods: ["GET", "POST"],
-    credentials: true
+    origin: "http://localhost:5173", // Change this to your frontend URL
+    methods: ["GET", "POST"]
   }
 });
 
@@ -34,9 +33,10 @@ const io = new Server(server, {
 // PeerJS server setup
 const peerServer = ExpressPeerServer(server, {
   debug: true,
-  path: '/'
+  path: "/peerjs",
 });
-app.use('/peerjs', peerServer);
+app.use("/peerjs", peerServer);
+
 
 // Configure multer for file uploads
 const storage = multer.diskStorage({
