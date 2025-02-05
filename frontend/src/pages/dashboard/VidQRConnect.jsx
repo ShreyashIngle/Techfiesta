@@ -28,7 +28,7 @@ const categories = {
   "खेती की तकनीकें": {
     "जैविक खेती": {
       title: "जैविक खेती कैसे करें: एक विस्तृत गाइड",
-      videoUrl: "https://www.youtube.com/watch?v=2qiNKen-rm0",
+      videoUrl: "https://www.youtube.com/watch?v=Ha0QOYtNwvs&t=382s",
       qrUrl: "https://example.com/qr5",
     },
     "ड्रिप सिंचाई": {
@@ -98,15 +98,15 @@ const categories = {
     },
   },
   "पशुधन और पोल्ट्री फार्मिंग": {
-    "डेयरी फार्मिंग टिप्स": {
-      title: "डेयरी फार्मिंग: दूध उत्पादन बढ़ाने के उपाय",
-      videoUrl: "https://www.youtube.com/watch?v=Q_AteW2rW6E",
-      qrUrl: "https://example.com/qr17",
-    },
     "पोल्ट्री के लिए सर्वश्रेष्ठ नस्लें": {
       title: "पोल्ट्री फार्मिंग: मुर्गियों की बेहतरीन नस्लें",
       videoUrl: "https://www.youtube.com/watch?v=Moexnha_TAU",
       qrUrl: "https://example.com/qr18",
+    },
+    "डेयरी फार्मिंग टिप्स": {
+      title: "डेयरी फार्मिंग: दूध उत्पादन बढ़ाने के उपाय",
+      videoUrl: "https://www.youtube.com/watch?v=Q_AteW2rW6E",
+      qrUrl: "https://example.com/qr17",
     },
   },
 };
