@@ -1,5 +1,3 @@
-
-
 export const translations = {
   en: {
     news: {
@@ -7,7 +5,6 @@ export const translations = {
       searchPlaceholder: 'Search cities...',
       selectCity: 'Select a city',
     },
-
     nav: {
       home: 'Home',
       about: 'About',
@@ -21,12 +18,10 @@ export const translations = {
     hero: {
       title: 'PREDICT. GROW. HARVEST.',
       subtitle: 'WELCOME TO YieldVision!',
-      description:
-        'At YieldVision, we combine cutting-edge satellite imagery with advanced machine learning to provide accurate yield predictions for farmers worldwide. Our platform uses real-time satellite data to forecast crop yields, optimize farming practices, and increase productivity.',
+      description: 'At YieldVision, we combine cutting-edge satellite imagery with advanced machine learning to provide accurate yield predictions for farmers worldwide. Our platform uses real-time satellite data to forecast crop yields, optimize farming practices, and increase productivity.',
     },
     testimonials: {
-      quote:
-        "Using YieldVision has revolutionized the way we approach farming. The accurate yield predictions and real-time data have helped us optimize our crops and improve overall productivity. It's an invaluable tool that makes farming smarter and more sustainable.",
+      quote: "Using YieldVision has revolutionized the way we approach farming. The accurate yield predictions and real-time data have helped us optimize our crops and improve overall productivity. It's an invaluable tool that makes farming smarter and more sustainable.",
     },
     signup: {
       title: 'Create Account',
@@ -47,8 +42,7 @@ export const translations = {
       learnMore: 'Learn More',
     },
     footer: {
-      description:
-        'Making yield prediction and farming insights accessible to everyone.',
+      description: 'Making yield prediction and farming insights accessible to everyone.',
       quickLinks: 'Quick Links',
       contact: 'Contact',
       followUs: 'Follow Us',
@@ -58,12 +52,9 @@ export const translations = {
       'Satellite Yield Prediction': 'Satellite Yield Prediction',
       'Crop Health Monitoring': 'Crop Health Monitoring',
       'Precision Agriculture Solutions': 'Precision Agriculture Solutions',
-      'Experience the power of advanced satellite imagery and machine learning to accurately predict crop yields.':
-        'Experience the power of advanced satellite imagery and machine learning to accurately predict crop yields.',
-      'Monitor the health of your crops in real-time with high-resolution satellite data, ensuring optimal growth.':
-        'Monitor the health of your crops in real-time with high-resolution satellite data, ensuring optimal growth.',
-      'Leverage data-driven insights to make informed decisions, enhance farm productivity, and promote sustainability.':
-        'Leverage data-driven insights to make informed decisions, enhance farm productivity, and promote sustainability.',
+      'Experience the power of advanced satellite imagery and machine learning to accurately predict crop yields.': 'Experience the power of advanced satellite imagery and machine learning to accurately predict crop yields.',
+      'Monitor the health of your crops in real-time with high-resolution satellite data, ensuring optimal growth.': 'Monitor the health of your crops in real-time with high-resolution satellite data, ensuring optimal growth.',
+      'Leverage data-driven insights to make informed decisions, enhance farm productivity, and promote sustainability.': 'Leverage data-driven insights to make informed decisions, enhance farm productivity, and promote sustainability.',
     },
     login: {
       title: 'Sign In',
@@ -86,18 +77,14 @@ export const translations = {
     about: {
       title: 'About YieldVision',
       mission: 'Our Mission',
-      missionText:
-        'To revolutionize agriculture through advanced satellite technology and machine learning.',
+      missionText: 'To revolutionize agriculture through advanced satellite technology and machine learning.',
       vision: 'Our Vision',
-      visionText:
-        'Creating a future where farming is more predictable, sustainable, and profitable.',
+      visionText: 'Creating a future where farming is more predictable, sustainable, and profitable.',
       team: 'Our Team',
-      teamText:
-        'A dedicated group of innovators combining expertise in agriculture, technology, and data science.',
+      teamText: 'A dedicated group of innovators combining expertise in agriculture, technology, and data science.',
       newAbout: {
         title: 'ABOUT US',
-        content:
-          'We are a team of five students team TechHarvesters , passionate about leveraging satellite imagery and machine learning to predict crop yields. Our goal is to provide farmers with accurate, data-driven insights to optimize farming practices and promote sustainable agriculture. Through innovation and technology, we aim to contribute to smarter, more efficient farming solutions worldwide.',
+        content: 'We are a team of five students team TechHarvesters , passionate about leveraging satellite imagery and machine learning to predict crop yields. Our goal is to provide farmers with accurate, data-driven insights to optimize farming practices and promote sustainable agriculture. Through innovation and technology, we aim to contribute to smarter, more efficient farming solutions worldwide.',
         images: {
           alt1: 'Golf facility',
           alt2: 'Golf course',
@@ -173,8 +160,68 @@ export const translations = {
       settingsSuccess: 'Settings updated successfully',
       settingsError: 'Failed to update settings',
     },
+    // New translations for dashboard features
+    dashboard: {
+      mapView: {
+        title: 'Map View',
+        totalFields: 'Total Fields',
+        activeAreas: 'Active Areas',
+        farmersEngaged: 'Farmers Engaged',
+        predictedYield: 'Predicted Yield',
+        operatingHours: 'Operating Hours',
+        locationDetails: 'Location Details',
+      },
+      ndviPrediction: {
+        title: 'NDVI Prediction',
+        uploadFiles: 'Upload Files',
+        generatePrediction: 'Generate Prediction',
+        cloudThreshold: 'Cloud Threshold',
+        results: 'Prediction Results',
+        downloadCSV: 'Download CSV',
+      },
+      imageNDVI: {
+        title: 'Image NDVI Prediction',
+        vhFile: 'VH File',
+        vvFile: 'VV File',
+        processing: 'Processing...',
+        results: 'Results',
+      },
+      vegetationIndices: {
+        title: 'Vegetation Indices',
+        startDate: 'Start Date',
+        endDate: 'End Date',
+        coordinates: 'Coordinates',
+        analyze: 'Analyze Indices',
+        results: 'Analysis Results',
+      },
+      weather: {
+        title: 'Weather Forecast',
+        searchLocation: 'Enter location',
+        currentWeather: 'Current Weather',
+        forecast: '7-Day Forecast',
+        wind: 'Wind',
+        humidity: 'Humidity',
+        feelsLike: 'Feels Like',
+        cloudCover: 'Cloud Cover',
+      },
+      schemes: {
+        title: 'Government Schemes',
+        benefits: 'Benefits',
+        achievements: 'Achievements',
+        learnMore: 'Learn More',
+      },
+      report: {
+        title: 'Agricultural Report',
+        download: 'Download Report',
+        generating: 'Generating...',
+        sections: {
+          recommendations: 'Crop Recommendations',
+          soilAnalysis: 'Soil Analysis',
+          actionPlan: 'Action Plan',
+        },
+      },
+    },
   },
-  
   hi: {
     nav: {
       home: 'होम',
@@ -189,12 +236,10 @@ export const translations = {
     hero: {
       title: 'भविष्यवाणी। विकास। फसल।',
       subtitle: 'यील्डविज़न में आपका स्वागत है!',
-      description:
-        'यील्डविज़न में, हम दुनिया भर के किसानों के लिए सटीक उपज भविष्यवाणी प्रदान करने के लिए अत्याधुनिक उपग्रह इमेजरी को उन्नत मशीन लर्निंग के साथ जोड़ते हैं।',
+      description: 'यील्डविज़न में, हम दुनिया भर के किसानों के लिए सटीक उपज भविष्यवाणी प्रदान करने के लिए अत्याधुनिक उपग्रह इमेजरी को उन्नत मशीन लर्निंग के साथ जोड़ते हैं।',
     },
     testimonials: {
-      quote:
-        'YieldVision का उपयोग करना खेती के प्रति हमारे दृष्टिकोण में क्रांति ले आया है। सटीक उत्पादन भविष्यवाणियाँ और वास्तविक समय डेटा ने हमें अपनी फसलों को अनुकूलित करने और समग्र उत्पादकता में सुधार करने में मदद की है। यह एक अमूल्य उपकरण है जो खेती को अधिक स्मार्ट और टिकाऊ बनाता है।',
+      quote: 'YieldVision का उपयोग करना खेती के प्रति हमारे दृष्टिकोण में क्रांति ले आया है। सटीक उत्पादन भविष्यवाणियाँ और वास्तविक समय डेटा ने हमें अपनी फसलों को अनुकूलित करने और समग्र उत्पादकता में सुधार करने में मदद की है। यह एक अमूल्य उपकरण है जो खेती को अधिक स्मार्ट और टिकाऊ बनाता है।',
     },
     home: {
       'YIELD PREDICTIONS': 'उत्पादन भविष्यवाणी',
@@ -206,8 +251,7 @@ export const translations = {
     signup: {
       title: 'खाता बनाएँ',
       alreadySigned: 'क्या आप पहले से साइन इन हैं?',
-      enterDetails:
-        'साइट की सभी सुविधाओं का उपयोग करने के लिए अपनी व्यक्तिगत जानकारी दर्ज करें',
+      enterDetails: 'साइट की सभी सुविधाओं का उपयोग करने के लिए अपनी व्यक्तिगत जानकारी दर्ज करें',
       signInButton: 'साइन इन करें',
       orUseEmail: 'या अपने ईमेल से पंजीकरण करें',
       namePlaceholder: 'नाम',
@@ -216,8 +260,7 @@ export const translations = {
       signUpButton: 'साइन अप करें',
     },
     footer: {
-      description:
-        'उत्पादन भविष्यवाणी और कृषि अंतर्दृष्टि को सभी के लिए सुलभ बनाना।',
+      description: 'उत्पादन भविष्यवाणी और कृषि अंतर्दृष्टि को सभी के लिए सुलभ बनाना।',
       quickLinks: 'त्वरित लिंक',
       contact: 'संपर्क करें',
       followUs: 'हमसे जुड़ें',
@@ -234,12 +277,9 @@ export const translations = {
       'Satellite Yield Prediction': 'सैटेलाइट उत्पादन भविष्यवाणी',
       'Crop Health Monitoring': 'फसल स्वास्थ्य निगरानी',
       'Precision Agriculture Solutions': 'सटीक कृषि समाधान',
-      'Experience the power of advanced satellite imagery and machine learning to accurately predict crop yields.':
-        'उन्नत सैटेलाइट इमेजरी और मशीन लर्निंग की शक्ति का अनुभव करें ताकि आप सही तरीके से फसल उत्पादन की भविष्यवाणी कर सकें।',
-      'Monitor the health of your crops in real-time with high-resolution satellite data, ensuring optimal growth.':
-        'उच्च-रिज़ॉल्यूशन सैटेलाइट डेटा के साथ अपनी फसलों के स्वास्थ्य की वास्तविक समय में निगरानी करें, जिससे यह सुनिश्चित होता है कि वे बेहतर वृद्धि कर रहे हैं।',
-      'Leverage data-driven insights to make informed decisions, enhance farm productivity, and promote sustainability.':
-        'डेटा-आधारित अंतर्दृष्टियों का उपयोग करके सूचित निर्णय लें, कृषि उत्पादकता बढ़ाएं और सततता को बढ़ावा दें।',
+      'Experience the power of advanced satellite imagery and machine learning to accurately predict crop yields.': 'उन्नत सैटेलाइट इमेजरी और मशीन लर्निंग की शक्ति का अनुभव करें ताकि आप सही तरीके से फसल उत्पादन की भविष्यवाणी कर सकें।',
+      'Monitor the health of your crops in real-time with high-resolution satellite data, ensuring optimal growth.': 'उच्च-रिज़ॉल्यूशन सैटेलाइट डेटा के साथ अपनी फसलों के स्वास्थ्य की वास्तविक समय में निगरानी करें, जिससे यह सुनिश्चित होता है कि वे बेहतर वृद्धि कर रहे हैं।',
+      'Leverage data-driven insights to make informed decisions, enhance farm productivity, and promote sustainability.': 'डेटा-आधारित अंतर्दृष्टियों का उपयोग करके सूचित निर्णय लें, कृषि उत्पादकता बढ़ाएं और सततता को बढ़ावा दें।',
     },
     login: {
       title: 'साइन इन करें',
@@ -249,25 +289,20 @@ export const translations = {
       signInButton: 'साइन इन करें',
       orUseEmail: 'या अपने ईमेल पासवर्ड का उपयोग करें',
       helloFriend: 'नमस्ते, मित्र!',
-      welcomeMessage:
-        'वेबसाइट पर नए हैं? अपनी व्यक्तिगत जानकारी के साथ पंजीकरण करें',
+      welcomeMessage: 'वेबसाइट पर नए हैं? अपनी व्यक्तिगत जानकारी के साथ पंजीकरण करें',
       signUpText: 'साइन अप करें',
     },
     about: {
       title: 'यील्डविज़न के बारे में',
       mission: 'हमारा मिशन',
-      missionText:
-        'उन्नत उपग्रह प्रौद्योगिकी और मशीन लर्निंग के माध्यम से कृषि में क्रांति लाना।',
+      missionText: 'उन्नत उपग्रह प्रौद्योगिकी और मशीन लर्निंग के माध्यम से कृषि में क्रांति लाना।',
       vision: 'हमारी दृष्टि',
-      visionText:
-        'एक ऐसा भविष्य बनाना जहां खेती अधिक पूर्वानुमेय, टिकाऊ और लाभदायक हो।',
+      visionText: 'एक ऐसा भविष्य बनाना जहां खेती अधिक पूर्वानुमेय, टिकाऊ और लाभदायक हो।',
       team: 'हमारी टीम',
-      teamText:
-        'कृषि, प्रौद्योगिकी और डेटा विज्ञान में विशेषज्ञता को जोड़ने वाले नवप्रवर्तकों का एक समर्पित समूह।',
+      teamText: 'कृषि, प्रौद्योगिकी और डेटा विज्ञान में विशेषज्ञता को जोड़ने वाले नवप्रवर्तकों का एक समर्पित समूह।',
       newAbout: {
         title: 'हमारे बारे में',
-        content:
-          'हम TechHarvesters Team के पांच छात्रों की एक टीम हैं, जो उपग्रह इमेजरी और मशीन लर्निंग का उपयोग करके फसल उपज की भविष्यवाणी करने के लिए प्रतिबद्ध हैं। हमारा उद्देश्य किसानों को सटीक, डेटा-संचालित अंतर्दृष्टि प्रदान करना है ताकि कृषि प्रथाओं को अनुकूलित किया जा सके और स्थायी कृषि को बढ़ावा दिया जा सके। नवाचार और प्रौद्योगिकी के माध्यम से, हम वैश्विक स्तर पर अधिक स्मार्ट और कुशल खेती समाधानों में योगदान देने का प्रयास करते हैं।',
+        content: 'हम TechHarvesters Team के पांच छात्रों की एक टीम हैं, जो उपग्रह इमेजरी और मशीन लर्निंग का उपयोग करके फसल उपज की भविष्यवाणी करने के लिए प्रतिबद्ध हैं। हमारा उद्देश्य किसानों को सटीक, डेटा-संचालित अंतर्दृष्टि प्रदान करना है ताकि कृषि प्रथाओं को अनुकूलित किया जा सके और स्थायी कृषि को बढ़ावा दिया जा सके। नवाचार और प्रौद्योगिकी के माध्यम से, हम वैश्विक स्तर पर अधिक स्मार्ट और कुशल खेती समाधानों में योगदान देने का प्रयास करते हैं।',
         images: {
           alt1: 'गोल्फ सुविधा',
           alt2: 'गोल्फ कोर्स',
@@ -348,5 +383,64 @@ export const translations = {
       settingsSuccess: 'सेटिंग्स सफलतापूर्वक अपडेट की गईं',
       settingsError: 'सेटिंग्स अपडेट करने में विफल',
     },
-  },
-};
+    // New translations for dashboard features in Hindi
+      mapView: {
+        title: 'मानचित्र दृश्य',
+        totalFields: 'कुल खेत',
+        activeAreas: 'सक्रिय क्षेत्र',
+        farmersEngaged: 'जुड़े किसान',
+        predictedYield: 'अनुमानित उपज',
+        operatingHours: 'कार्य समय',
+        locationDetails: 'स्थान विवरण',
+      },
+      ndviPrediction: {
+        title: 'एनडीवीआई भविष्यवाणी',
+        uploadFiles: 'फ़ाइलें अपलोड करें',
+        generatePrediction: 'भविष्यवाणी उत्पन्न करें',
+        cloudThreshold: 'बादल सीमा',
+        results: 'भविष्यवाणी परिणाम',
+        downloadCSV: 'सीएसवी डाउनलोड करें',
+      },
+      imageNDVI: {
+        title: 'छवि एनडीवीआई भविष्यवाणी',
+        vhFile: 'वीएच फ़ाइल',
+        vvFile: 'वीवी फ़ाइल',
+        processing: 'प्रसंस्करण हो रहा है...',
+        results: 'परिणाम',
+      },
+      vegetationIndices: {
+        title: 'वनस्पति सूचकांक',
+        startDate: 'प्रारंभ तिथि',
+        endDate: 'समाप्ति तिथि',
+        coordinates: 'निर्देशांक',
+        analyze: 'विश्लेषण करें',
+        results: 'विश्लेषण परिणाम',
+      },
+      weather: {
+        title: 'मौसम पूर्वानुमान',
+        searchLocation: 'स्थान दर्ज करें',
+        currentWeather: 'वर्तमान मौसम',
+        forecast: '7-दिन का पूर्वानुमान',
+        wind: 'हवा',
+        humidity: 'नमी',
+        feelsLike: 'महसूस होता है',
+        cloudCover: 'बादल छाए',
+      },
+      schemes: {
+        title: 'सरकारी योजनाएं',
+        benefits: 'लाभ',
+        achievements: 'उपलब्धियां',
+        learnMore: 'और जानें',
+      },
+      report: {
+        title: 'कृषि रिपोर्ट',
+        download: 'रिपोर्ट डाउनलोड करें',
+        generating: 'उत्पन्न हो रहा है...',
+        sections: {
+          recommendations: 'फसल सिफारिशें',
+          soilAnalysis: 'मिट्टी विश्लेषण',
+          actionPlan: 'कार्य योजना',
+        },
+      },
+    },
+  };
