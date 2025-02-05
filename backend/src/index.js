@@ -22,29 +22,37 @@ const app = express();
 const server = createServer(app);
 
 // Socket.IO setup
+// In your server.js
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173", // Change this to your frontend URL
-    methods: ["GET", "POST"]
-  }
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST"],
+    credentials: true
+  },
+  allowEIO3: true, // Enable compatibility with Socket.IO v3 clients
+  transports: ['websocket'], // Specify available transports
+  path: '/socket.io/', // Explicit path
+  pingTimeout: 60000, // Increase ping timeout
+  pingInterval: 25000 // Increase ping interval
 });
-
 
 // PeerJS server setup
 const peerServer = ExpressPeerServer(server, {
   debug: true,
-  path: "/peerjs",
+  path: '/',
+  allow_discovery: true
 });
-app.use("/peerjs", peerServer);
 
+// Use the peer server
+app.use('/peerjs', peerServer);
 
 // Configure multer for file uploads
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
+  destination: function (_req, _file, cb) {
     const uploadDir = path.join(__dirname, '../uploads');
     cb(null, uploadDir);
   },
-  filename: function (req, file, cb) {
+  filename: function (_req, file, cb) {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
     cb(null, uniqueSuffix + path.extname(file.originalname));
   }
@@ -55,7 +63,7 @@ const upload = multer({
   limits: {
     fileSize: 5 * 1024 * 1024 // 5MB limit
   },
-  fileFilter: (req, file, cb) => {
+  fileFilter: (_req, file, cb) => {
     const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
     if (allowedTypes.includes(file.mimetype)) {
       cb(null, true);
@@ -63,6 +71,20 @@ const upload = multer({
       cb(new Error('Invalid file type. Only JPEG, PNG and GIF are allowed.'));
     }
   }
+});
+
+app.use(cors({
+  origin: "http://localhost:5173",
+  methods: ['GET', 'POST'],
+  credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
+// Also add WebSocket CORS headers
+app.use((_req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'http://localhost:5173');
+  res.header('Access-Control-Allow-Credentials', true);
+  next();
 });
 
 // Middleware
@@ -82,7 +104,7 @@ app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 // Routes
 app.use('/api/auth', authRoutes);
-app.use('/api/user', (req, res, next) => {
+app.use('/api/user', (req, _res, next) => {
   req.upload = upload;
   next();
 }, userRoutes);
@@ -115,7 +137,7 @@ io.on('connection', (socket) => {
 });
 
 // Error handling middleware
-app.use((err, req, res, next) => {
+app.use((err, _req, res, _next) => {
   console.error(err.stack);
   if (err instanceof multer.MulterError) {
     if (err.code === 'LIMIT_FILE_SIZE') {
