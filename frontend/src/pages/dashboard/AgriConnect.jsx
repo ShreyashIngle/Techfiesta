@@ -69,17 +69,25 @@ function AgriConnect() {
     // Handle incoming calls
     peerRef.current.on("call", (call) => {
       toast.success("Incoming call...");
-
-      if (myStream) {
-        call.answer(myStream);
-        call.on("stream", (remoteVideoStream) => {
-          setRemoteStream(remoteVideoStream);
-          if (remoteVideoRef.current) {
-            remoteVideoRef.current.srcObject = remoteVideoStream;
-          }
+      
+      navigator.mediaDevices
+        .getUserMedia({ video: true, audio: true })
+        .then((stream) => {
+          setMyStream(stream);
+          call.answer(stream);
+          call.on("stream", (remoteVideoStream) => {
+            setRemoteStream(remoteVideoStream);
+            if (remoteVideoRef.current) {
+              remoteVideoRef.current.srcObject = remoteVideoStream;
+            }
+          });
+        })
+        .catch((error) => {
+          console.error("Error accessing media devices:", error);
+          toast.error("Failed to access media devices");
         });
-      }
     });
+    
 
     return () => {
       // Cleanup
