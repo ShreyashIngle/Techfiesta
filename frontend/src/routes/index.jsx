@@ -21,6 +21,7 @@ import NDVIPrediction from '../pages/dashboard/NDVIPrediction';
 import NDVIImagePrediction from '../pages/dashboard/NDVIImagePrediction';
 import VegetationIndices from '../pages/dashboard/VegetationIndices';
 import VidQRConnect from '../pages/dashboard/VidQRConnect';
+import AgriConnect from '../pages/dashboard/AgriConnect';
 
 const ProtectedRoute = ({ children, allowedRoles = ['farmer', 'enterprise'] }) => {
   const token = localStorage.getItem('token');
@@ -94,6 +95,10 @@ export const router = createBrowserRouter([
           {
             path: 'vidqr-connect',
             element: <ProtectedRoute allowedRoles={['farmer']}><VidQRConnect /></ProtectedRoute>
+          },
+          {
+            path: 'agri-connect',
+            element: <ProtectedRoute allowedRoles={['farmer', 'enterprise']}><AgriConnect /></ProtectedRoute>
           }
         ]
       },
