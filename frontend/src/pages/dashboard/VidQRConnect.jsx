@@ -7,12 +7,12 @@ const categories = {
     "प्रधानमंत्री किसान सम्मान निधि योजना": {
       title: "प्रधानमंत्री किसान सम्मान निधि योजना की पूरी जानकारी",
       videoUrl: "https://www.youtube.com/watch?v=87ev--e_zeg",
-      qrUrl: "https://example.com/qr1",
+      qrUrl: "https://drive.google.com/file/d/1ACzDcVUCclGvprpOJqy8BMf25g3PdUtT/view?usp=sharing",
     },
     "किसान क्रेडिट कार्ड": {
       title: "किसान क्रेडिट कार्ड योजना: आवेदन प्रक्रिया और लाभ",
       videoUrl: "https://www.youtube.com/watch?v=m4W5ONPyFek",
-      qrUrl: "https://docs.google.com/document/d/1VC4W8Z-J9paO17bCHe-rEwtAOfND84TiC0e3sV1vmUM/edit?tab=t.0",
+      qrUrl: "https://drive.google.com/file/d/1Q5MVF7yYaOpzOnv_K7fg9UdWLwEqs1R8/view?usp=sharing",
     },
     "प्रधानमंत्री फसल बीमा योजना": {
       title: "फसल बीमा योजना: कैसे करें आवेदन और क्या हैं फायदे",
@@ -29,12 +29,12 @@ const categories = {
     "जैविक खेती": {
       title: "जैविक खेती कैसे करें: एक विस्तृत गाइड",
       videoUrl: "https://www.youtube.com/watch?v=Ha0QOYtNwvs&t=382s",
-      qrUrl: "https://example.com/qr5",
+      qrUrl: "https://drive.google.com/file/d/1KTJr9JKS0YEqd36DV2XHIlGdQQ3-i3hw/view?usp=sharing",
     },
     "ड्रिप सिंचाई": {
       title: "ड्रिप सिंचाई प्रणाली: स्थापना और लाभ",
       videoUrl: "https://www.youtube.com/watch?v=4ucbtnYIgjo",
-      qrUrl: "https://example.com/qr6",
+      qrUrl: "https://drive.google.com/file/d/1EzgG3tWL7u_8NIqyphiIWONExInLRUX1/view?usp=sharing",
     },
     "फसल चक्र के लाभ": {
       title: "फसल चक्र: मिट्टी की उर्वरता बढ़ाने की तकनीक",
@@ -46,7 +46,7 @@ const categories = {
     "मौसमी फसल गाइड": {
       title: "मौसमी फसलों की जानकारी और खेती के टिप्स",
       videoUrl: "https://www.youtube.com/watch?v=PDau070A4n4",
-      qrUrl: "https://example.com/qr8",
+      qrUrl: "https://drive.google.com/file/d/1ZvzNGlb00aygiM6j9T9qOdAkWacABLOS/view?usp=sharing",
     },
     "मानसून और सिंचाई के टिप्स": {
       title: "मानसून में सिंचाई कैसे करें: विशेषज्ञ सलाह",
@@ -58,7 +58,7 @@ const categories = {
     "ताज़ा फसल मूल्य": {
       title: "आज के मंडी भाव: प्रमुख फसलों के ताज़ा दाम",
       videoUrl: "https://www.youtube.com/watch?v=jhCEp_vNgJc",
-      qrUrl: "https://example.com/qr10",
+      qrUrl: "https://drive.google.com/file/d/1e6DQu0JWKNkSxGdUWNnCDGgL3IMOBD35/view?usp=sharing",
     },
     "ऑनलाइन फसल कैसे बेचें": {
       title: "ऑनलाइन फसल बिक्री: प्रक्रिया और प्लेटफॉर्म",
@@ -70,7 +70,7 @@ const categories = {
     "सर्वश्रेष्ठ जैविक कीटनाशक": {
       title: "जैविक कीटनाशक: घर पर बनाने की विधि",
       videoUrl: "https://www.youtube.com/watch?v=hZNszVlamm8",
-      qrUrl: "https://example.com/qr12",
+      qrUrl: "https://drive.google.com/file/d/1QVl17vcZCTBa_k6LfdX-9eKJFzk7PxUp/view?usp=sharing",
     },
     "मात्रा और आवेदन विधियाँ": {
       title: "उर्वरकों का सही उपयोग: मात्रा और समय",
@@ -82,7 +82,7 @@ const categories = {
     "कृषि में ड्रोन का उपयोग": {
       title: "कृषि में ड्रोन तकनीक: उपयोग और लाभ",
       videoUrl: "https://www.youtube.com/watch?v=u7iBV1QUU1M",
-      qrUrl: "https://example.com/qr14",
+      qrUrl: "https://drive.google.com/file/d/14Sbe8vsHT7FCdGxFB-wW_dAmf9V1kwrt/view?usp=sharing",
     },
     "ट्रैक्टर रखरखाव टिप्स": {
       title: "ट्रैक्टर की देखभाल: महत्वपूर्ण टिप्स",
@@ -94,14 +94,14 @@ const categories = {
     "प्रगतिशील किसानों के साथ साक्षात्कार": {
       title: "सफल किसान की कहानी: प्रेरणादायक यात्रा",
       videoUrl: "https://www.youtube.com/watch?v=n_h6gFqKgys",
-      qrUrl: "https://example.com/qr16",
+      qrUrl: "https://drive.google.com/file/d/1ttcIVLH1q2mMJtOR9N58Fo42b2AKWme6/view?usp=sharing",
     },
   },
   "पशुधन और पोल्ट्री फार्मिंग": {
     "पोल्ट्री के लिए सर्वश्रेष्ठ नस्लें": {
       title: "पोल्ट्री फार्मिंग: मुर्गियों की बेहतरीन नस्लें",
       videoUrl: "https://www.youtube.com/watch?v=Moexnha_TAU",
-      qrUrl: "https://example.com/qr18",
+      qrUrl: "https://drive.google.com/file/d/1HI-5GkQe8ep-no1l-iyRGiNy3i3T_ul6/view?usp=sharing",
     },
     "डेयरी फार्मिंग टिप्स": {
       title: "डेयरी फार्मिंग: दूध उत्पादन बढ़ाने के उपाय",
