@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, LogIn, Leaf, MessageSquare, Newspaper, Map, GanttChart, FileText, Cloud, BarChart, Image, Activity, Video } from 'lucide-react';
+import { Menu, X, LogIn, Leaf, MessageSquare, Newspaper, Map, GanttChart, FileText, Cloud, BarChart, Image, Activity, Video, Phone } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { translations } from '../../utils/translations';
@@ -25,7 +25,8 @@ function Sidebar({ isOpen, setIsOpen }) {
     { icon: GanttChart, label: 'Government Schemes', path: '/dashboard/schemes' },
     { icon: FileText, label: 'Report', path: '/dashboard/report' },
     { icon: Cloud, label: 'Weather', path: '/dashboard/weather' },
-    { icon: Video, label: 'VidQR Connect', path: '/dashboard/vidqr-connect' }
+    { icon: Video, label: 'VidQR Connect', path: '/dashboard/vidqr-connect' },
+    { icon: Phone, label: 'AgriConnect', path: '/dashboard/agri-connect' }
   ];
 
   const enterpriseMenuItems = [
@@ -33,7 +34,8 @@ function Sidebar({ isOpen, setIsOpen }) {
     { icon: Cloud, label: 'Weather', path: '/dashboard/weather' },
     { icon: BarChart, label: 'NDVI Prediction', path: '/dashboard/ndvi-prediction' },
     { icon: Image, label: 'Image NDVI Prediction', path: '/dashboard/ndvi-image-prediction' },
-    { icon: Activity, label: 'Vegetation Indices', path: '/dashboard/vegetation-indices' }
+    { icon: Activity, label: 'Vegetation Indices', path: '/dashboard/vegetation-indices' },
+    { icon: Phone, label: 'AgriConnect', path: '/dashboard/agri-connect' }
   ];
 
   const menuItems = userRole === 'farmer' ? farmerMenuItems : enterpriseMenuItems;

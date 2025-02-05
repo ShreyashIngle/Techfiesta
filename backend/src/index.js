@@ -9,6 +9,9 @@ import userRoutes from './routes/user.js';
 import vegetationIndicesRoutes from './routes/vegetationIndices.js';
 import morgan from 'morgan';
 import multer from 'multer';
+import { Server } from 'socket.io';
+import { createServer } from 'http';
+import { ExpressPeerServer } from 'peer';
 
 dotenv.config();
 
@@ -16,6 +19,23 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
+const server = createServer(app);
+
+// Socket.IO setup
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST"]
+  }
+});
+
+// PeerJS server setup
+const peerServer = ExpressPeerServer(server, {
+  debug: true,
+  path: '/peerjs'
+});
+
+app.use('/peerjs', peerServer);
 
 // Configure multer for file uploads
 const storage = multer.diskStorage({
@@ -67,6 +87,32 @@ app.use('/api/user', (req, res, next) => {
 }, userRoutes);
 app.use('/api/vegetation-indices', vegetationIndicesRoutes);
 
+// Socket.IO event handling
+io.on('connection', (socket) => {
+  console.log('User connected:', socket.id);
+
+  socket.on('join-room', (roomId, userId) => {
+    socket.join(roomId);
+    socket.to(roomId).emit('user-connected', userId);
+
+    socket.on('disconnect', () => {
+      socket.to(roomId).emit('user-disconnected', userId);
+    });
+  });
+
+  socket.on('call-user', ({ userToCall, signalData, from, name }) => {
+    io.to(userToCall).emit('call-user', { signal: signalData, from, name });
+  });
+
+  socket.on('answer-call', (data) => {
+    io.to(data.to).emit('call-accepted', data.signal);
+  });
+
+  socket.on('end-call', (roomId) => {
+    socket.to(roomId).emit('call-ended');
+  });
+});
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
@@ -85,6 +131,6 @@ mongoose.connect(process.env.MONGODB_URI)
   .catch(err => console.error('MongoDB connection error:', err));
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
