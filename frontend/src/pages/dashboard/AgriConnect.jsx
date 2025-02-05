@@ -1,9 +1,18 @@
-import { useEffect, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
-import { Phone, PhoneOff, Video, VideoOff, Mic, MicOff, Copy, Check } from 'lucide-react';
-import { io } from 'socket.io-client';
-import Peer from 'peerjs';
-import toast from 'react-hot-toast';
+import { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
+import {
+  Phone,
+  PhoneOff,
+  Video,
+  VideoOff,
+  Mic,
+  MicOff,
+  Copy,
+  Check,
+} from "lucide-react";
+import { io } from "socket.io-client";
+import Peer from "peerjs";
+import toast from "react-hot-toast";
 
 function AgriConnect() {
   const [myStream, setMyStream] = useState(null);
@@ -12,8 +21,8 @@ function AgriConnect() {
   const [isCalling, setIsCalling] = useState(false);
   const [isVideoEnabled, setIsVideoEnabled] = useState(true);
   const [isAudioEnabled, setIsAudioEnabled] = useState(true);
-  const [peerId, setPeerId] = useState('');
-  const [remotePeerId, setRemotePeerId] = useState('');
+  const [peerId, setPeerId] = useState("");
+  const [remotePeerId, setRemotePeerId] = useState("");
   const [copied, setCopied] = useState(false);
 
   const myVideoRef = useRef();
@@ -23,41 +32,47 @@ function AgriConnect() {
 
   useEffect(() => {
     // Initialize Socket.IO
-    socketRef.current = io('http://localhost:5000');
+    socketRef.current = io("http://localhost:5000", {
+      transports: ["websocket", "polling"],
+    });
 
     // Initialize PeerJS
     peerRef.current = new Peer(undefined, {
-      host: 'localhost',
+      host: "localhost",
       port: 5000,
-      path: '/peerjs'
+      path: "/peerjs",
+      secure: false,
     });
 
-    peerRef.current.on('open', (id) => {
+    peerRef.current.on("open", (id) => {
       setPeerId(id);
-      console.log('My peer ID:', id);
+      console.log("My peer ID:", id);
     });
 
     // Get user media
-    navigator.mediaDevices.getUserMedia({
-      video: true,
-      audio: true
-    }).then(stream => {
-      setMyStream(stream);
-      if (myVideoRef.current) {
-        myVideoRef.current.srcObject = stream;
-      }
-    }).catch(error => {
-      console.error('Error accessing media devices:', error);
-      toast.error('Failed to access camera and microphone');
-    });
+    navigator.mediaDevices
+      .getUserMedia({
+        video: true,
+        audio: true,
+      })
+      .then((stream) => {
+        setMyStream(stream);
+        if (myVideoRef.current) {
+          myVideoRef.current.srcObject = stream;
+        }
+      })
+      .catch((error) => {
+        console.error("Error accessing media devices:", error);
+        toast.error("Failed to access camera and microphone");
+      });
 
     // Handle incoming calls
-    peerRef.current.on('call', call => {
-      toast.success('Incoming call...');
-      
+    peerRef.current.on("call", (call) => {
+      toast.success("Incoming call...");
+
       if (myStream) {
         call.answer(myStream);
-        call.on('stream', remoteVideoStream => {
+        call.on("stream", (remoteVideoStream) => {
           setRemoteStream(remoteVideoStream);
           if (remoteVideoRef.current) {
             remoteVideoRef.current.srcObject = remoteVideoStream;
@@ -69,7 +84,7 @@ function AgriConnect() {
     return () => {
       // Cleanup
       if (myStream) {
-        myStream.getTracks().forEach(track => track.stop());
+        myStream.getTracks().forEach((track) => track.stop());
       }
       if (socketRef.current) {
         socketRef.current.disconnect();
@@ -84,25 +99,25 @@ function AgriConnect() {
     try {
       await navigator.clipboard.writeText(peerId);
       setCopied(true);
-      toast.success('Peer ID copied to clipboard!');
+      toast.success("Peer ID copied to clipboard!");
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
-      toast.error('Failed to copy Peer ID');
+      toast.error("Failed to copy Peer ID");
     }
   };
 
   const handleCall = () => {
     if (!remotePeerId.trim()) {
-      toast.error('Please enter a valid Peer ID');
+      toast.error("Please enter a valid Peer ID");
       return;
     }
 
     setIsCalling(true);
-    
+
     try {
       const call = peerRef.current.call(remotePeerId, myStream);
-      
-      call.on('stream', remoteVideoStream => {
+
+      call.on("stream", (remoteVideoStream) => {
         setRemoteStream(remoteVideoStream);
         if (remoteVideoRef.current) {
           remoteVideoRef.current.srcObject = remoteVideoStream;
@@ -111,26 +126,25 @@ function AgriConnect() {
         setIsCalling(false);
       });
 
-      call.on('close', () => {
+      call.on("close", () => {
         endCall();
       });
 
-      call.on('error', (err) => {
-        console.error('Call error:', err);
-        toast.error('Call failed');
+      call.on("error", (err) => {
+        console.error("Call error:", err);
+        toast.error("Call failed");
         setIsCalling(false);
       });
-
     } catch (error) {
-      console.error('Error making call:', error);
-      toast.error('Failed to make call');
+      console.error("Error making call:", error);
+      toast.error("Failed to make call");
       setIsCalling(false);
     }
   };
 
   const endCall = () => {
     if (remoteStream) {
-      remoteStream.getTracks().forEach(track => track.stop());
+      remoteStream.getTracks().forEach((track) => track.stop());
     }
     setRemoteStream(null);
     setIsCallActive(false);
@@ -177,7 +191,7 @@ function AgriConnect() {
           <div>
             <h2 className="text-lg font-semibold mb-2">Your Peer ID:</h2>
             <p className="text-xl font-mono bg-gray-700 px-4 py-2 rounded-lg">
-              {peerId || 'Generating...'}
+              {peerId || "Generating..."}
             </p>
           </div>
           <button
@@ -260,7 +274,7 @@ function AgriConnect() {
               className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-colors disabled:opacity-50"
             >
               <Phone className="w-5 h-5" />
-              {isCalling ? 'Calling...' : 'Start Call'}
+              {isCalling ? "Calling..." : "Start Call"}
             </button>
           </div>
         ) : (
@@ -268,7 +282,7 @@ function AgriConnect() {
             <button
               onClick={toggleVideo}
               className={`p-4 rounded-full ${
-                isVideoEnabled ? 'bg-gray-700' : 'bg-red-600'
+                isVideoEnabled ? "bg-gray-700" : "bg-red-600"
               }`}
             >
               {isVideoEnabled ? (
@@ -280,7 +294,7 @@ function AgriConnect() {
             <button
               onClick={toggleAudio}
               className={`p-4 rounded-full ${
-                isAudioEnabled ? 'bg-gray-700' : 'bg-red-600'
+                isAudioEnabled ? "bg-gray-700" : "bg-red-600"
               }`}
             >
               {isAudioEnabled ? (
