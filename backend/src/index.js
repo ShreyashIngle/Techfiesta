@@ -25,16 +25,17 @@ const server = createServer(app);
 const io = new Server(server, {
   cors: {
     origin: "http://localhost:5173",
-    methods: ["GET", "POST"]
+    methods: ["GET", "POST"],
+    credentials: true
   }
 });
+
 
 // PeerJS server setup
 const peerServer = ExpressPeerServer(server, {
   debug: true,
-  path: '/peerjs'
+  path: '/'
 });
-
 app.use('/peerjs', peerServer);
 
 // Configure multer for file uploads
