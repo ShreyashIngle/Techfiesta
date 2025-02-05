@@ -118,7 +118,7 @@ const Chatbot = () => {
   };
 
   return (
-    <div className="flex flex-col h-[90vh] bg-[#0D1B1E] text-white">
+    <div className="flex flex-col h-[100vh] bg-[#0D1B1E] text-white">
       {/* Header */}
       <header className="max-w-3xl mx-auto py-4 text-center text-2xl font-bold text-green-400 shadow-md bg-[#0B2027]">
         Chatbot Assistant
@@ -126,7 +126,7 @@ const Chatbot = () => {
 
       {/* Chat Section */}
       <main className="flex-1 flex flex-col p-6 space-y-4 overflow-hidden">
-        <div className="flex-1 overflow-y-auto p-4 border border-green-700 rounded-lg bg-[#0B2027] shadow-lg">
+        <div className="flex-1 overflow-y-auto p-4 border border-green-700 rounded-lg bg-[#0B2027] shadow-lg h-[100vh]">
           {chatHistory.map((message, index) => (
             <div
               key={index}

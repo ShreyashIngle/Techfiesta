@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, LogIn, Leaf, MessageSquare, Newspaper, Map, GanttChart, FileText, Cloud, BarChart, Image } from 'lucide-react';
+import { Menu, X, LogIn, Leaf, MessageSquare, Newspaper, Map, GanttChart, FileText, Cloud, BarChart, Image, Activity, Video } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { translations } from '../../utils/translations';
@@ -24,14 +24,16 @@ function Sidebar({ isOpen, setIsOpen }) {
     { icon: Newspaper, label: 'News', path: '/dashboard/news' },
     { icon: GanttChart, label: 'Government Schemes', path: '/dashboard/schemes' },
     { icon: FileText, label: 'Report', path: '/dashboard/report' },
-    { icon: Cloud, label: 'Weather', path: '/dashboard/weather' }
+    { icon: Cloud, label: 'Weather', path: '/dashboard/weather' },
+    { icon: Video, label: 'VidQR Connect', path: '/dashboard/vidqr-connect' }
   ];
 
   const enterpriseMenuItems = [
     { icon: Map, label: 'Map View', path: '/dashboard/map' },
     { icon: Cloud, label: 'Weather', path: '/dashboard/weather' },
     { icon: BarChart, label: 'NDVI Prediction', path: '/dashboard/ndvi-prediction' },
-    { icon: Image, label: 'Image NDVI Prediction', path: '/dashboard/ndvi-image-prediction' }
+    { icon: Image, label: 'Image NDVI Prediction', path: '/dashboard/ndvi-image-prediction' },
+    { icon: Activity, label: 'Vegetation Indices', path: '/dashboard/vegetation-indices' }
   ];
 
   const menuItems = userRole === 'farmer' ? farmerMenuItems : enterpriseMenuItems;

@@ -27,8 +27,8 @@ google_credentials_path = str(Path(__file__).resolve().parent / google_credentia
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = google_credentials_path
 
 # Debugging
-print("Final Google Credentials Path:", google_credentials_path)
-print("File exists:", os.path.exists(google_credentials_path))
+# print("Final Google Credentials Path:", google_credentials_path)
+# print("File exists:", os.path.exists(google_credentials_path))
 
 # Fetch AssemblyAI API Key
 assemblyai_api_key = os.getenv("ASSEMBLYAI_API_KEY")

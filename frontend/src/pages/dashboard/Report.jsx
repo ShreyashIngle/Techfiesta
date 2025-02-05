@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Download, FileText } from 'lucide-react';
+import { Download, FileText, X } from 'lucide-react';
+import QRCode from 'qrcode.react';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import logo from "../../images/logo.png";
@@ -8,8 +9,16 @@ import logo from "../../images/logo.png";
 function Report() {
   const reportRef = useRef(null);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [showQRModal, setShowQRModal] = useState(false);
 
-  // Example report data remains the same...
+  // Get the current URL for QR code
+  const getCurrentUrl = () => {
+    if (typeof window !== 'undefined') {
+      return window.location.href;
+    }
+    return '';
+  };
+
   const reportData = {
     title: "Agricultural Analysis Report",
     date: new Date().toLocaleDateString(),
@@ -139,15 +148,18 @@ function Report() {
   };
 
   const MetricBar = ({ value, label, color }) => (
-    <div className="mb-4">
+    <div className="mb-4 w-full">
       <div className="flex justify-between mb-1">
         <span className={`text-sm font-medium ${color}`}>{label}</span>
         <span className={`text-sm font-medium ${color}`}>{value}%</span>
       </div>
-      <div className="w-full bg-gray-100 rounded-full h-2.5">
+      <div className="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
         <div
-          className={`h-2.5 rounded-full ${color.replace('text', 'bg')}`}
-          style={{ width: `${value}%` }}
+          className={`h-full rounded-full transition-all duration-500 ease-out ${color.replace('text', 'bg')}`}
+          style={{ 
+            width: `${value}%`,
+            opacity: 0.8 
+          }}
         ></div>
       </div>
     </div>
@@ -163,9 +175,47 @@ function Report() {
     </div>
   );
 
+  const QRModal = () => (
+    <div className={`fixed inset-0 z-50 flex items-center justify-center ${showQRModal ? '' : 'hidden'}`}>
+      {/* Backdrop */}
+      <div 
+        className="absolute inset-0 bg-black bg-opacity-50 backdrop-blur-sm"
+        onClick={() => setShowQRModal(false)}
+      ></div>
+      
+      {/* Modal */}
+      <div className="relative bg-white rounded-2xl p-6 max-w-sm w-full mx-4 shadow-xl">
+        <button 
+          onClick={() => setShowQRModal(false)}
+          className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+        >
+          <X className="w-6 h-6" />
+        </button>
+        
+        <h3 className="text-xl font-semibold mb-4 text-gray-900">
+          Scan QR Code to View Report
+        </h3>
+        
+        <div className="flex items-center justify-center p-4">
+          <QRCode
+            value={getCurrentUrl()}
+            size={256}
+            level="H"
+            includeMargin={true}
+            className="rounded-lg"
+          />
+        </div>
+        
+        <p className="text-sm text-gray-500 text-center mt-4">
+          Scan with your mobile device to view the report
+        </p>
+      </div>
+    </div>
+  );
+
   return (
     <div className="p-8 bg-black min-h-screen">
-      <div className="flex justify-between items-center mb-8">
+      <div className="flex justify-between items-center mb-8 flex-wrap gap-4">
         <motion.h1
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -173,23 +223,36 @@ function Report() {
         >
           Agricultural Report
         </motion.h1>
-        <motion.button
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          whileHover={{ scale: 1.05 }}
-          onClick={generatePDF}
-          disabled={isGenerating}
-          className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-800 to-green-900 text-white rounded-xl hover:from-green-600 hover:to-green-700 transition-all duration-300 shadow-lg disabled:opacity-50"
-        >
-          {isGenerating ? (
-            <>Generating...</>
-          ) : (
-            <>
-              <Download className="w-5 h-5" />
-              Download Report
-            </>
-          )}
-        </motion.button>
+        <div className="flex gap-4">
+          <motion.button
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            whileHover={{ scale: 1.05 }}
+            onClick={() => setShowQRModal(true)}
+            className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-800 to-blue-900 text-white rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-300 shadow-lg"
+          >
+            <FileText className="w-5 h-5" />
+            View QR Code
+          </motion.button>
+          
+          <motion.button
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            whileHover={{ scale: 1.05 }}
+            onClick={generatePDF}
+            disabled={isGenerating}
+            className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-800 to-green-900 text-white rounded-xl hover:from-green-600 hover:to-green-700 transition-all duration-300 shadow-lg disabled:opacity-50"
+          >
+            {isGenerating ? (
+              <>Generating...</>
+            ) : (
+              <>
+                <Download className="w-5 h-5" />
+                Download Report
+              </>
+            )}
+          </motion.button>
+        </div>
       </div>
 
       <div ref={reportRef} className="space-y-8">
@@ -244,6 +307,8 @@ function Report() {
           </motion.div>
         ))}
       </div>
+
+      <QRModal />
     </div>
   );
 }
