@@ -7,7 +7,7 @@ import {
   VideoOff,
   Mic,
   MicOff,
-  Copy,
+  Copy, 
   Check,
 } from "lucide-react";
 import { io } from "socket.io-client";
@@ -31,74 +31,113 @@ function AgriConnect() {
   const socketRef = useRef(null);
 
   useEffect(() => {
-    // Initialize Socket.IO
-    socketRef.current = io("http://localhost:5000", {
-      transports: ["websocket", "polling"],
-    });
-
-    // Initialize PeerJS
-    peerRef.current = new Peer(undefined, {
-      host: "localhost",
-      port: 5000,
-      path: "/peerjs",
-      secure: false,
-    });
-
-    peerRef.current.on("open", (id) => {
-      setPeerId(id);
-      console.log("My peer ID:", id);
-    });
-
-    // Get user media
-    navigator.mediaDevices
-      .getUserMedia({
-        video: true,
-        audio: true,
-      })
-      .then((stream) => {
-        setMyStream(stream);
-        if (myVideoRef.current) {
-          myVideoRef.current.srcObject = stream;
-        }
-      })
-      .catch((error) => {
-        console.error("Error accessing media devices:", error);
-        toast.error("Failed to access camera and microphone");
-      });
-
-    // Handle incoming calls
-    peerRef.current.on("call", (call) => {
-      toast.success("Incoming call...");
-      
-      navigator.mediaDevices
-        .getUserMedia({ video: true, audio: true })
-        .then((stream) => {
+    let mounted = true;
+  
+    const initializeConnection = async () => {
+      try {
+        // Initialize Socket.IO
+        socketRef.current = io("http://localhost:5000", {
+          transports: ['websocket', 'polling'],
+          path: '/socket.io/',
+          reconnectionAttempts: 5,
+          reconnectionDelay: 1000,
+          autoConnect: true,
+          withCredentials: true
+        });
+  
+        // Socket.IO event handlers
+        socketRef.current.on('connect', () => {
+          console.log('Socket connected:', socketRef.current.id);
+          toast.success('Connected to server');
+        });
+  
+        socketRef.current.on('connect_error', (error) => {
+          console.error('Socket connection error:', error);
+          toast.error('Connection error. Retrying...');
+        });
+  
+        socketRef.current.on('disconnect', (reason) => {
+          console.log('Socket disconnected:', reason);
+          if (reason === 'io server disconnect') {
+            // Reconnect manually if server disconnected
+            socketRef.current.connect();
+          }
+        });
+  
+        // Initialize PeerJS
+        peerRef.current = new Peer(undefined, {
+          host: 'localhost',
+          port: 5000,
+          path: '/peerjs',
+          secure: false,
+          debug: 3,
+          config: {
+            iceServers: [
+              { urls: 'stun:stun.l.google.com:19302' },
+              { urls: 'stun:global.stun.twilio.com:3478' }
+            ]
+          }
+        });
+  
+        peerRef.current.on('open', (id) => {
+          if (mounted) {
+            setPeerId(id);
+            console.log('PeerJS connected with ID:', id);
+            toast.success('Ready to make calls');
+          }
+        });
+  
+        // Get user media
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: true,
+          audio: true
+        });
+        
+        if (mounted) {
           setMyStream(stream);
+          if (myVideoRef.current) {
+            myVideoRef.current.srcObject = stream;
+          }
+        }
+
+        // Answer incoming calls
+        peerRef.current.on('call', (call) => {
           call.answer(stream);
-          call.on("stream", (remoteVideoStream) => {
+          call.on('stream', (remoteVideoStream) => {
             setRemoteStream(remoteVideoStream);
             if (remoteVideoRef.current) {
               remoteVideoRef.current.srcObject = remoteVideoStream;
             }
+            setIsCallActive(true);
           });
-        })
-        .catch((error) => {
-          console.error("Error accessing media devices:", error);
-          toast.error("Failed to access media devices");
+          call.on('close', () => {
+            endCall();
+          });
+          call.on('error', (err) => {
+            console.error("Call error:", err);
+            toast.error("Call failed: " + err.message);
+            endCall();
+          });
         });
-    });
-    
-
-    return () => {
-      // Cleanup
-      if (myStream) {
-        myStream.getTracks().forEach((track) => track.stop());
+  
+      } catch (error) {
+        console.error('Initialization error:', error);
+        toast.error('Failed to initialize video call');
       }
+    };
+  
+    initializeConnection();
+  
+    return () => {
+      mounted = false;
       if (socketRef.current) {
         socketRef.current.disconnect();
       }
       if (peerRef.current) {
         peerRef.current.destroy();
+      }
+      if (myStream) {
+        myStream.getTracks().forEach(track => track.stop());
       }
     };
   }, []);
@@ -125,7 +164,16 @@ function AgriConnect() {
     try {
       const call = peerRef.current.call(remotePeerId, myStream);
 
+      // Add timeout for call connection
+      const callTimeout = setTimeout(() => {
+        if (isCalling) {
+          toast.error("Call connection timed out");
+          setIsCalling(false);
+        }
+      }, 30000); // 30 second timeout
+
       call.on("stream", (remoteVideoStream) => {
+        clearTimeout(callTimeout);
         setRemoteStream(remoteVideoStream);
         if (remoteVideoRef.current) {
           remoteVideoRef.current.srcObject = remoteVideoStream;
@@ -135,17 +183,19 @@ function AgriConnect() {
       });
 
       call.on("close", () => {
+        clearTimeout(callTimeout);
         endCall();
       });
 
       call.on("error", (err) => {
+        clearTimeout(callTimeout);
         console.error("Call error:", err);
-        toast.error("Call failed");
+        toast.error("Call failed: " + err.message);
         setIsCalling(false);
       });
     } catch (error) {
       console.error("Error making call:", error);
-      toast.error("Failed to make call");
+      toast.error("Failed to make call: " + error.message);
       setIsCalling(false);
     }
   };
