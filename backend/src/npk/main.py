@@ -8,6 +8,7 @@ import pandas as pd
 from npk.ndvi_prediction import app as ndvi_app
 from npk.image_ndvi import app as image_ndvi_app
 from npk.chatbot.utils import app as chatbot_app
+from npk.price_prediction.app import app as price_app
 
 # Initialize FastAPI app
 app = FastAPI()
@@ -25,6 +26,9 @@ app.mount("/ndvi", ndvi_app)
 
 # Mount the Image NDVI prediction app
 app.mount("/image-ndvi", image_ndvi_app)
+
+# mount price prediction app
+app.mount("/market", price_app)
 
 # chatbot app
 app.mount("/chatbot", chatbot_app)
