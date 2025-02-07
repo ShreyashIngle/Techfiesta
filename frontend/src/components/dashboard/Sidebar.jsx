@@ -18,7 +18,7 @@ function Sidebar({ isOpen, setIsOpen }) {
   }, []);
 
   const farmerMenuItems = [
-    // { icon: Map, label: 'Map View', path: '/dashboard/map' },
+    { icon: Map, label: 'Map View', path: '/dashboard/map' },
     { icon: Leaf, label: 'Crop Recommendation', path: '/dashboard/crop-recommendation' },
     { icon: MessageSquare, label: 'Chatbot', path: '/dashboard/chatbot' },
     { icon: Newspaper, label: 'News', path: '/dashboard/news' },
