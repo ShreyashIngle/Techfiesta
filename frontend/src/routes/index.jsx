@@ -22,6 +22,7 @@ import NDVIImagePrediction from '../pages/dashboard/NDVIImagePrediction';
 import VegetationIndices from '../pages/dashboard/VegetationIndices';
 import VidQRConnect from '../pages/dashboard/VidQRConnect';
 import AgriConnect from '../pages/dashboard/AgriConnect';
+import CropPriceAI from '../pages/dashboard/CropPriceAI';
 
 const ProtectedRoute = ({ children, allowedRoles = ['farmer', 'enterprise'] }) => {
   const token = localStorage.getItem('token');
@@ -99,6 +100,10 @@ export const router = createBrowserRouter([
           {
             path: 'agri-connect',
             element: <ProtectedRoute allowedRoles={['farmer', 'enterprise']}><AgriConnect /></ProtectedRoute>
+          },
+          {
+            path: 'crop-price-ai',
+            element: <ProtectedRoute allowedRoles={['farmer']}><CropPriceAI /></ProtectedRoute>
           }
         ]
       },
