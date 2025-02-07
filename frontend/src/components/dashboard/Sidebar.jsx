@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, LogIn, Leaf, MessageSquare, Newspaper, Map, GanttChart, FileText, Cloud, BarChart, Image, Activity, Video, Phone } from 'lucide-react';
+import { Menu, X, LogIn, Leaf, MessageSquare, Newspaper, Map, GanttChart, FileText, Cloud, BarChart, Image, Activity, Video, Phone, TrendingUp } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { translations } from '../../utils/translations';
@@ -18,7 +18,7 @@ function Sidebar({ isOpen, setIsOpen }) {
   }, []);
 
   const farmerMenuItems = [
-    { icon: Map, label: 'Map View', path: '/dashboard/map' },
+    // { icon: Map, label: 'Map View', path: '/dashboard/map' },
     { icon: Leaf, label: 'Crop Recommendation', path: '/dashboard/crop-recommendation' },
     { icon: MessageSquare, label: 'Chatbot', path: '/dashboard/chatbot' },
     { icon: Newspaper, label: 'News', path: '/dashboard/news' },
@@ -26,7 +26,8 @@ function Sidebar({ isOpen, setIsOpen }) {
     { icon: FileText, label: 'Report', path: '/dashboard/report' },
     { icon: Cloud, label: 'Weather', path: '/dashboard/weather' },
     { icon: Video, label: 'VidQR Connect', path: '/dashboard/vidqr-connect' },
-    { icon: Phone, label: 'AgriConnect', path: '/dashboard/agri-connect' }
+    { icon: Phone, label: 'AgriConnect', path: '/dashboard/agri-connect' },
+    { icon: TrendingUp, label: 'Crop Price AI', path: '/dashboard/crop-price-ai' }
   ];
 
   const enterpriseMenuItems = [
