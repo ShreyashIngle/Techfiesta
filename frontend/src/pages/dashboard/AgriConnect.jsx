@@ -53,7 +53,7 @@ function AgriConnect() {
   
         socketRef.current.on('connect_error', (error) => {
           console.error('Socket connection error:', error);
-          toast.error('Connection error. Retrying...');
+          // toast.error('Connection error. Retrying...');
         });
   
         socketRef.current.on('disconnect', (reason) => {
@@ -104,10 +104,10 @@ function AgriConnect() {
         peerRef.current.on('call', (call) => {
           call.answer(stream);
           call.on('stream', (remoteVideoStream) => {
-            setRemoteStream(remoteVideoStream);
             if (remoteVideoRef.current) {
               remoteVideoRef.current.srcObject = remoteVideoStream;
             }
+            setRemoteStream(remoteVideoStream);
             setIsCallActive(true);
           });
           call.on('close', () => {

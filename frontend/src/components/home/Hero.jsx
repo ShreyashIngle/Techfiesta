@@ -17,7 +17,7 @@ function Hero() {
         className="absolute top-0 left-0 w-full h-full object-cover z-0"
       >
         <source
-          src="https://sidcupfamilygolf.com/wp-content/uploads/2023/02/hero.mp4"
+          src="/public/video.mp4"
           type="video/mp4"
         />
       </video>

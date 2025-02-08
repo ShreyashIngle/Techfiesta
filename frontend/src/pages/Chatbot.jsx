@@ -120,7 +120,7 @@ const Chatbot = () => {
   return (
     <div className="flex flex-col h-[100vh] bg-[#0D1B1E] text-white">
       {/* Header */}
-      <header className="max-w-3xl mx-auto py-4 text-center text-2xl font-bold text-green-400 shadow-md bg-[#0B2027]">
+      <header className="max-w-3xl mx-auto py-4 text-center text-4xl font-bold text-white shadow-md bg-[#0B2027]">
         Chatbot Assistant
       </header>
 
