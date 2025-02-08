@@ -104,10 +104,10 @@ function AgriConnect() {
         peerRef.current.on('call', (call) => {
           call.answer(stream);
           call.on('stream', (remoteVideoStream) => {
+            setRemoteStream(remoteVideoStream);
             if (remoteVideoRef.current) {
               remoteVideoRef.current.srcObject = remoteVideoStream;
             }
-            setRemoteStream(remoteVideoStream);
             setIsCallActive(true);
           });
           call.on('close', () => {
