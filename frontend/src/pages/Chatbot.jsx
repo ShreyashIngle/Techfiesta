@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { motion } from 'framer-motion';
 
 const Chatbot = () => {
   const [userInput, setUserInput] = useState("");
@@ -119,12 +120,16 @@ const Chatbot = () => {
 
   return (
     <div className="flex flex-col h-[100vh] bg-[#0D1B1E] text-white">
-      {/* Header */}
-      <header className="max-w-3xl mx-auto py-4 text-center text-4xl font-bold text-white shadow-md bg-[#0B2027]">
-        Chatbot Assistant
-      </header>
+     
+        <motion.h1
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-4xl font-bold mb-8 text-white text-center pt-3 "
+        >
+          Chatbot
+        </motion.h1>
 
-      {/* Chat Section */}
+        {/* Chat Section */}
       <main className="flex-1 flex flex-col p-6 space-y-4 overflow-hidden">
         <div className="flex-1 overflow-y-auto p-4 border border-green-700 rounded-lg bg-[#0B2027] shadow-lg h-[100vh]">
           {chatHistory.map((message, index) => (

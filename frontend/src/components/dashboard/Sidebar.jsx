@@ -27,14 +27,14 @@ function Sidebar({ isOpen, setIsOpen }) {
     { icon: Cloud, label: 'Weather', path: '/dashboard/weather' },
     { icon: Video, label: 'VidQR Connect', path: '/dashboard/vidqr-connect' },
     { icon: Phone, label: 'AgriConnect', path: '/dashboard/agri-connect' },
-    // { icon: TrendingUp, label: 'Crop Price AI', path: '/dashboard/crop-price-ai' }
+    { icon: TrendingUp, label: 'Crop Price AI', path: '/dashboard/crop-price-ai' }
   ];
 
   const enterpriseMenuItems = [
     // { icon: Map, label: 'Map View', path: '/dashboard/map' },
     { icon: Cloud, label: 'Weather', path: '/dashboard/weather' },
     { icon: BarChart, label: 'NDVI Prediction', path: '/dashboard/ndvi-prediction' },
-    // { icon: Image, label: 'Image NDVI Prediction', path: '/dashboard/ndvi-image-prediction' },
+    { icon: Image, label: 'Image NDVI Prediction', path: '/dashboard/ndvi-image-prediction' },
     { icon: Activity, label: 'Vegetation Indices', path: '/dashboard/vegetation-indices' },
     { icon: Phone, label: 'AgriConnect', path: '/dashboard/agri-connect' }
   ];
