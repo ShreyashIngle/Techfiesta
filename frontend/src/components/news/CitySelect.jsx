@@ -33,9 +33,7 @@ function CitySelect({ cities, selectedCity, onCityChange }) {
       >
         <span>{selectedCity || "Select a city"}</span>
         <ChevronDown
-          className={`w-5 h-5 transition-transform ${
-            isOpen ? "rotate-180" : ""
-          }`}
+          className={`w-5 h-5 transition-transform ${isOpen ? "rotate-180" : ""}`}
         />
       </button>
 
@@ -78,9 +76,7 @@ function CitySelect({ cities, selectedCity, onCityChange }) {
                     </button>
                   ))
                 ) : (
-                  <div className="text-center text-gray-400 py-2">
-                    No cities found
-                  </div>
+                  <div className="text-center text-gray-400 py-2">No cities found</div>
                 )}
               </div>
             </div>

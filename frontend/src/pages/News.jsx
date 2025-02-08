@@ -1087,25 +1087,23 @@ const mockNewsData = [
       "description": "The sugarcane production in Aurangabad has reached record-breaking levels. \n    Farmers attribute this to high-yielding varieties introduced recently. \n    The local sugar mills have expanded their capacity to process the harvest. \n    Experts highlight the role of effective pest management in achieving this feat. \n    The increased yield has also brought challenges of surplus management. \n    Cooperative societies in Aurangabad are stepping in to ensure fair pricing. \n    The economic upliftment is visible as farmer incomes rise significantly. \n    Local authorities are now focusing on infrastructure to support transportation. \n    Environmentalists urge careful resource management to avoid ecological impact. \n    Farmers have been trained in sustainable practices to balance productivity. \n    Research institutions have played a crucial role in this success. \n    The government is planning to replicate this model in other regions. \n    Policies favoring agro-industrial development have been crucial. \n    With proper planning, Aurangabad can maintain this growth sustainably. \n    New irrigation facilities have proven to be game-changers this year."
   },
 ];
-
-  function News() {
-    const [selectedCity, setSelectedCity] = useState('');
+function News() {
+    const [selectedCity, setSelectedCity] = useState("");
     const [filteredNews, setFilteredNews] = useState(mockNewsData);
     const { language } = useLanguage();
     const t = translations[language].news;
     const [isLoading, setIsLoading] = useState(false);
   
     // Extract unique cities
-    const cities = [...new Set(mockNewsData.map(news => news.city))];
+    const cities = [...new Set(mockNewsData.map((news) => news.city))];
   
     // Effect to filter news based on selected city
     useEffect(() => {
       setIsLoading(true);
   
       const timeoutId = setTimeout(() => {
-        // Filter news based on selected city
         if (selectedCity) {
-          setFilteredNews(mockNewsData.filter(news => news.city === selectedCity));
+          setFilteredNews(mockNewsData.filter((news) => news.city === selectedCity));
         } else {
           setFilteredNews(mockNewsData);
         }
@@ -1115,47 +1113,72 @@ const mockNewsData = [
       return () => clearTimeout(timeoutId);
     }, [selectedCity]);
   
+    // Fetch current location and set the selected city
+    useEffect(() => {
+      if (!selectedCity) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            // Use reverse geocoding to get the city name from latitude and longitude
+            fetch(
+              `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`
+            )
+              .then((res) => res.json())
+              .then((data) => {
+                const city = data.locality || "Unknown city";
+                setSelectedCity(city);
+                localStorage.setItem("selectedCity", city); // Store the city in localStorage
+              })
+              .catch(() => {
+                setSelectedCity("Unknown city");
+              });
+          },
+          () => {
+            setSelectedCity("Unable to fetch location");
+          }
+        );
+      }
+    }, [selectedCity]);
   
-
-  // Limit the displayed news to 6 items
-  const displayedNews = filteredNews.slice(0, 6);
-
-  return (
-    <div className="min-h-screen  bg-gradient-to-b from-black to-gray-900">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-4xl font-bold text-center mb-16"
-        >
-          {t.title}
-        </motion.h1>
-
-        {/* City Selection */}
-        <div className="max-w-md mx-auto mb-12">
-          <CitySelect
-            cities={cities}
-            selectedCity={selectedCity}
-            onCityChange={setSelectedCity}
-          />
-        </div>
-
-        {/* Loading State */}
-        {isLoading && <p className="text-white text-center">Loading...</p>}
-
-        {/* News Cards Display */}
-        {displayedNews.length === 0 && !isLoading ? (
-          <p className="text-white text-center">No news available</p>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {displayedNews.map((news, index) => (
-              <NewsCard key={index} news={news} />
-            ))}
+    // Limit the displayed news to 6 items
+    const displayedNews = filteredNews.slice(0, 6);
+  
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-black to-gray-900">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-4xl font-bold text-center mb-16"
+          >
+            {t.title}
+          </motion.h1>
+  
+          {/* City Selection */}
+          <div className="max-w-md mx-auto mb-12">
+            <CitySelect
+              cities={cities}
+              selectedCity={selectedCity}
+              onCityChange={setSelectedCity}
+            />
           </div>
-        )}
+  
+          {/* Loading State */}
+          {isLoading && <p className="text-white text-center">Loading...</p>}
+  
+          {/* News Cards Display */}
+          {displayedNews.length === 0 && !isLoading ? (
+            <p className="text-white text-center">No news available</p>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {displayedNews.map((news, index) => (
+                <NewsCard key={index} news={news} />
+              ))}
+            </div>
+          )}
+        </div>
       </div>
-    </div>
-  );
-}
-
-export default News;
+    );
+  }
+  
+  export default News;

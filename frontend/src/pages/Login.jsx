@@ -7,6 +7,7 @@ import axios from 'axios';
 import { useLanguage } from '../contexts/LanguageContext';
 import { translations } from '../utils/translations';
 import ProfileUpdatePopup from '../components/shared/ProfileUpdatePopup';
+import { getCurrentLocation } from '../utils/location';
 
 function Login() {
   const navigate = useNavigate();
@@ -33,6 +34,18 @@ function Login() {
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('userRole', response.data.role);
       
+      // Get user's location after successful login
+      toast.promise(
+        getCurrentLocation(),
+        {
+          loading: 'Fetching your location...',
+          success: (locationData) => {
+            return `Location detected: ${locationData.city}`;
+          },
+          error: (err) => `Could not get location: ${err.message}`
+        }
+      );
+
       if (response.data.role === 'farmer') {
         // Check if profile is complete for farmers only
         const profileResponse = await axios.get('http://localhost:5000/api/user/profile', {
