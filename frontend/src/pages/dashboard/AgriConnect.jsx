@@ -53,7 +53,7 @@ function AgriConnect() {
   
         socketRef.current.on('connect_error', (error) => {
           console.error('Socket connection error:', error);
-          toast.error('Connection error. Retrying...');
+          // toast.error('Connection error. Retrying...');
         });
   
         socketRef.current.on('disconnect', (reason) => {
