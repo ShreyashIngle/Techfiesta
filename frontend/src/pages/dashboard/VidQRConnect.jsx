@@ -162,7 +162,7 @@ function VidQRConnect() {
                   {categories[selectedCategory][selectedSubCategory].title}
                 </h2>
                 <div className="flex flex-col items-center space-y-6">
-                  {/* <QRCode
+                  <QRCode
                     value={
                       categories[selectedCategory][selectedSubCategory].qrUrl
                     }
@@ -173,7 +173,7 @@ function VidQRConnect() {
                   />
                   <p className="text-gray-400  text-2xl">
                     QR कोड को स्कैन करें और सारांश प्राप्त करें
-                  </p> */}
+                  </p>
                   <iframe
                     width="560"
                     height="315"
