@@ -12,10 +12,11 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
-  ResponsiveContainer
+  ResponsiveContainer,
+  AreaChart,
+  Area
 } from 'recharts';
 
-// List of available crops
 const AVAILABLE_CROPS = [
   'wheat', 'paddy', 'arhar', 'bajra', 'barley', 'copra', 'cotton', 'sesamum',
   'gram', 'groundnut', 'jowar', 'maize', 'masoor', 'moong', 'niger', 'ragi',
@@ -227,7 +228,7 @@ function CropPriceAI() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-gray-800 rounded-2xl p-6 space-y-8"
+          className="bg-gray-800 rounded-2xl p-6"
         >
           {/* Chart */}
           <div>
@@ -310,7 +311,7 @@ function CropPriceAI() {
                 <Ship className="text-green-500" />
                 <div>
                   <p className="text-sm text-gray-400">Export Markets</p>
-                  <p className="text-white">{cropDetails.export}</p>
+                  <p>{cropDetails.export}</p>
                 </div>
               </div>
             </div>

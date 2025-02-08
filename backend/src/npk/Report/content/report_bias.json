@@ -1,0 +1,12 @@
+{
+    "Hallucination Bias": "The report should not contain claims that are not scientifically verified.",
+    "Misinterpretation Bias": "The report should not misinterpret soil conditions, fertilizers, irrigation, or crop rotation.",
+    "Data Bias": "The report should not prioritize large-scale farmers while neglecting small-scale farmers.",
+    "Technological Bias": "The report should not recommend solutions that rely solely on high-tech or expensive equipment.",
+    "Economic Bias": "The report should provide economically feasible recommendations applicable to farmers of all financial backgrounds.",
+    "Environmental Bias": "The report should not ignore sustainable agricultural practices such as organic farming and water management.",
+    "Language and Communication Bias": "The report should use accessible language that all farmers can understand, avoiding overly technical terms.",
+    "Sensor Data Reliability Bias": "The report should not rely solely on remote sensing and satellite data but also incorporate ground-based observations.",
+    "Decision-Making Bias": "The report should not limit farmers to a single recommended solution but instead provide multiple viable options.",
+    "Uncertainty and Confidence Bias": "The report should not present predictions as absolute truths but instead acknowledge uncertainties."
+}
