@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react'; 
 import { motion } from 'framer-motion';
 import { Cloud, Droplets, Wind, Thermometer, Search, Sun, Moon } from 'lucide-react';
 import axios from 'axios';
@@ -22,14 +22,26 @@ function WeatherForecast() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const fetchWeatherData = async () => {
+  // On component mount, check if there's a location in localStorage
+  useEffect(() => {
+    const storedLocation = localStorage.getItem('userLocation');
+    if (storedLocation) {
+      const locationData = JSON.parse(storedLocation);
+      if (locationData.city) {
+        setLocation(locationData.city); // Set the location from localStorage
+        fetchWeatherData(locationData.city); // Fetch weather data immediately
+      }
+    }
+  }, []); // Run only once on mount
+
+  const fetchWeatherData = async (city) => {
     try {
       setLoading(true);
       setError(null);
 
       const [currentResponse, forecastResponse] = await Promise.all([
-        axios.get(`${BASE_URL}/current.json?key=${API_KEY}&q=${location}&aqi=yes`),
-        axios.get(`${BASE_URL}/forecast.json?key=${API_KEY}&q=${location}&days=7&aqi=yes`)
+        axios.get(`${BASE_URL}/current.json?key=${API_KEY}&q=${city}&aqi=yes`),
+        axios.get(`${BASE_URL}/forecast.json?key=${API_KEY}&q=${city}&days=7&aqi=yes`)
       ]);
 
       setWeatherData({
@@ -47,7 +59,7 @@ function WeatherForecast() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (location.trim()) {
-      fetchWeatherData();
+      fetchWeatherData(location);
     }
   };
 
