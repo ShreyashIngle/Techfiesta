@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Calendar, MapPin } from 'lucide-react';
+import { Map, Calendar, LineChart as LineChartIcon, CheckSquare } from 'lucide-react';
+import mapboxgl from 'mapbox-gl';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import {
@@ -13,91 +14,197 @@ import {
   Legend,
   ResponsiveContainer
 } from 'recharts';
+import 'mapbox-gl/dist/mapbox-gl.css';
+
+mapboxgl.accessToken = "pk.eyJ1Ijoic2hyZXlhczQxMTQiLCJhIjoiY201MGw5ZGh3MW9sdjJqcXY3aHp2N2t4aCJ9.DSYDzKDbYIxralvkJ6Ypbg";
+
+const API_KEY = "fdc562ba530cc8f603e9c3c3422b0708";
 
 function VegetationIndices() {
+  const [coordinates, setCoordinates] = useState("");
+  const [polygonId, setPolygonId] = useState(null);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [selectedIndices, setSelectedIndices] = useState([]);
+  const [indexData, setIndexData] = useState({});
+  const [polygonCoordinates, setPolygonCoordinates] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [results, setResults] = useState(null);
-  const [formData, setFormData] = useState({
-    date_start: '',
-    date_end: '',
-    coordinates: [
-      { lat: '', lng: '' },
-      { lat: '', lng: '' },
-      { lat: '', lng: '' },
-      { lat: '', lng: '' }
-    ],
-    indices: ['NDVI', 'MSI', 'EVI']
-  });
+  
+  const mapContainerRef = useRef(null);
+  const mapRef = useRef(null);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-  
+  const indicesList = ["evi", "evi2", "nri", "dswi", "ndwi"];
+
+  const parseCoordinates = (input) => {
     try {
-      const coordinates = formData.coordinates.map(coord => [
-        parseFloat(coord.lng),
-        parseFloat(coord.lat)
-      ]);
-      coordinates.push(coordinates[0]);
-  
-      const requestData = {
-        type: "mt_stats",
-        params: {
-          bm_type: formData.indices,
-          date_start: formData.date_start,
-          date_end: formData.date_end,
-          geometry: {
-            coordinates: [coordinates],
-            type: "Polygon"
-          },
-          reference: `ref_${Date.now()}`,
-          sensors: ["sentinel2"]
-        }
-      };
-  
-      // Create task without authentication
-      const taskResponse = await axios.post('http://localhost:5000/api/vegetation-indices/create-task', requestData);
-      console.log('Task Response:', taskResponse.data);  // Log the response
-      const taskId = taskResponse.data.task_id;
-  
-      if (!taskId) {
-        toast.error('Failed to create task');
-        return;
-      }
-  
-      // Wait for a few seconds before fetching the results
-      await new Promise(resolve => setTimeout(resolve, 5000));
-  
-      // Get results without authentication
-      const resultsResponse = await axios.get(`http://localhost:5000/api/vegetation-indices/get-results/${taskId}`);
-      console.log('Results Response:', resultsResponse.data);  // Log the results response
-  
-      if (!resultsResponse.data.result || resultsResponse.data.result.length === 0) {
-        toast.error('No results found');
-      } else {
-        setResults(resultsResponse.data.result);
-        toast.success('Analysis completed successfully');
+      const parsed = JSON.parse(input);
+      if (Array.isArray(parsed)) {
+        return parsed;
       }
     } catch (error) {
-      console.error('Error:', error);
-      toast.error(error.response?.data?.message || 'Failed to analyze vegetation indices');
+      toast.error("Invalid coordinates format. Enter a valid JSON array.");
+    }
+    return null;
+  };
+
+  const toggleIndex = (index) => {
+    setSelectedIndices((prev) =>
+      prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
+    );
+  };
+
+  const toggleAllIndices = () => {
+    setSelectedIndices(selectedIndices.length === indicesList.length ? [] : [...indicesList]);
+  };
+
+  const createPolygon = async () => {
+    const coordsArray = parseCoordinates(coordinates);
+    if (!coordsArray) return;
+
+    setLoading(true);
+    try {
+      const payload = {
+        name: "Polygon Sample",
+        geo_json: {
+          type: "Feature",
+          properties: {},
+          geometry: {
+            type: "Polygon",
+            coordinates: [coordsArray],
+          },
+        },
+      };
+
+      const response = await axios.post(
+        `http://api.agromonitoring.com/agro/1.0/polygons?appid=${API_KEY}`,
+        payload
+      );
+      
+      setPolygonId(response.data.id);
+      setPolygonCoordinates(coordsArray);
+      toast.success("Polygon created successfully!");
+    } catch (error) {
+      console.error("Error creating polygon:", error);
+      toast.error("Failed to create polygon.");
     } finally {
       setLoading(false);
     }
   };
-  
 
-  const handleCoordinateChange = (index, field, value) => {
-    const newCoordinates = [...formData.coordinates];
-    newCoordinates[index] = {
-      ...newCoordinates[index],
-      [field]: value
-    };
-    setFormData(prev => ({
-      ...prev,
-      coordinates: newCoordinates
-    }));
+  const convertToUnix = (date) => Math.floor(new Date(date).getTime() / 1000);
+
+  const fetchIndexStats = async () => {
+    if (!polygonId) {
+      toast.error("Create a polygon first!");
+      return;
+    }
+
+    if (!startDate || !endDate) {
+      toast.error("Please select both start and end dates");
+      return;
+    }
+
+    if (selectedIndices.length === 0) {
+      toast.error("Please select at least one index");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const startUnix = convertToUnix(startDate);
+      const endUnix = convertToUnix(endDate);
+
+      const response = await axios.get(
+        `http://api.agromonitoring.com/agro/1.0/image/search?start=${startUnix}&end=${endUnix}&polyid=${polygonId}&appid=${API_KEY}`
+      );
+
+      let newIndexData = {};
+
+      for (const index of selectedIndices) {
+        const indexStats = await Promise.all(
+          response.data.map(async (item) => {
+            try {
+              const statsResponse = await axios.get(item.stats[index]);
+              return {
+                date: new Date(item.dt * 1000).toLocaleDateString(),
+                min: statsResponse.data.min,
+                max: statsResponse.data.max,
+                median: statsResponse.data.median,
+              };
+            } catch (err) {
+              console.error(`Error fetching ${index} stats:`, err);
+              return null;
+            }
+          })
+        );
+
+        newIndexData[index] = indexStats.filter((entry) => entry !== null);
+      }
+
+      setIndexData(newIndexData);
+      toast.success("Data fetched successfully!");
+    } catch (error) {
+      console.error("Error fetching index stats:", error);
+      toast.error("Failed to fetch index stats.");
+    } finally {
+      setLoading(false);
+    }
   };
+
+  useEffect(() => {
+    if (!polygonCoordinates) return;
+
+    if (mapRef.current) {
+      mapRef.current.remove();
+    }
+
+    const map = new mapboxgl.Map({
+      container: mapContainerRef.current,
+      style: "mapbox://styles/mapbox/satellite-v9",
+      center: polygonCoordinates[0],
+      zoom: 15,
+    });
+
+    map.on("load", () => {
+      map.addSource("polygon-source", {
+        type: "geojson",
+        data: {
+          type: "Feature",
+          properties: {},
+          geometry: {
+            type: "Polygon",
+            coordinates: [polygonCoordinates],
+          },
+        },
+      });
+
+      map.addLayer({
+        id: "polygon-fill",
+        type: "fill",
+        source: "polygon-source",
+        layout: {},
+        paint: {
+          "fill-color": "#10B981",
+          "fill-opacity": 0.5,
+        },
+      });
+
+      map.addLayer({
+        id: "polygon-border",
+        type: "line",
+        source: "polygon-source",
+        layout: {},
+        paint: {
+          "line-color": "#064E3B",
+          "line-width": 2,
+        },
+      });
+    });
+
+    mapRef.current = map;
+
+    return () => map.remove();
+  }, [polygonCoordinates]);
 
   return (
     <div className="p-8">
@@ -112,156 +219,179 @@ function VegetationIndices() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-gray-800 rounded-2xl p-8"
+        className="space-y-8"
       >
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Date Range Inputs */}
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
-                Start Date
-              </label>
-              <div className="relative">
-                <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                <input
-                  type="date"
-                  value={formData.date_start}
-                  onChange={(e) => setFormData(prev => ({ ...prev, date_start: e.target.value }))}
-                  className="w-full pl-10 pr-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                  required
-                />
-              </div>
-            </div>
+        {/* Coordinates Input */}
+        <div className="bg-gray-800 rounded-2xl p-8">
+          <div className="flex items-center gap-3 mb-6">
+            <Map className="w-6 h-6 text-green-500" />
+            <h2 className="text-2xl font-bold">Area Selection</h2>
+          </div>
+          
+          <textarea
+            className="w-full px-6 py-4 bg-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 text-white placeholder-gray-400"
+            placeholder="Enter coordinates JSON array (e.g., [[lon1,lat1], [lon2,lat2], ...])"
+            value={coordinates}
+            onChange={(e) => setCoordinates(e.target.value)}
+            rows={4}
+          />
+          
+          <button
+            onClick={createPolygon}
+            disabled={loading}
+            className="mt-4 w-full bg-green-600 text-white py-3 rounded-xl hover:bg-green-700 transition-colors disabled:opacity-50"
+          >
+            {loading ? "Creating..." : "Create Polygon"}
+          </button>
+        </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
-                End Date
-              </label>
-              <div className="relative">
-                <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                <input
-                  type="date"
-                  value={formData.date_end}
-                  onChange={(e) => setFormData(prev => ({ ...prev, date_end: e.target.value }))}
-                  className="w-full pl-10 pr-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                  required
-                />
+        {polygonId && (
+          <>
+            {/* Date Selection */}
+            <div className="bg-gray-800 rounded-2xl p-8">
+              <div className="flex items-center gap-3 mb-6">
+                <Calendar className="w-6 h-6 text-green-500" />
+                <h2 className="text-2xl font-bold">Date Range</h2>
               </div>
-            </div>
-
-            {/* Coordinates Inputs */}
-            {formData.coordinates.map((coord, index) => (
-              <div key={index} className="space-y-4">
-                <h3 className="font-medium text-gray-300">Point {index + 1}</h3>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-400 mb-2">
-                      Latitude
-                    </label>
-                    <div className="relative">
-                      <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                      <input
-                        type="number"
-                        step="any"
-                        value={coord.lat}
-                        onChange={(e) => handleCoordinateChange(index, 'lat', e.target.value)}
-                        className="w-full pl-10 pr-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                        required
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-400 mb-2">
-                      Longitude
-                    </label>
-                    <div className="relative">
-                      <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                      <input
-                        type="number"
-                        step="any"
-                        value={coord.lng}
-                        onChange={(e) => handleCoordinateChange(index, 'lng', e.target.value)}
-                        className="w-full pl-10 pr-4 py-2 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                        required
-                      />
-                    </div>
-                  </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-400 mb-2">
+                    Start Date
+                  </label>
+                  <input
+                    type="date"
+                    value={startDate}
+                    onChange={(e) => setStartDate(e.target.value)}
+                    className="w-full px-6 py-4 bg-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 text-white"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-400 mb-2">
+                    End Date
+                  </label>
+                  <input
+                    type="date"
+                    value={endDate}
+                    onChange={(e) => setEndDate(e.target.value)}
+                    className="w-full px-6 py-4 bg-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 text-white"
+                  />
                 </div>
               </div>
-            ))}
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
-          >
-            {loading ? 'Analyzing...' : 'Analyze Indices'}
-          </button>
-        </form>
-
-        {results && (
-          <div className="mt-8 space-y-8">
-            {/* Results Table */}
-            <div className="bg-gray-700 rounded-xl p-6">
-              <h3 className="text-xl font-bold mb-4">Analysis Results</h3>
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead>
-                    <tr>
-                      <th className="text-left p-2">Date</th>
-                      <th className="text-left p-2">Cloud Coverage</th>
-                      <th className="text-left p-2">Index</th>
-                      <th className="text-left p-2">Min</th>
-                      <th className="text-left p-2">Max</th>
-                      <th className="text-left p-2">Average</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {results && results.map((result, index) => (
-                      result.indexes && Object.entries(result.indexes).map(([indexName, values]) => (
-                        <tr key={`${index}-${indexName}`} className="border-t border-gray-600">
-                          <td className="p-2">{result.date}</td>
-                          <td className="p-2">{result.cloud}%</td>
-                          <td className="p-2">{indexName}</td>
-                          <td className="p-2">{values.min.toFixed(4)}</td>
-                          <td className="p-2">{values.max.toFixed(4)}</td>
-                          <td className="p-2">{values.average.toFixed(4)}</td>
-                        </tr>
-                      ))
-                    ))}
-                  </tbody>
-                </table>
-              </div>
             </div>
 
-            {/* Chart */}
-            <div className="bg-gray-700 rounded-xl p-6">
-              <h3 className="text-xl font-bold mb-4">Indices Trends</h3>
-              <div className="h-[400px]">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={results}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                    <XAxis dataKey="date" stroke="#9CA3AF" />
-                    <YAxis stroke="#9CA3AF" />
-                    <Tooltip />
-                    <Legend />
-                    {formData.indices.map((index, i) => (
-                      <Line
-                        key={index}
-                        type="monotone"
-                        dataKey={`indexes.${index}.average`}
-                        name={index}
-                        stroke={['#EF4444', '#3B82F6', '#10B981'][i]}
-                        strokeWidth={2}
-                        dot={{ fill: ['#EF4444', '#3B82F6', '#10B981'][i] }}
-                      />
-                    ))}
-                  </LineChart>
-                </ResponsiveContainer>
+            {/* Index Selection */}
+            <div className="bg-gray-800 rounded-2xl p-8">
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-3">
+                  <LineChartIcon className="w-6 h-6 text-green-500" />
+                  <h2 className="text-2xl font-bold">Select Indices</h2>
+                </div>
+                <button
+                  onClick={toggleAllIndices}
+                  className="flex items-center gap-2 px-4 py-2 bg-gray-700 rounded-lg hover:bg-gray-600 transition-colors"
+                >
+                  <CheckSquare className="w-5 h-5" />
+                  {selectedIndices.length === indicesList.length ? "Deselect All" : "Select All"}
+                </button>
               </div>
+              
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                {indicesList.map((index) => (
+                  <button
+                    key={index}
+                    onClick={() => toggleIndex(index)}
+                    className={`px-6 py-3 rounded-xl transition-colors ${
+                      selectedIndices.includes(index)
+                        ? "bg-green-600 text-white"
+                        : "bg-gray-700 text-gray-300 hover:bg-gray-600"
+                    }`}
+                  >
+                    {index.toUpperCase()}
+                  </button>
+                ))}
+              </div>
+              
+              <button
+                onClick={fetchIndexStats}
+                disabled={loading}
+                className="mt-6 w-full bg-green-600 text-white py-3 rounded-xl hover:bg-green-700 transition-colors disabled:opacity-50"
+              >
+                {loading ? "Fetching Data..." : "Fetch Selected Indices"}
+              </button>
             </div>
-          </div>
+
+            {/* Charts */}
+            {Object.keys(indexData).length > 0 && (
+              <div className="bg-gray-800 rounded-2xl p-8">
+                <div className="space-y-8">
+                  {Object.keys(indexData).map((index) => (
+                    <div key={index}>
+                      <h3 className="text-xl font-bold mb-4">{index.toUpperCase()} Statistics</h3>
+                      <div className="h-[400px]">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <LineChart data={indexData[index]}>
+                            <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                            <XAxis dataKey="date" stroke="#9CA3AF" />
+                            <YAxis stroke="#9CA3AF" />
+                            <Tooltip
+                              contentStyle={{
+                                backgroundColor: '#1F2937',
+                                border: 'none',
+                                borderRadius: '0.5rem',
+                                color: '#fff'
+                              }}
+                            />
+                            <Legend />
+                            <Line
+                              type="monotone"
+                              dataKey="min"
+                              stroke="#EF4444"
+                              strokeWidth={2}
+                              dot={{ fill: '#EF4444' }}
+                              name="Minimum"
+                            />
+                            <Line
+                              type="monotone"
+                              dataKey="max"
+                              stroke="#10B981"
+                              strokeWidth={2}
+                              dot={{ fill: '#10B981' }}
+                              name="Maximum"
+                            />
+                            <Line
+                              type="monotone"
+                              dataKey="median"
+                              stroke="#3B82F6"
+                              strokeWidth={2}
+                              dot={{ fill: '#3B82F6' }}
+                              name="Median"
+                            />
+                          </LineChart>
+                        </ResponsiveContainer>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Map View */}
+            {polygonCoordinates && (
+              <div className="bg-gray-800 rounded-2xl p-8">
+                <div className="flex items-center gap-3 mb-6">
+                  <Map className="w-6 h-6 text-green-500" />
+                  <h2 className="text-2xl font-bold">Selected Area</h2>
+                </div>
+                
+                <div 
+                  ref={mapContainerRef}
+                  className="w-full h-[400px] rounded-xl overflow-hidden"
+                />
+              </div>
+            )}
+          </>
         )}
       </motion.div>
     </div>
