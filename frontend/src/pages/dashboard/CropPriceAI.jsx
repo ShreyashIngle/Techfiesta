@@ -16,7 +16,12 @@ import {
   AreaChart,
   Area
 } from 'recharts';
-import toast from 'react-hot-toast';
+
+const AVAILABLE_CROPS = [
+  'wheat', 'paddy', 'arhar', 'bajra', 'barley', 'copra', 'cotton', 'sesamum',
+  'gram', 'groundnut', 'jowar', 'maize', 'masoor', 'moong', 'niger', 'ragi',
+  'rape', 'jute', 'safflower', 'soyabean', 'sugarcane', 'sunflower', 'urad'
+];
 
 function CropPriceAI() {
   const [dashboardData, setDashboardData] = useState(null);
@@ -306,7 +311,7 @@ function CropPriceAI() {
                 <Ship className="text-green-500" />
                 <div>
                   <p className="text-sm text-gray-400">Export Markets</p>
-                  <p className="text-white">{cropDetails.export}</p>
+                  <p>{cropDetails.export}</p>
                 </div>
               </div>
             </div>
