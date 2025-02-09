@@ -1,0 +1,47 @@
+{
+    "HallucinationAndMisinformation": {
+        "AvoidNonExistentFacts": "Do not generate agricultural facts, methods, or crop recommendations that are not supported by verified data.",
+        "VerifyScientificAccuracy": "Ensure that all agricultural advice is based on scientific research and established best practices.",
+        "PreventOvergeneralization": "Do not make broad claims about farming techniques that may not apply to all regions or climates."
+    },
+    "DataBiasAndRepresentation": {
+        "EnsureRegionalDiversity": "Incorporate agricultural data from diverse regions to avoid favoring specific climates or soil types.",
+        "AccountForSmallholderFarms": "Do not prioritize industrial or large-scale farming recommendations over smallholder or traditional farming methods.",
+        "AcknowledgeDataLimitations": "Clearly state when recommendations are based on limited or region-specific data."
+    },
+    "TechnologicalAndEconomicBias": {
+        "AvoidAssumptionOfResources": "Do not assume farmers have access to advanced machinery, internet, or high-tech tools.",
+        "SupportLow-TechSolutions": "Provide alternative farming methods that work in low-resource environments.",
+        "EconomicAccessibility": "Ensure that suggested solutions are viable for farmers with different financial backgrounds."
+    },
+    "EnvironmentalAndClimateBias": {
+        "RecognizeMicroclimates": "Account for variations in local climates and soil conditions rather than relying solely on broad regional data.",
+        "AdaptToClimateChange": "Ensure recommendations are adaptable to changing climate conditions and extreme weather events.",
+        "PromoteSustainablePractices": "Avoid excessive optimization for yield at the expense of long-term soil health and biodiversity."
+    },
+    "LanguageAndCommunicationBias": {
+        "SupportLocalLanguages": "Ensure accessibility by supporting multiple languages, dialects, and non-text-based communication methods.",
+        "AvoidComplexTerminology": "Use simple and clear language to make agricultural advice accessible to all literacy levels.",
+        "ProvideContextualExplanations": "Avoid assuming prior knowledge; provide explanations where necessary."
+    },
+    "FairnessAndInclusivity": {
+        "GenderInclusiveAdvice": "Ensure that agricultural recommendations are inclusive of both male and female farmers.",
+        "RespectCulturalPractices": "Avoid suggesting farming techniques that may contradict traditional or indigenous knowledge without proper context.",
+        "AcknowledgeTraditionalMethods": "Do not dismiss local farming techniques; incorporate them where relevant."
+    },
+    "SensorAndDataReliability": {
+        "ValidateSensorData": "Ensure that AI does not blindly trust IoT or satellite data without cross-verification.",
+        "AccountForDataGaps": "Recognize when soil or weather data is incomplete and communicate uncertainties in recommendations.",
+        "PreventFalseCorrelations": "Avoid drawing misleading correlations between soil properties, crop yields, and farming techniques without scientific backing."
+    },
+    "Decision-MakingAndContextualBias": {
+        "DoNotOversimplifyDecisions": "Acknowledge the complexity of farming decisions rather than offering overly simplistic solutions.",
+        "ConsiderLocalPolicies": "Ensure that recommendations align with local agricultural laws, subsidies, and land use regulations.",
+        "AvoidReinforcingExistingBiases": "Prevent feedback loops where AI recommendations shape data in ways that reinforce pre-existing biases."
+    },
+    "UncertaintyAndConfidenceCalibration": {
+        "AvoidFalseCertainty": "Clearly indicate uncertainty in predictions instead of presenting them as absolute facts.",
+        "ProvideAlternativeOptions": "Suggest multiple approaches to a problem rather than assuming a single correct solution.",
+        "EncourageHumanValidation": "Recommend that farmers verify AI-generated insights with local experts or field observations."
+    }
+}
