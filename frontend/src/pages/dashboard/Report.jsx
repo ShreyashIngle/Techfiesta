@@ -4,313 +4,416 @@ import { Download, FileText, X } from 'lucide-react';
 import QRCode from 'qrcode.react';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
-import logo from "../../images/logo.png";
+import axios from 'axios';
+import toast from 'react-hot-toast';
 
-function Report() {
+const Report = () => {
   const reportRef = useRef(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [showQRModal, setShowQRModal] = useState(false);
+  const [reportData, setReportData] = useState(null);
+  const [activeModal, setActiveModal] = useState(null);
+  
+  const [formData, setFormData] = useState({
+    land_area: '',
+    location: '',
+    crop_type: '',
+    soil_type: '',
+    irrigation_facilities: false,
+    irrigation_type: '',
+    crop_stage: '',
+    seed_type: '',
+    crop_rotation: false,
+    rotation_details: '',
+    weed_management: false,
+    weed_methods: '',
+    drainage_system: false,
+    drainage_details: '',
+    pest_disease: false,
+    pest_disease_list: '',
+    fertilizer_application: false,
+    fertilizer_details: '',
+    crop_specific_diseases: false,
+    disease_details: '',
+    farming_equipment: false,
+    equipment_list: '',
+    labor_availability: false,
+    labor_quantity: 0,
+    submit_button: false,
+    output_area: ''
+  });
 
-  // Get the current URL for QR code
-  const getCurrentUrl = () => {
-    if (typeof window !== 'undefined') {
-      return window.location.href;
+  const handleInputChange = (name, value) => {
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleBooleanChange = (name, checked) => {
+    setFormData(prev => ({
+      ...prev,
+      [name]: checked
+    }));
+    if (checked) {
+      setActiveModal(name);
     }
-    return '';
   };
 
-  const reportData = {
-    title: "Agricultural Analysis Report",
-    date: new Date().toLocaleDateString(),
-    sections: [
-      {
-        title: "Crop Recommendations",
-        content: [
-          {
-            subtitle: "Primary Recommendation",
-            text: "Based on your soil analysis and climate conditions, Wheat is recommended as your primary crop. The soil's nitrogen content and pH levels are optimal for wheat cultivation.",
-            metrics: {
-              soilHealth: 85,
-              yieldPotential: 92,
-              waterRequirement: 75
-            }
-          },
-          {
-            subtitle: "Alternative Options",
-            text: "Secondary crop options include Barley and Maize, which would also thrive in your current conditions."
-          }
-        ],
-        backgroundColor: "bg-sky-200",
-        textColor: "text-sky-900",
-        borderColor: "border-sky-200"
-      },
-      {
-        title: "Soil Analysis",
-        content: [
-          {
-            subtitle: "Current Soil Conditions",
-            text: "Your soil shows excellent nutrient balance with high organic matter content. Nitrogen levels are at 45 ppm, Phosphorus at 32 ppm, and Potassium at 180 ppm.",
-            metrics: {
-              nitrogen: 45,
-              phosphorus: 32,
-              potassium: 180
-            }
-          }
-        ],
-        backgroundColor: "bg-sky-200",
-        textColor: "text-rose-900",
-        borderColor: "border-rose-200"
-      },
-      {
-        title: "Action Plan",
-        content: [
-          {
-            subtitle: "Immediate Steps",
-            text: "1. Begin soil preparation by mid-March\n2. Apply recommended fertilizers\n3. Implement irrigation system upgrades",
-            timeline: [
-              { task: "Soil Preparation", deadline: "March 15" },
-              { task: "Fertilizer Application", deadline: "March 20" },
-              { task: "Irrigation Setup", deadline: "March 25" }
-            ]
-          }
-        ],
-        backgroundColor: "bg-sky-200",
-        textColor: "text-emerald-900",
-        borderColor: "border-emerald-200"
-      }
-    ]
-  };
-
-  const generatePDF = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
       setIsGenerating(true);
-      const pdf = new jsPDF({
-        orientation: 'p',
-        unit: 'mm',
-        format: 'a4'
-      });
-
-      const sections = Array.from(reportRef.current.children);
-      const margin = 10;
-      const pageWidth = pdf.internal.pageSize.getWidth();
-      const pageHeight = pdf.internal.pageSize.getHeight();
-
-      for (let i = 0; i < sections.length; i++) {
-        const section = sections[i];
-        
-        // Wait for images to load
-        const images = section.getElementsByTagName('img');
-        await Promise.all(Array.from(images).map(img => {
-          if (img.complete) return Promise.resolve();
-          return new Promise(resolve => {
-            img.onload = resolve;
-          });
-        }));
-
-        const canvas = await html2canvas(section, {
-          scale: 2,
-          useCORS: true,
-          logging: false,
-          backgroundColor: '#ffffff',
-          windowWidth: section.scrollWidth,
-          windowHeight: section.scrollHeight
-        });
-
-        // Calculate dimensions while maintaining aspect ratio
-        let imgWidth = pageWidth - (2 * margin);
-        let imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-        // Check if the image height exceeds the page height
-        if (imgHeight > pageHeight - (2 * margin)) {
-          imgHeight = pageHeight - (2 * margin);
-          imgWidth = (canvas.width * imgHeight) / canvas.height;
-        }
-
-        // Add new page for each section except the first
-        if (i > 0) {
-          pdf.addPage();
-        }
-
-        // Center the image on the page
-        const x = (pageWidth - imgWidth) / 2;
-        const y = (pageHeight - imgHeight) / 2;
-
-        const imgData = canvas.toDataURL('image/jpeg', 1.0);
-        pdf.addImage(imgData, 'JPEG', x, y, imgWidth, imgHeight, undefined, 'FAST');
-      }
-
-      pdf.save('agricultural-report.pdf');
+      const response = await axios.post('http://localhost:8000/report/generate_report', formData);
+      setReportData(null); // Force React to re-render
+      setTimeout(() => setReportData(response.data), 100); // Reapply data after a short delay
+      toast.success('Report generated successfully!');
     } catch (error) {
-      console.error('Error generating PDF:', error);
+      console.error('Error generating report:', error);
+      toast.error('Failed to generate report');
     } finally {
       setIsGenerating(false);
     }
   };
-
-  const MetricBar = ({ value, label, color }) => (
-    <div className="mb-4 w-full">
-      <div className="flex justify-between mb-1">
-        <span className={`text-sm font-medium ${color}`}>{label}</span>
-        <span className={`text-sm font-medium ${color}`}>{value}%</span>
-      </div>
-      <div className="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
-        <div
-          className={`h-full rounded-full transition-all duration-500 ease-out ${color.replace('text', 'bg')}`}
-          style={{ 
-            width: `${value}%`,
-            opacity: 0.8 
-          }}
-        ></div>
-      </div>
-    </div>
-  );
-
-  const TimelineItem = ({ task, deadline, color }) => (
-    <div className="flex items-center mb-4">
-      <div className={`flex-shrink-0 w-2 h-2 rounded-full ${color.replace('text', 'bg')}`}></div>
-      <div className="ml-4">
-        <p className={`text-sm font-medium ${color}`}>{task}</p>
-        <p className="text-xs text-gray-500">{deadline}</p>
-      </div>
-    </div>
-  );
-
-  const QRModal = () => (
-    <div className={`fixed inset-0 z-50 flex items-center justify-center ${showQRModal ? '' : 'hidden'}`}>
-      {/* Backdrop */}
-      <div 
-        className="absolute inset-0 bg-black bg-opacity-50 backdrop-blur-sm"
-        onClick={() => setShowQRModal(false)}
-      ></div>
+  
+  const generatePDF = async () => {
+    if (!reportRef.current) {
+      toast.error("No report data to generate PDF!");
+      return;
+    }
+  
+    try {
+      setIsGenerating(true);
       
-      {/* Modal */}
-      <div className="relative bg-white rounded-2xl p-6 max-w-sm w-full mx-4 shadow-xl">
-        <button 
-          onClick={() => setShowQRModal(false)}
-          className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
-        >
-          <X className="w-6 h-6" />
-        </button>
-        
-        <h3 className="text-xl font-semibold mb-4 text-gray-900">
-          Scan QR Code to View Report
-        </h3>
-        
-        <div className="flex items-center justify-center p-4">
-          <QRCode
-            value={getCurrentUrl()}
-            size={256}
-            level="H"
-            includeMargin={true}
-            className="rounded-lg"
-          />
+      await new Promise(resolve => setTimeout(resolve, 500)); // Small delay to ensure rendering
+  
+      const element = reportRef.current;
+      const canvas = await html2canvas(element, {
+        scale: 2,
+        useCORS: true,
+        logging: true,
+        backgroundColor: '#ffffff',
+        windowWidth: element.scrollWidth,
+        windowHeight: element.scrollHeight
+      });
+  
+      const imgData = canvas.toDataURL('image/png');
+      const imgWidth = 210; // A4 width in mm
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+  
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+      
+      pdf.save('agricultural-report.pdf');
+      toast.success('PDF downloaded successfully!');
+    } catch (error) {
+      console.error('PDF generation error:', error);
+      toast.error('Failed to generate PDF: ' + error.message);
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+  
+  
+
+  const Modal = ({ title, isOpen, onClose, children }) => {
+    if (!isOpen) return null;
+
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center">
+        <div className="absolute inset-0 bg-black bg-opacity-50" onClick={onClose}></div>
+        <div className="relative bg-white rounded-lg p-6 w-full max-w-md mx-4">
+          <button 
+            onClick={onClose}
+            className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+          >
+            <X className="w-6 h-6" />
+          </button>
+          <h3 className="text-lg font-semibold mb-4">{title}</h3>
+          {children}
         </div>
-        
-        <p className="text-sm text-gray-500 text-center mt-4">
-          Scan with your mobile device to view the report
-        </p>
       </div>
+    );
+  };
+
+  const DetailInput = ({ label, name, value, onChange, type = "text" }) => (
+    <div className="mb-4">
+      <label className="block text-sm font-medium text-gray-700 mb-1">
+        {label}
+      </label>
+      <input
+        type={type}
+        value={value}
+        onChange={(e) => onChange(name, e.target.value)}
+        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+      />
     </div>
+  );
+
+  const Toggle = ({ label, checked, onChange }) => (
+    <label className="flex items-center cursor-pointer">
+      <div className="relative">
+        <input
+          type="checkbox"
+          className="sr-only"
+          checked={checked}
+          onChange={onChange}
+        />
+        <div className={`w-10 h-6 bg-gray-300 rounded-full shadow-inner ${checked ? 'bg-green-500' : ''}`}></div>
+        <div className={`absolute w-4 h-4 bg-white rounded-full shadow transition-transform duration-200 ease-in-out ${checked ? 'translate-x-5' : 'translate-x-1'} top-1`}></div>
+      </div>
+      <span className="ml-3 text-sm font-medium text-gray-700">{label}</span>
+    </label>
   );
 
   return (
-    <div className="p-8 bg-black min-h-screen">
-      <div className="flex justify-between items-center mb-8 flex-wrap gap-4">
-        <motion.h1
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-4xl font-bold text-white"
-        >
-          Agricultural Report
-        </motion.h1>
-        <div className="flex gap-4">
-          <motion.button
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            whileHover={{ scale: 1.05 }}
-            onClick={() => setShowQRModal(true)}
-            className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-800 to-blue-900 text-white rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-300 shadow-lg"
-          >
-            <FileText className="w-5 h-5" />
-            View QR Code
-          </motion.button>
-          
-          <motion.button
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            whileHover={{ scale: 1.05 }}
-            onClick={generatePDF}
+    <div className="max-w-7xl mx-auto p-6">
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="space-y-8"
+      >
+        <h1 className="text-3xl font-bold text-gray-900">Agricultural Report Generator</h1>
+        
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Basic Information */}
+            <DetailInput
+              label="Land Area (acres)"
+              name="land_area"
+              value={formData.land_area}
+              onChange={handleInputChange}
+              type="number"
+            />
+
+            <DetailInput
+              label="Location"
+              name="location"
+              value={formData.location}
+              onChange={handleInputChange}
+            />
+
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Crop Type
+              </label>
+              <select 
+                value={formData.crop_type}
+                onChange={(e) => handleInputChange('crop_type', e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+              >
+                <option value="">Select crop type</option>
+                <option value="wheat">Wheat</option>
+                <option value="rice">Rice</option>
+                <option value="corn">Corn</option>
+              </select>
+            </div>
+
+            {/* Boolean Fields */}
+            <div className="space-y-4">
+              <Toggle
+                label="Irrigation Facilities"
+                checked={formData.irrigation_facilities}
+                onChange={(e) => handleBooleanChange('irrigation_facilities', e.target.checked)}
+              />
+            </div>
+
+            {/* Add other fields similarly */}
+          </div>
+
+          <button 
+            type="submit" 
+            className={`w-full py-3 px-4 rounded-md text-white font-medium ${
+              isGenerating ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700'
+            }`}
             disabled={isGenerating}
-            className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-800 to-green-900 text-white rounded-xl hover:from-green-600 hover:to-green-700 transition-all duration-300 shadow-lg disabled:opacity-50"
           >
-            {isGenerating ? (
-              <>Generating...</>
-            ) : (
-              <>
-                <Download className="w-5 h-5" />
-                Download Report
-              </>
-            )}
-          </motion.button>
+            {isGenerating ? 'Generating Report...' : 'Generate Report'}
+          </button>
+        </form>
+
+        {/* Modals */}
+        <Modal
+          title="Irrigation Details"
+          isOpen={activeModal === 'irrigation_facilities'}
+          onClose={() => setActiveModal(null)}
+        >
+          <DetailInput
+            label="Irrigation Type"
+            name="irrigation_type"
+            value={formData.irrigation_type}
+            onChange={handleInputChange}
+          />
+          <button 
+            onClick={() => setActiveModal(null)}
+            className="w-full py-2 px-4 bg-green-600 text-white rounded-md hover:bg-green-700"
+          >
+            Save
+          </button>
+        </Modal>
+
+        
+        {reportData && (
+  <div ref={reportRef} className="mt-8 p-6 bg-black rounded-lg shadow-lg">
+    <h2 className="text-2xl font-bold mb-4">Agricultural Report</h2>
+    {/* Displaying Land Details */}
+    <div className="space-y-4">
+      <div>
+        <h3 className="font-semibold">Land Details</h3>
+        <p>Area: {reportData.report.land_area || "Data not available"} acres</p>
+        <p>Location: {reportData.report.location || "Data not available"}</p>
+      </div>
+
+      {/* User Advantages and Disadvantages */}
+      <div>
+        <h3 className="font-semibold">User Advantages & Disadvantages</h3>
+        <div className="space-y-2">
+          <p><strong>Advantages:</strong> {reportData.report.output_format.user_advantages_disadvantages.advantages}</p>
+          <p><strong>Disadvantages:</strong> {reportData.report.output_format.user_advantages_disadvantages.disadvantages}</p>
         </div>
       </div>
 
-      <div ref={reportRef} className="space-y-8">
-        {reportData.sections.map((section, index) => (
-          <motion.div
-            key={section.title}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.1 }}
-            className={`${section.backgroundColor} rounded-2xl p-8 shadow-sm border ${section.borderColor}`}
-          >
-            <div className="flex items-center gap-4 mb-6">
-              <img src={logo} alt="Logo" className="w-12 h-12" />
-              <div>
-                <h2 className={`text-2xl font-bold ${section.textColor}`}>{section.title}</h2>
-                <p className="text-gray-500 text-sm">{reportData.date}</p>
-              </div>
-            </div>
-
-            {section.content.map((item, i) => (
-              <div key={i} className="mb-6">
-                <h3 className={`text-xl font-semibold mb-4 ${section.textColor}`}>{item.subtitle}</h3>
-                <p className="text-gray-600 mb-6 whitespace-pre-line">{item.text}</p>
-
-                {item.metrics && (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                    {Object.entries(item.metrics).map(([key, value]) => (
-                      <MetricBar
-                        key={key}
-                        label={key.charAt(0).toUpperCase() + key.slice(1)}
-                        value={value}
-                        color={section.textColor}
-                      />
-                    ))}
-                  </div>
-                )}
-
-                {item.timeline && (
-                  <div className="mt-6">
-                    {item.timeline.map((timelineItem, index) => (
-                      <TimelineItem
-                        key={index}
-                        task={timelineItem.task}
-                        deadline={timelineItem.deadline}
-                        color={section.textColor}
-                      />
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
-          </motion.div>
-        ))}
+      {/* Actionable Suggestions */}
+      <div>
+        <h3 className="font-semibold">Actionable Suggestions</h3>
+        <p>{reportData.report.output_format.user_advantages_disadvantages.actionable_suggestions}</p>
       </div>
 
-      <QRModal />
+      {/* FAQ Section */}
+      <div>
+        <h3 className="font-semibold">Frequently Asked Questions</h3>
+        <div className="space-y-2">
+          {reportData.report.general_faq_questions.map((faq, index) => (
+            <div key={index} className="space-y-1">
+              <p><strong>Q:</strong> {faq.question}</p>
+              <p><strong>A:</strong> {faq.answer}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Things to Take Care Of */}
+      <div>
+        <h3 className="font-semibold">Important Things to Take Care Of</h3>
+        <ul className="list-disc pl-6">
+          {reportData.report.important_things_to_take_care_of.map((item, index) => (
+            <li key={index}>{item}</li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Good Methods and Practices */}
+      <div>
+        <h3 className="font-semibold">Good Methods and Practices</h3>
+        <ul className="list-disc pl-6">
+          {reportData.report.good_methods_and_practices.map((item, index) => (
+            <li key={index}>{item}</li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Futuristic Predictions */}
+      <div>
+        <h3 className="font-semibold">Futuristic Predictions</h3>
+        <ul className="list-disc pl-6">
+          {reportData.report.futuristic_predictions.map((prediction, index) => (
+            <li key={index}>{prediction}</li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Use Case Scenarios */}
+      <div>
+        <h3 className="font-semibold">Use Case Scenarios</h3>
+        <div className="space-y-2">
+          {reportData.report.use_case_scenarios.map((scenario, index) => (
+            <div key={index} className="space-y-1">
+              <p><strong>Scenario:</strong> {scenario.scenario}</p>
+              <p><strong>Potential Outcome:</strong> {scenario.potential_outcome}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Step-by-Step Guidelines */}
+      <div>
+        <h3 className="font-semibold">Step-by-Step Guidelines</h3>
+        <div className="space-y-2">
+          {reportData.report.step_by_step_guidelines.map((step, index) => (
+            <div key={index} className="space-y-1">
+              <p><strong>Step:</strong> {step.step}</p>
+              <p><strong>Description:</strong> {step.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Common Mistakes to Avoid */}
+      <div>
+        <h3 className="font-semibold">Common Mistakes to Avoid</h3>
+        <div className="space-y-2">
+          {reportData.report.common_mistakes_to_avoid.map((mistake, index) => (
+            <div key={index} className="space-y-1">
+              <p><strong>Mistake:</strong> {mistake.mistake}</p>
+              <p><strong>Reason:</strong> {mistake.reason}</p>
+              <p><strong>Alternative Approach:</strong> {mistake.alternative_approach}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Critical Evaluation Metrics */}
+      <div>
+        <h3 className="font-semibold">Critical Evaluation Metrics</h3>
+        <div className="space-y-2">
+          {reportData.report.critical_evaluation_metrics.map((metric, index) => (
+            <div key={index} className="space-y-1">
+              <p><strong>Metric:</strong> {metric.metric}</p>
+              <p><strong>Importance:</strong> {metric.importance}</p>
+              <p><strong>How to Measure:</strong> {metric.how_to_measure}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+ 
+
+
+            
+            <div className="flex gap-4 mt-6">
+              <button
+                onClick={generatePDF}
+                disabled={isGenerating}
+                className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+              >
+                <Download className="w-4 h-4" />
+                Download PDF
+              </button>
+              
+              <button
+                onClick={() => setShowQRModal(true)}
+                className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+              >
+                <FileText className="w-4 h-4" />
+                View QR Code
+              </button>
+            </div>
+          </div>
+        )}
+
+     
+        <Modal
+          title="Scan QR Code to View Report"
+          isOpen={showQRModal}
+          onClose={() => setShowQRModal(false)}
+        >
+          <div className="flex justify-center p-4">
+            <QRCode value={window.location.href} size={256} />
+          </div>
+        </Modal>
+      </motion.div>
     </div>
   );
-}
+};
 
 export default Report;
