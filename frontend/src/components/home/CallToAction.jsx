@@ -127,14 +127,14 @@ function CallToAction() {
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="text-center">
                     <h3 className="text-2xl font-bold mb-4">{item.title}</h3>
-                    <motion.button
+                    {/* <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       className="inline-flex items-center px-6 py-3 bg-green-500 text-black rounded-full font-semibold hover:bg-green-400 transition-colors"
                     >
                       {t.learnMore}
                       <ArrowRight className="ml-2" size={20} />
-                    </motion.button>
+                    </motion.button> */}
                   </div>
                 </div>
               </div>
