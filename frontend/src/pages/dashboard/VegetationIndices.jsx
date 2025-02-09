@@ -1,9 +1,17 @@
-import { useState, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
-import { Map, Calendar, LineChart as LineChartIcon, CheckSquare } from 'lucide-react';
-import mapboxgl from 'mapbox-gl';
-import axios from 'axios';
-import toast from 'react-hot-toast';
+import { useState, useEffect, useRef } from "react";
+import { motion } from "framer-motion";
+import {
+  Map,
+  Calendar,
+  LineChart as LineChartIcon,
+  CheckSquare,
+  Download
+} from "lucide-react";
+import mapboxgl from "mapbox-gl";
+import Papa from "papaparse";
+import { saveAs } from "file-saver";
+import axios from "axios";
+import toast from "react-hot-toast";
 import {
   LineChart,
   Line,
@@ -12,11 +20,12 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
-  ResponsiveContainer
-} from 'recharts';
-import 'mapbox-gl/dist/mapbox-gl.css';
+  ResponsiveContainer,
+} from "recharts";
+import "mapbox-gl/dist/mapbox-gl.css";
 
-mapboxgl.accessToken = "pk.eyJ1Ijoic2hyZXlhczQxMTQiLCJhIjoiY201MGw5ZGh3MW9sdjJqcXY3aHp2N2t4aCJ9.DSYDzKDbYIxralvkJ6Ypbg";
+mapboxgl.accessToken =
+  "pk.eyJ1Ijoic2hyZXlhczQxMTQiLCJhIjoiY201MGw5ZGh3MW9sdjJqcXY3aHp2N2t4aCJ9.DSYDzKDbYIxralvkJ6Ypbg";
 
 const API_KEY = "fdc562ba530cc8f603e9c3c3422b0708";
 
@@ -29,7 +38,7 @@ function VegetationIndices() {
   const [indexData, setIndexData] = useState({});
   const [polygonCoordinates, setPolygonCoordinates] = useState(null);
   const [loading, setLoading] = useState(false);
-  
+
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
 
@@ -54,7 +63,9 @@ function VegetationIndices() {
   };
 
   const toggleAllIndices = () => {
-    setSelectedIndices(selectedIndices.length === indicesList.length ? [] : [...indicesList]);
+    setSelectedIndices(
+      selectedIndices.length === indicesList.length ? [] : [...indicesList]
+    );
   };
 
   const createPolygon = async () => {
@@ -79,7 +90,7 @@ function VegetationIndices() {
         `http://api.agromonitoring.com/agro/1.0/polygons?appid=${API_KEY}`,
         payload
       );
-      
+
       setPolygonId(response.data.id);
       setPolygonCoordinates(coordsArray);
       toast.success("Polygon created successfully!");
@@ -206,6 +217,22 @@ function VegetationIndices() {
     return () => map.remove();
   }, [polygonCoordinates]);
 
+  const downloadAllCSV = () => {
+    if (Object.keys(indexData).length === 0) {
+      toast.error("No data available for download.");
+      return;
+    }
+
+    Object.keys(indexData).forEach((index) => {
+      if (indexData[index] && indexData[index].length > 0) {
+        const csv = Papa.unparse(indexData[index]);
+        const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+        saveAs(blob, `${index}_statistics.csv`);
+      }
+    });
+    toast.success("CSV files downloaded!");
+  };
+
   return (
     <div className="p-8">
       <motion.h1
@@ -227,7 +254,7 @@ function VegetationIndices() {
             <Map className="w-6 h-6 text-green-500" />
             <h2 className="text-2xl font-bold">Area Selection</h2>
           </div>
-          
+
           <textarea
             className="w-full px-6 py-4 bg-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 text-white placeholder-gray-400"
             placeholder="Enter coordinates JSON array (e.g., [[lon1,lat1], [lon2,lat2], ...])"
@@ -235,7 +262,7 @@ function VegetationIndices() {
             onChange={(e) => setCoordinates(e.target.value)}
             rows={4}
           />
-          
+
           <button
             onClick={createPolygon}
             disabled={loading}
@@ -253,7 +280,7 @@ function VegetationIndices() {
                 <Calendar className="w-6 h-6 text-green-500" />
                 <h2 className="text-2xl font-bold">Date Range</h2>
               </div>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-400 mb-2">
@@ -266,7 +293,7 @@ function VegetationIndices() {
                     className="w-full px-6 py-4 bg-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 text-white"
                   />
                 </div>
-                
+
                 <div>
                   <label className="block text-sm font-medium text-gray-400 mb-2">
                     End Date
@@ -280,39 +307,46 @@ function VegetationIndices() {
                 </div>
               </div>
             </div>
-
             {/* Index Selection */}
-            <div className="bg-gray-800 rounded-2xl p-8">
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center gap-3">
-                  <LineChartIcon className="w-6 h-6 text-green-500" />
-                  <h2 className="text-2xl font-bold">Select Indices</h2>
-                </div>
-                <button
-                  onClick={toggleAllIndices}
-                  className="flex items-center gap-2 px-4 py-2 bg-gray-700 rounded-lg hover:bg-gray-600 transition-colors"
-                >
-                  <CheckSquare className="w-5 h-5" />
-                  {selectedIndices.length === indicesList.length ? "Deselect All" : "Select All"}
-                </button>
-              </div>
-              
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-                {indicesList.map((index) => (
-                  <button
-                    key={index}
-                    onClick={() => toggleIndex(index)}
-                    className={`px-6 py-3 rounded-xl transition-colors ${
-                      selectedIndices.includes(index)
-                        ? "bg-green-600 text-white"
-                        : "bg-gray-700 text-gray-300 hover:bg-gray-600"
-                    }`}
-                  >
-                    {index.toUpperCase()}
-                  </button>
+        <div className="bg-gray-800 rounded-2xl p-8">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <LineChartIcon className="w-6 h-6 text-green-500" />
+              <h2 className="text-2xl font-bold">Select Indices</h2>
+            </div>
+            <div className="flex gap-4">
+              <button
+                onClick={toggleAllIndices}
+                className="flex items-center gap-2 px-4 py-2 bg-gray-700 rounded-lg hover:bg-gray-600 transition-colors"
+              >
+                <CheckSquare className="w-5 h-5" />
+                {selectedIndices.length === indicesList.length ? "Deselect All" : "Select All"}
+              </button>
+              <button
+                onClick={downloadAllCSV}
+                className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                <Download className="w-5 h-5" />
+                Download CSV
+              </button>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            {indicesList.map((index) => (
+              <button
+                key={index}
+                onClick={() => toggleIndex(index)}
+                className={`px-6 py-3 rounded-xl transition-colors ${
+                  selectedIndices.includes(index)
+                    ? "bg-green-600 text-white"
+                    : "bg-gray-700 text-gray-300 hover:bg-gray-600"
+                }`}
+              >
+                {index.toUpperCase()}
+              </button>
                 ))}
               </div>
-              
+
               <button
                 onClick={fetchIndexStats}
                 disabled={loading}
@@ -328,19 +362,24 @@ function VegetationIndices() {
                 <div className="space-y-8">
                   {Object.keys(indexData).map((index) => (
                     <div key={index}>
-                      <h3 className="text-xl font-bold mb-4">{index.toUpperCase()} Statistics</h3>
+                      <h3 className="text-xl font-bold mb-4">
+                        {index.toUpperCase()} Statistics
+                      </h3>
                       <div className="h-[400px]">
                         <ResponsiveContainer width="100%" height="100%">
                           <LineChart data={indexData[index]}>
-                            <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                            <CartesianGrid
+                              strokeDasharray="3 3"
+                              stroke="#374151"
+                            />
                             <XAxis dataKey="date" stroke="#9CA3AF" />
                             <YAxis stroke="#9CA3AF" />
                             <Tooltip
                               contentStyle={{
-                                backgroundColor: '#1F2937',
-                                border: 'none',
-                                borderRadius: '0.5rem',
-                                color: '#fff'
+                                backgroundColor: "#1F2937",
+                                border: "none",
+                                borderRadius: "0.5rem",
+                                color: "#fff",
                               }}
                             />
                             <Legend />
@@ -349,7 +388,7 @@ function VegetationIndices() {
                               dataKey="min"
                               stroke="#EF4444"
                               strokeWidth={2}
-                              dot={{ fill: '#EF4444' }}
+                              dot={{ fill: "#EF4444" }}
                               name="Minimum"
                             />
                             <Line
@@ -357,7 +396,7 @@ function VegetationIndices() {
                               dataKey="max"
                               stroke="#10B981"
                               strokeWidth={2}
-                              dot={{ fill: '#10B981' }}
+                              dot={{ fill: "#10B981" }}
                               name="Maximum"
                             />
                             <Line
@@ -365,7 +404,7 @@ function VegetationIndices() {
                               dataKey="median"
                               stroke="#3B82F6"
                               strokeWidth={2}
-                              dot={{ fill: '#3B82F6' }}
+                              dot={{ fill: "#3B82F6" }}
                               name="Median"
                             />
                           </LineChart>
@@ -384,8 +423,8 @@ function VegetationIndices() {
                   <Map className="w-6 h-6 text-green-500" />
                   <h2 className="text-2xl font-bold">Selected Area</h2>
                 </div>
-                
-                <div 
+
+                <div
                   ref={mapContainerRef}
                   className="w-full h-[400px] rounded-xl overflow-hidden"
                 />

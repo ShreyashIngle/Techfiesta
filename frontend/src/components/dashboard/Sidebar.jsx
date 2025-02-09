@@ -23,7 +23,7 @@ function Sidebar({ isOpen, setIsOpen }) {
     { icon: MessageSquare, label: 'Chatbot', path: '/dashboard/chatbot' },
     { icon: Newspaper, label: 'News', path: '/dashboard/news' },
     { icon: GanttChart, label: 'Government Schemes', path: '/dashboard/schemes' },
-    { icon: FileText, label: 'Report', path: '/dashboard/report' },
+    // { icon: FileText, label: 'Report', path: '/dashboard/report' },
     { icon: Cloud, label: 'Weather', path: '/dashboard/weather' },
     { icon: Video, label: 'VidQR Connect', path: '/dashboard/vidqr-connect' },
     { icon: Phone, label: 'AgriConnect', path: '/dashboard/agri-connect' },

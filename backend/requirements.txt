@@ -6,7 +6,6 @@ scikit-learn==1.4.0
 scipy==1.12.0
 python-multipart==0.0.6
 rasterio==1.4.3
-
 streamlit
 openai==0.28
 audio_recorder_streamlit
@@ -17,5 +16,9 @@ pyttsx3
 google-cloud-texttospeech
 requests
 pydub
-numpy
 lightgbm
+torch
+torchvision
+matplotlib
+scikit-image
+pillow
