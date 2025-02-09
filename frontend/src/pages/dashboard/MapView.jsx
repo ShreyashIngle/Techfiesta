@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import mapboxgl from 'mapbox-gl';
+import toast from 'react-hot-toast';
 import { Activity, Users, Target, Trophy, MapPin, Mail, Crosshair } from 'lucide-react';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
@@ -94,12 +95,12 @@ function MapView() {
     });
   }, [coordinates]);
 
-  const statsCards = [
-    { icon: Target, label: 'Total Fields Analyzed', value: facilityStats.totalFieldsAnalyzed },
-    { icon: Activity, label: 'Active Monitoring Areas', value: facilityStats.activeMonitoringAreas },
-    { icon: Users, label: 'Farmers Engaged', value: facilityStats.totalFarmers },
-    { icon: Trophy, label: 'Predicted Yield (Avg)', value: facilityStats.averageYield }
-  ];
+  // const statsCards = [
+  //   { icon: Target, label: 'Total Fields Analyzed', value: facilityStats.totalFieldsAnalyzed },
+  //   { icon: Activity, label: 'Active Monitoring Areas', value: facilityStats.activeMonitoringAreas },
+  //   { icon: Users, label: 'Farmers Engaged', value: facilityStats.totalFarmers },
+  //   { icon: Trophy, label: 'Predicted Yield (Avg)', value: facilityStats.averageYield }
+  // ];
 
   const resetCoordinates = () => {
     setCoordinates([]);
@@ -118,13 +119,13 @@ function MapView() {
 
 const copyCoordinates = () => {
   if (coordinates.length < 4) {
-    alert('Please select 4 points first.');
+    toast.error('Please select 4 points first.');
     return;
   }
 
   const formattedCoordinates = [...coordinates, coordinates[0]]; // Ensure the last point is the first point
   navigator.clipboard.writeText(JSON.stringify(formattedCoordinates, null, 2)).then(() => {
-    alert('Coordinates copied to clipboard');
+    toast.success('Coordinates copied to clipboard');
   });
 };
 
@@ -146,7 +147,7 @@ const copyCoordinates = () => {
           className="lg:col-span-1 space-y-6"
         >
           {/* Stats Cards */}
-          <div className="grid grid-cols-2 gap-4">
+          {/* <div className="grid grid-cols-2 gap-4">
             {statsCards.map((stat, index) => (
               <motion.div
                 key={stat.label}
@@ -163,7 +164,7 @@ const copyCoordinates = () => {
                 </p>
               </motion.div>
             ))}
-          </div>
+          </div> */}
 
           {/* Coordinates Panel */}
           <motion.div
