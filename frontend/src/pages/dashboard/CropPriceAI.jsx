@@ -119,7 +119,7 @@ function CropPriceAI() {
         animate={{ opacity: 1, y: 0 }}
         className="text-4xl font-bold mb-8 text-white"
       >
-        Crop Price AI
+        Marketplace Connect
       </motion.h1>
 
       {dashboardData && (
@@ -138,9 +138,7 @@ function CropPriceAI() {
               {dashboardData.top5.map((crop, index) => (
                 <motion.div
                   key={crop[0]}
-                  whileHover={{ scale: 1.02 }}
-                  className="flex items-center justify-between p-4 bg-gray-700 rounded-xl cursor-pointer hover:bg-gray-600 transition-colors"
-                  onClick={() => fetchCropDetails(crop[0])}
+                  className="flex items-center justify-between p-4 bg-gray-700 rounded-xl  transition-colors"
                 >
                   <div className="flex items-center gap-4">
                     <span className="text-2xl font-bold text-gray-400">#{index + 1}</span>
@@ -169,9 +167,7 @@ function CropPriceAI() {
               {dashboardData.bottom5.map((crop, index) => (
                 <motion.div
                   key={crop[0]}
-                  whileHover={{ scale: 1.02 }}
-                  className="flex items-center justify-between p-4 bg-gray-700 rounded-xl cursor-pointer hover:bg-gray-600 transition-colors"
-                  onClick={() => fetchCropDetails(crop[0])}
+                  className="flex items-center justify-between p-4 bg-gray-700 rounded-xl  transition-colors"
                 >
                   <div className="flex items-center gap-4">
                     <span className="text-2xl font-bold text-gray-400">#{index + 1}</span>

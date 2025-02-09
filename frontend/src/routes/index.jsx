@@ -33,7 +33,7 @@ const ProtectedRoute = ({ children, allowedRoles = ['farmer', 'enterprise'] }) =
   }
 
   if (!allowedRoles.includes(userRole)) {
-    return <Navigate to="/dashboard/crop-recommendation" replace />;
+    return <Navigate to="/dashboard/map" replace />;
   }
 
   return children;
@@ -52,7 +52,7 @@ export const router = createBrowserRouter([
         path: 'dashboard',
         element: <ProtectedRoute><Dashboard /></ProtectedRoute>,
         children: [
-          { index: true, element: <Navigate to="crop-recommendation" replace /> },
+          { index: true, element: <Navigate to="map" replace /> },
           { 
             path: 'map', 
             element: <ProtectedRoute allowedRoles={['farmer', 'enterprise']}><MapView /></ProtectedRoute> 

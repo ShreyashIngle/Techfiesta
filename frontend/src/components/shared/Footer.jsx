@@ -50,29 +50,15 @@ function Footer() {
               </li>
               <li className="flex items-center text-gray-300">
                 <Phone className="mr-2" size={20} />
-                0208 309 0181
+                9869239419
               </li>
-              <li className="flex items-center text-gray-300">
-                <Mail className="mr-2" size={20} />
-                info@yieldvision.com
-              </li>
+
             </ul>
           </div>
 
           <div>
-            <h3 className="text-xl font-bold mb-4">{t.followUs}</h3>
-            <div className="flex space-x-4">
-              {[Facebook, Twitter, Instagram].map((Icon, index) => (
-                <motion.a
-                  key={index}
-                  href="#"
-                  whileHover={{ y: -5 }}
-                  className="bg-white/10 p-3 rounded-full hover:bg-white/20 transition-colors"
-                >
-                  <Icon size={24} />
-                </motion.a>
-              ))}
-            </div>
+
+
           </div>
         </div>
 

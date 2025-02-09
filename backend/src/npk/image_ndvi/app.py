@@ -79,7 +79,7 @@ class UNetGenerator(nn.Module):
 
 # Load the trained Generator model
 generator = UNetGenerator().to(device)
-generator.load_state_dict(torch.load("generator.pth", map_location=device))
+generator.load_state_dict(torch.load("src/npk/image_ndvi/generator.pth", map_location=device))
 generator.eval()
 
 # Pydantic models for response

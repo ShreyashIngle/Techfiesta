@@ -10,6 +10,7 @@ from npk.chatbot.utils import app as chatbot_app
 from npk.price_prediction.app import app as price_app
 from npk.Report.app import app as report_app
 from npk.crop_rotation.app import app as rotation_app
+from npk.image_ndvi.app import app as imageNdvi_app
 
 # Initialize FastAPI app
 app = FastAPI()
@@ -36,6 +37,9 @@ app.mount("/report", report_app)
 
 # crop rotation app
 app.mount("/crop-rotation", rotation_app)
+
+# image ndvi app
+app.mount("/image-ndvi", imageNdvi_app)
 
 # Load pre-trained model for crop prediction
 pickle_in = open("src/npk/model.pkl", "rb")
