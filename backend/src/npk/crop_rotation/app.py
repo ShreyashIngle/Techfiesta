@@ -4,6 +4,7 @@ from typing import List, Optional, Dict, Any, Union
 from datetime import datetime
 from pathlib import Path
 from dotenv import load_dotenv
+from fastapi.middleware.cors import CORSMiddleware
 import json
 import openai
 import os
@@ -21,6 +22,14 @@ if not openai.api_key:
 
 # Initialize FastAPI
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Your React frontend URL
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Get the current directory
 current_dir = Path(__file__).parent

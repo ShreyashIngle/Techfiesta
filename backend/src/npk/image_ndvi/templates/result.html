@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NDVI Results</title>
+</head>
+<body>
+    <h1>NDVI Results</h1>
+    
+    <h2>Uploaded SAR Image</h2>
+    <img src="{{ sar_image }}" alt="SAR Image" width="300">
+
+    <h2>Generated Optical Image</h2>
+    <img src="data:image/png;base64,{{ optical_image }}" alt="Generated Optical Image" width="300">
+
+    <h3>Overall NDVI Statistics</h3>
+    <ul>
+        <li><strong>Min NDVI:</strong> {{ min_ndvi }}</li>
+        <li><strong>Max NDVI:</strong> {{ max_ndvi }}</li>
+        <li><strong>Mean NDVI:</strong> {{ mean_ndvi }}</li>
+    </ul>
+
+    <h3>NDVI Statistics for Each of 10 Pixels</h3>
+    <table border="1">
+        <tr>
+            <th>Pixel Segment</th>
+            <th>Min NDVI</th>
+            <th>Max NDVI</th>
+            <th>Mean NDVI</th>
+        </tr>
+        {% for i in range(10) %}
+        <tr>
+            <td>Pixel {{ i+1 }}</td>
+            <td>{{ pixel_stats[i]['min'] }}</td>
+            <td>{{ pixel_stats[i]['max'] }}</td>
+            <td>{{ pixel_stats[i]['mean'] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <br>
+    <a href="/">Upload Another Image</a>
+</body>
+</html>
