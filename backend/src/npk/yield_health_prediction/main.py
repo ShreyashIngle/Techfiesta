@@ -1,5 +1,3 @@
-from reportlab.lib.enums import TA_LEFT, TA_RIGHT
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
@@ -18,7 +16,6 @@ from reportlab.lib.enums import TA_LEFT
 from reportlab.lib.units import inch
 from reportlab.lib import colors
 from reportlab.lib.styles import ParagraphStyle
-from pathlib import Path
 
 # Initialize FastAPI
 app = FastAPI()
@@ -36,32 +33,12 @@ app.add_middleware(
 GENAI_API_KEY = "AIzaSyDxO5dlN-W99qqnRaB5nxMoIFy_YPJTdts"  # Replace with your API key
 genai.configure(api_key=GENAI_API_KEY)
 
-try:
-    current_dir = Path(__file__).parent
-except NameError:
-    current_dir = Path.cwd()  # Use cwd() if __file__ is not available
-
-print("Current directory for health:", current_dir)
-
 # Constants for PDF generation
-OUTPUT_DIR = r"C:\Users\tejas\OneDrive\Desktop\Techfiesta\Techfiesta\backend\src\npk\yield_health_prediction\output"
-
-# Ensure the directory exists
-try:
-    os.makedirs(OUTPUT_DIR, exist_ok=True)
-    print(f"Ensured directory exists: {OUTPUT_DIR}")
-except Exception as e:
-    print(f"Error while creating/accessing directory: {e}")
-
-# Check if OUTPUT_DIR is accessible
-if os.path.exists(OUTPUT_DIR) and os.path.isdir(OUTPUT_DIR):
-    print("Output directory is accessible.")
-else:
-    print("The directory does not exist or is not accessible.")
+TEMPLATE_PATH = "template.pdf"  # Make sure this exists in your directory
+OUTPUT_DIR = "output"
+os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 # Define request body model
-
-
 class CropData(BaseModel):
     selectedCrop: Optional[str] = None
     selectedSoil: Optional[str] = None
@@ -78,7 +55,6 @@ class CropData(BaseModel):
     indexData: Optional[dict] = None
     polygonCoordinates: Optional[list] = None
 
-
 def format_gemini_response(text: str) -> dict:
     """Parse and format the Gemini response into sections."""
     sections = {
@@ -87,10 +63,10 @@ def format_gemini_response(text: str) -> dict:
         'recommendations': '',
         'risks': ''
     }
-
+    
     current_section = 'prediction'
     lines = text.split('\n')
-
+    
     for line in lines:
         if 'Predicted' in line:
             sections['prediction'] = line.strip()
@@ -102,25 +78,31 @@ def format_gemini_response(text: str) -> dict:
             current_section = 'risks'
         elif line.strip():
             sections[current_section] += line.strip() + '\n'
-
+    
     return sections
 
+import markdown
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image
+from reportlab.lib.enums import TA_LEFT, TA_RIGHT
+from reportlab.lib.units import inch
+from reportlab.lib import colors
+from reportlab.lib.styles import ParagraphStyle
 
 # Path to logo file (Ensure it's in the correct directory)
 LOGO_PATH = "logo.png"  # Replace with your actual logo file path
-
 
 def insert_text_into_pdf(text: str, report_type: str = "Yield") -> str:
     """Convert Markdown to formatted PDF with styles, add logo & timestamp."""
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     current_time = datetime.now().strftime("%B %d, %Y %H:%M:%S")  # Date + Time
-    output_path = os.path.join(
-        OUTPUT_DIR, f"{report_type.lower()}report{timestamp}.pdf")
+    output_path = os.path.join(OUTPUT_DIR, f"{report_type.lower()}report{timestamp}.pdf")
 
     # Convert Markdown to HTML
     sections = format_gemini_response(text)
-    sections = {key: markdown.markdown(value)
-                for key, value in sections.items()}
+    sections = {key: markdown.markdown(value) for key, value in sections.items()}
 
     # Set up PDF document
     doc = SimpleDocTemplate(output_path, pagesize=letter)
@@ -171,8 +153,7 @@ def insert_text_into_pdf(text: str, report_type: str = "Yield") -> str:
         elements.append(logo)
 
     # Add Title
-    elements.append(
-        Paragraph(f"Crop {report_type} Analysis Report", title_style))
+    elements.append(Paragraph(f"Crop {report_type} Analysis Report", title_style))
     elements.append(Spacer(1, 0.2 * inch))
 
     # Add Date & Time
@@ -181,8 +162,7 @@ def insert_text_into_pdf(text: str, report_type: str = "Yield") -> str:
 
     # Add Sections
     for section, content in sections.items():
-        elements.append(Paragraph(section.replace(
-            "_", " ").title(), section_style))
+        elements.append(Paragraph(section.replace("_", " ").title(), section_style))
         elements.append(Paragraph(content, body_style))
         elements.append(Spacer(1, 0.3 * inch))
 
@@ -191,10 +171,10 @@ def insert_text_into_pdf(text: str, report_type: str = "Yield") -> str:
     return output_path
 
 
+
 @app.get("/")
 async def root():
     return {"message": "FastAPI Backend Running"}
-
 
 @app.post("/yield")
 async def predictYield(data: CropData):
@@ -276,22 +256,20 @@ async def predictYield(data: CropData):
         # Call Gemini API
         model = genai.GenerativeModel("gemini-pro")
         response = model.generate_content(prompt)
-
+        
         # Generate PDF
         pdf_path = insert_text_into_pdf(response.text, "Yield")
-
+        
         # Return PDF for download
         return FileResponse(
             pdf_path,
             media_type="application/pdf",
             filename=os.path.basename(pdf_path),
-            headers={
-                "Content-Disposition": f"attachment; filename={os.path.basename(pdf_path)}"}
+            headers={"Content-Disposition": f"attachment; filename={os.path.basename(pdf_path)}"}
         )
 
     except Exception as e:
         return {"error": "Internal Server Error", "message": str(e)}
-
 
 @app.post("/health")
 async def predictHealth(data: CropData):
@@ -375,17 +353,16 @@ async def predictHealth(data: CropData):
         # Call Gemini API
         model = genai.GenerativeModel("gemini-pro")
         response = model.generate_content(prompt)
-
+        
         # Generate PDF
         pdf_path = insert_text_into_pdf(response.text, "Health")
-
+        
         # Return PDF for download
         return FileResponse(
             pdf_path,
             media_type="application/pdf",
             filename=os.path.basename(pdf_path),
-            headers={
-                "Content-Disposition": f"attachment; filename={os.path.basename(pdf_path)}"}
+            headers={"Content-Disposition": f"attachment; filename={os.path.basename(pdf_path)}"}
         )
 
     except Exception as e:
