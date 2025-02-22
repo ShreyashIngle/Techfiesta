@@ -23,6 +23,7 @@ import VegetationIndices from '../pages/dashboard/VegetationIndices';
 import VidQRConnect from '../pages/dashboard/VidQRConnect';
 import AgriConnect from '../pages/dashboard/AgriConnect';
 import CropPriceAI from '../pages/dashboard/CropPriceAI';
+import YieldHealthPrediction from '../pages/dashboard/yieldHealthPrediction';
 
 const ProtectedRoute = ({ children, allowedRoles = ['farmer', 'enterprise'] }) => {
   const token = localStorage.getItem('token');
@@ -56,6 +57,10 @@ export const router = createBrowserRouter([
           { 
             path: 'map', 
             element: <ProtectedRoute allowedRoles={['farmer', 'enterprise']}><MapView /></ProtectedRoute> 
+          },
+          { 
+            path: 'yield-health-prediction',
+            element: <ProtectedRoute allowedRoles={['farmer', 'enterprise']}><YieldHealthPrediction /></ProtectedRoute> 
           },
           { 
             path: 'crop-recommendation', 
